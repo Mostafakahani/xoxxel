@@ -1,0 +1,35 @@
+{
+  "name": "سامانه ی اتاق اصناف نیشابور",
+  "short_name": "اصناف نیشابور",
+  "description": "این یک برنامه برای مدیریت صنف های موجود در شهر نیشابور هست",
+  "background_color": "#fff",
+  "theme_color": "#1A1D21",
+  "scope": "./",
+  "orientation": "portrait-primary",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "fa-IR",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/images/icons/icon-57x57.png",
+      "type": "image/png",
+      "sizes": "57x57"
+    },
+    {
+      "src": "/images/icons/icon-76x76.png",
+      "type": "image/png",
+      "sizes": "76x76"
+    },
+    {
+      "src": "/images/icons/icon-48x48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/images/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}
