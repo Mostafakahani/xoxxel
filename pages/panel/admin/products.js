@@ -1,6 +1,8 @@
 import { Button, Grid, Typography } from "@mui/material";
 import CustomTable from "Components/Common/CustomTable/Cutsom Table";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
+import SimplePopup from "Components/Common/Popup/Popup";
+import Popup from "Components/Common/Popup/Popup";
 import NewT from "Components/Common/TableItems/NewT";
 import { AddProductIcon, IconActiveProducts } from "Icons/icons";
 import { useState } from "react";
@@ -98,7 +100,7 @@ const Products = () => {
             id: 1,
             data: [
                 "#254",
-                {
+                              {
                     type: "avatar",
                     text: "مدیریت",
                     url: '/images/avatar.png'
@@ -201,6 +203,7 @@ const Products = () => {
                         }}>حذف</Button>
                         {/* } */}
                     </Grid>
+                    <SimplePopup />
 
                     {/* <CustomTable
                         headCells={headCells}
