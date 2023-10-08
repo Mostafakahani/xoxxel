@@ -60,13 +60,14 @@ function EnhancedTableHead(props) {
         {dataHead?.map((headCell, i) => (
           <TableCell
             key={i}
-            align={"center"}
+            align={i === dataHead.length - 1 ? "left" : "center"}
             padding={"normal"}
             sx={{ color: "#212121", pb: 3 }}
           >
             {headCell}
           </TableCell>
         ))}
+
       </TableRow>
     </TableHead>
   );
@@ -273,7 +274,7 @@ export default function TableItems({
                         )}
                         {e?.type === "btn" && (
                           <>
-                            <Grid sx={{ display: 'flex', justifyContent: 'center'}}>
+                            <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
                               <Button sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
                                 <Typography>افزودن ویژگی</Typography>
                               </Button>
