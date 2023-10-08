@@ -1,6 +1,7 @@
 import { Button, Grid, Typography } from "@mui/material";
 import CustomTable from "Components/Common/CustomTable/Cutsom Table";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
+import NewT from "Components/Common/TableItems/NewT";
 import { AddProductIcon, IconActiveProducts } from "Icons/icons";
 import { useState } from "react";
 const Products = () => {
@@ -89,7 +90,66 @@ const Products = () => {
     ];
     const [itemsForDel, setItemsForDel] = useState([]);
 
+    const [selected, setSelected] = useState([]);
+    const [tags, setTags] = useState([]);
+    const dataHead = ["کد محصول", "ایجاد کننده", "نام محصول", "نوع", "تاریخ ایجاد", "اقدامات"]
+    const dataBody = [
+        {
+            id: 1,
+            data: [
+                "#254",
+                {
+                    type: "avatar",
+                    text: "مدیریت",
+                    url: '/images/avatar.png'
+                },
+                {
+                    type: "textBold",
+                    text: "Call of duty mobile",
+                },
+                {
+                    type: "text",
+                    text: "Gift card",
+                },
+                {
+                    type: "text",
+                    text: "1401/7/7",
+                },
+                {
+                    type: "btn",
+                    text: "1401/7/7",
+                },
+            ],
+        },
+        {
+            id: 3,
+            data: [
+                "#254",
+                {
+                    type: "avatar",
+                    text: "مدیریت",
+                    url: '/images/avatar.png'
+                },
+                {
+                    type: "textBold",
+                    text: "Call of duty mobile",
+                },
+                {
+                    type: "text",
+                    text: "Gift card",
+                },
+                {
+                    type: "text",
+                    text: "1401/7/7",
+                },
+                {
+                    type: "btn",
+                    text: "1401/7/7",
+                },
 
+            ],
+        },
+    ]
 
     return (
         <>
@@ -130,19 +190,19 @@ const Products = () => {
                     <Grid sx={{ display: 'flex', justifyContent: 'right' }}>
                         {/* {
                             itemsForDel.length > 0 && */}
-                            <Button variant="contained" disabled={itemsForDel.length > 0 ? false : true} disableElevation sx={{
-                                fontSize: "12px",
-                                textAlign: "right",
-                                display: "flex",
-                                justifyContent: "center",   
-                                alignItems: "center",
-                                borderRadius: '8px',
-                                backgroundColor: '#D24093',
-                            }}>حذف</Button>
+                        <Button variant="contained" disabled={itemsForDel.length > 0 ? false : true} disableElevation sx={{
+                            fontSize: "12px",
+                            textAlign: "right",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRadius: '8px',
+                            backgroundColor: '#D24093',
+                        }}>حذف</Button>
                         {/* } */}
                     </Grid>
 
-                    <CustomTable
+                    {/* <CustomTable
                         headCells={headCells}
                         rows={rows}
                         selected={(object) => {
@@ -154,8 +214,13 @@ const Products = () => {
                         }
                         page={0}
                         show={(x) => console.log(x)}
+                    /> */}
+                    <NewT
+                        selected={selected}
+                        setSelected={setSelected}
+                        dataHead={dataHead}
+                        dataBody={dataBody}
                     />
-
                 </Grid>
 
 

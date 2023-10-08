@@ -194,6 +194,7 @@ textarea {
 .ck-button:hover svg {
   color: #6f767e !important;
 }
+
 .ck.ck-button.ck-on svg {
   color: #6f767e !important;
 }
@@ -276,8 +277,8 @@ input[type="number"] {
 
 @media (max-width: 480px) {
   .MuiContainer-root {
-    padding-left: 6px !important ;
-    padding-right: 6px !important ;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
   }
 }
 
@@ -319,7 +320,19 @@ input[type="number"] {
   0% {
     opacity: 0.8;
   }
+
   10% {
     opacity: 1;
   }
 }
+
+
+
+/* Custom Table */
+/* .custom-row {
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  border-collapse: separate;
+  border-spacing: 0 50px; /* ایجاد فاصله 10 پیکسلی بین ردیف‌ها */
+

@@ -81,9 +81,9 @@ export default function CustomTable(props) {
   function EnhancedTableHead(inputs) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount } = inputs;
 
-    return (
+    return (    
       <TableHead>
-        <TableRow sx={{ borderBottom: "2px solid " + ((theme) => theme.palette.custom.hrColor) }}>
+        <TableRow className="custom-row" sx={{ borderBottom: "2px solid " + ((theme) => theme.palette.custom.hrColor) }}>
           {props?.selected && (
             <TableCell padding="checkbox">
               <Checkbox

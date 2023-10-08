@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import { Avatar, Button, Grid } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
+import { EyesIcon } from "Icons/icons";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -24,6 +25,7 @@ function EnhancedTableHead(props) {
             px: "16px",
             fontSize: "12.04px",
             color: "#212121",
+            textAlign: 'left'
           },
           ".MuiCheckbox-indeterminate": {
             svg: {
@@ -230,7 +232,9 @@ export default function TableItems({
                       </TableCell>
                     )}
                     {row?.data?.map((e, i) => (
-                      <TableCell align="center" key={i}>
+                      <TableCell align="center" sx={{
+                        textAlign: 'left'
+                      }} key={i}>
                         {!e?.type && e}
                         {e?.type === "avatar" && (
                           <Box className="center">
@@ -251,16 +255,37 @@ export default function TableItems({
                             </Typography>
                           </Box>
                         )}
+                        {e?.type === "textBold" && (
+                          <>
+                            <Typography variant="p" sx={{ fontWeight: 600, fontSize: "15px" }}> {e?.text}</Typography>
+                          </>
+                        )}
+                        {e?.type === "text" && (
+                          <>
+                            <Typography variant="p" sx={{}}> {e?.text}</Typography>
+                          </>
+                        )}
+
                         {e?.type === "status" && (
                           <StatusButton {...e} variant="contained">
                             {e?.text}
                           </StatusButton>
                         )}
                         {e?.type === "btn" && (
-                          <StatusButton variant="contained" {...e}>
-                            {e?.text}
-                          </StatusButton>
+                          <>
+                            <Grid sx={{ display: 'flex', justifyContent: 'center'}}>
+                              <Button sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
+                                <Typography>افزودن ویژگی</Typography>
+                              </Button>
+                              <Button sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
+                                <EyesIcon />
+                                <Typography>مشاهده و ویرایش</Typography>
+                              </Button>
+                            </Grid>
+                          </>
                         )}
+
+
                         {e?.type === "jsx" && e?.jsx}
                         {/* M */}
                         {/* {e?.type === "text" && (
