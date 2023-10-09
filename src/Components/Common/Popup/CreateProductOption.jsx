@@ -138,7 +138,7 @@ const AddProductFeature = ({ tableId }) => {
                                             انتخاب کنید
                                         </MenuItem>
                                         {menuCats.map((x) => (
-                                            <MenuItem value={x.value}>{x.value}</MenuItem>
+                                            <MenuItem key={x.id} value={x.value}>{x.value}</MenuItem>
                                         ))}
 
                                     </Select>
