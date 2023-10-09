@@ -6,6 +6,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ToggleButton, Snackbar, Box, Typography, Grid, Container, TextField, MenuItem } from '@mui/material';
+import MyForm from './CreateProductOption';
+import AddProductPopup from './CreateProductOption';
+import AddProductFeatures from './CreateProductOption';
 
 const Alerts = [
     { status: 'success', message: 'در حال انتقال به درگاه پرداخت...' },
@@ -84,13 +87,13 @@ const SimplePopup = (props) => {
         },
     ]
 
-    const [selectedOption, setSelectedOption] = useState('');
 
-    const handleOptionChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
-
-    const options = ['گزینه 1', 'گزینه 2', 'گزینه 3'];
+    const options = [
+        "United state", "Iraq", "Iran"
+    ];
+    const options2 = ["ندارد", "Iraq", "Iran"];
+    const [selectedRegion, setSelectedRegion] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     return (
         <div>
@@ -121,7 +124,7 @@ const SimplePopup = (props) => {
                     <Grid sx={{ textAlign: "left" }}>
                         <Typography sx={{ textAlign: "left" }}>برای ایجاد محصول ابتدا ریجن را مشخص کنید و دسته را مشخص کنید</Typography>
                     </Grid>
-                    <DialogContentText sx={{ display: 'flex', justifyContent: { md: 'center', xs: 'flex-start' }, padding: '30px 10px' }}>
+                    <DialogContentText sx={{ display: 'flex', justifyContent: 'space-around', padding: '30px 10px' }}>
                         {/* <ToggleButton
                             value="check"
                             // selected={selected === total}
@@ -145,36 +148,13 @@ const SimplePopup = (props) => {
                         > */}
                         {/* </ToggleButton> */}
                         <Grid>
-                            <Typography>ریجن</Typography>
-                            <TextField
-                                select
-                                label="انتخاب گزینه"
-                                value={selectedOption}
-                                onChange={handleOptionChange}
-                                fullWidth
-                            >
-                                {options.map((option, index) => (
-                                    <MenuItem key={index} value={option}>
-                                        {option}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            <AddProductFeatures
+
+                            />
                         </Grid>
                         <Grid>
-                            <Typography>دسته</Typography>
-                            <TextField
-                                select
-                                label="انتخاب گزینه"
-                                value={selectedOption}
-                                onChange={handleOptionChange}
-                                fullWidth
-                            >
-                                {options.map((option, index) => (
-                                    <MenuItem key={index} value={option}>
-                                        {option}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            {/* <AddProductPopup options={options2} text={'دسته بندی'} /> */}
+
                         </Grid>
                     </DialogContentText>
                 </DialogContent>

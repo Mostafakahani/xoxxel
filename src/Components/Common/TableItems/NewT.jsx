@@ -12,6 +12,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { Avatar, Button, Grid } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
+import AddProductFeatures from 'Components/Common/Popup/CreateProductOption'
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -275,9 +276,14 @@ export default function TableItems({
                         {e?.type === "btn" && (
                           <>
                             <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-                              <Button sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
-                                <Typography>افزودن ویژگی</Typography>
-                              </Button>
+                              <AddProductFeatures tableId={row.data[0]} />
+                              {/* <Button
+                                onClick={(x) => console.log(row.data[0])}
+                                // onClick={() => props.show(row["id"])}
+
+                                sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
+
+                              </Button> */}
                               <Button sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
                                 <EyesIcon />
                                 <Typography>مشاهده و ویرایش</Typography>
@@ -287,7 +293,7 @@ export default function TableItems({
                         )}
 
 
-                        {e?.type === "jsx" && e?.jsx}
+                        {/* {e?.type === "jsx" && e?.jsx} */}
                         {/* M */}
                         {/* {e?.type === "text" && (
                           <>

@@ -1,11 +1,10 @@
 import { Button, Grid, Typography } from "@mui/material";
-import CustomTable from "Components/Common/CustomTable/Cutsom Table";
-import AccountLayout from "Components/Common/Layout/AccountLayout";
-import SimplePopup from "Components/Common/Popup/Popup";
-import Popup from "Components/Common/Popup/Popup";
 import NewT from "Components/Common/TableItems/NewT";
-import { AddProductIcon, IconActiveProducts } from "Icons/icons";
 import { useState } from "react";
+import AccountLayout from "Components/Common/Layout/AccountLayout";
+
+import AddProductFeatures from 'Components/Common/Popup/CreateProductOption'
+import { AddProductIcon, IconActiveProducts } from "Icons/icons";
 const Products = () => {
     const ButtonData = [
         { text: 'حذف دسته , ریجن , نوع' },
@@ -100,7 +99,7 @@ const Products = () => {
             id: 1,
             data: [
                 "#254",
-                              {
+                {
                     type: "avatar",
                     text: "مدیریت",
                     url: '/images/avatar.png'
@@ -126,7 +125,7 @@ const Products = () => {
         {
             id: 3,
             data: [
-                "#254",
+                "#204",
                 {
                     type: "avatar",
                     text: "مدیریت",
@@ -152,7 +151,7 @@ const Products = () => {
             ],
         },
     ]
-
+    const [selectedItemId, setSelectedItemId] = useState(null);
     return (
         <>
             <AccountLayout>
@@ -203,7 +202,7 @@ const Products = () => {
                         }}>حذف</Button>
                         {/* } */}
                     </Grid>
-                    <SimplePopup />
+                    {/* <SimplePopup /> */}
 
                     {/* <CustomTable
                         headCells={headCells}
@@ -223,7 +222,11 @@ const Products = () => {
                         setSelected={setSelected}
                         dataHead={dataHead}
                         dataBody={dataBody}
-                    />
+                        // show={(x) => console.log(dataBody.data[0])}
+                        selectedItemId={selectedItemId} />
+
+
+
                 </Grid>
 
 
