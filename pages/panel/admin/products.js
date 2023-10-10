@@ -156,21 +156,22 @@ const Products = () => {
         <>
             <AccountLayout>
                 <Grid
-                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                    // sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                    container
                 >
-                    <Grid>
+                    <Grid xs={12} md={5}>
                         <Grid sx={{ display: 'flex' }}>
                             <IconActiveProducts />
                             <Typography sx={{ ml: "10px" }}>لیست محصولات</Typography>
                         </Grid>
                         <Grid>
-                            <Typography sx={{ mt: "10px" }}>شما میتوانید در لیست زیر تمام محصولات ثبت شده را مشاهده و ویرایش کنید.</Typography>
+                            <Typography sx={{ mt: "10px", fontSize: '12px' }}>شما میتوانید در لیست زیر تمام محصولات ثبت شده را مشاهده و ویرایش کنید.</Typography>
                         </Grid>
                     </Grid>
-                    <Grid>
+                    <Grid xs={12} md={7}>
                         {
                             ButtonData.map((x, index) => (
-                                <Button key={index} sx={{ mr: "18px", py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}>{x.text}</Button>
+                                <Button key={index} sx={{ mr: {md:"5px", xs: '2px'}, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}>{x.text}</Button>
                             ))
                         }
                         <Button sx={{
