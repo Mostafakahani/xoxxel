@@ -13,6 +13,7 @@ import { Avatar, Button, Grid } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import AddProductFeatures from 'Components/Common/Popup/CreateProductOption'
+import AddProductFeatureNew from "../Popup/CreateProductOptionNew";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -276,7 +277,8 @@ export default function TableItems({
                         {e?.type === "btn" && (
                           <>
                             <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-                              <AddProductFeatures tableId={row.data[0]} />
+                              {/* <AddProductFeatures tableId={row.data[0]} /> */}
+                              <AddProductFeatureNew tableId={row.data[0]}/>
                               {/* <Button
                                 onClick={(x) => console.log(row.data[0])}
                                 // onClick={() => props.show(row["id"])}

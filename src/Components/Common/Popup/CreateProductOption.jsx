@@ -9,11 +9,12 @@ const AddProductFeature = ({ tableId }) => {
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
     const [completedFirstStep, setCompletedFirstStep] = useState(false);
-
     const [products, setProducts] = useState([
-        { region: region, category: category, name: name, price: price },
-        { region: "region", category: "category", name: "name", price: "price" },
-    ])
+        { region: 'North America', category: 'دسته دوم', name: 'محصول یک', price: 100 },
+        { region: 'Europe', category: 'دسته سوم', name: 'محصول دو', price: 150 },
+        { region: 'Asia', category: 'ندارد', name: 'محصول سه', price: 200 },
+    ]);
+
 
     const handleClickOpen = () => { setOpen(true); };
     const handleClose = () => {
@@ -25,13 +26,20 @@ const AddProductFeature = ({ tableId }) => {
         setCompletedFirstStep(false)
     };
     const handleNext = () => { setCompletedFirstStep(true); };
+
+
+
     const handleSubmit = () => {
-        const product = { region, category, name, price, tableId };
-        // setProducts(product)
-        console.log(product);
+        const newProduct = { region, category, name, price, tableId };
+        setProducts(prevProducts => [...prevProducts, newProduct]); // افزودن محصول جدید به لیست محصولات به صورت یک آرایه از اشیاء
+        console.log(products); // لاگ کردن محصولات
         setOpen(false);
-        handleClear()
+        handleClear();
     };
+
+
+
+
     const handleClear = () => {
         setName("");
         setPrice("");
@@ -67,7 +75,7 @@ const AddProductFeature = ({ tableId }) => {
                 onClick={handleClickOpen}>
                 افزودن ویژگی
             </Button>
-            <Button onClick={() => console.log(products)}>products</Button>
+            <Button onClick={() => console.log(products)}>نمایش محصولات</Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title"  >
                 <DialogTitle id="form-dialog-title" sx={{ fontSize: "20px" }}>ایجاد ویژگی محصول</DialogTitle>
                 <Typography sx={{ px: '25px', fontSize: "15px" }}>برای ایجاد محصول ابتدا ریجن را مشخص کنید و دسته را مشخص کنید</Typography>
@@ -77,33 +85,42 @@ const AddProductFeature = ({ tableId }) => {
                             <Grid sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
                                 <Grid>
                                     <Typography>نام محصول</Typography>
-                                    <Select
+                                    <TextField
                                         margin="dense"
                                         id="name"
                                         type="text"
                                         fullWidth
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                    >
-                                        {products.map((x, index) => (
-                                            <MenuItem key={index} value={x.name}>{x.name}</MenuItem>
-                                        ))}
-                                    </Select>
+                                        sx={{ width: { md: '200px', xs: '100px' }, display: 'flex !important' }}
+
+                                    />
                                 </Grid>
                                 <Grid>
-                                    <Typography>نام محصول</Typography>
-                                    <Select
+                                    <Typography> قیمت محصول</Typography>
+                                    <TextField
                                         margin="dense"
                                         id="price"
                                         type="number"
                                         fullWidth
                                         value={price}
                                         onChange={(e) => setPrice(e.target.value)}
-                                    >
-                                        {products.map((x, index) => (
-                                            <MenuItem key={index} value={x.name}>{x.name}</MenuItem>
-                                        ))}
-                                    </Select>
+                                        sx={{ width: { md: '200px', xs: '100px' }, display: 'flex !important' }}
+
+                                    />
+                                </Grid>
+                                <Grid>
+                                    <Typography> به عنوان محبوب </Typography>
+                                    <TextField
+                                        margin="dense"
+                                        id="price"
+                                        type="number"
+                                        fullWidth
+                                        value={price}
+                                        onChange={(e) => setPrice(e.target.value)}
+                                        sx={{ width: { md: '200px', xs: '100px' }, display: 'flex !important' }}
+
+                                    />
                                 </Grid>
                             </Grid>
                         </>
