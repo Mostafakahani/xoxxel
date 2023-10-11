@@ -55,24 +55,27 @@ const Rows = () => {
         width: '250px'
     }
     return (
-        <div>
-            <TextField
-                onChange={handleNameChange}
-                value={name}
-                label="نام"
-                variant="outlined"
-                sx={fieldDes}
+        <Grid>
+            <Grid sx={{ width: '550px', display: 'flex', justifyContent: 'space-between' }}>
+                <TextField
+                    onChange={handleNameChange}
+                    value={name}
+                    label="نام"
+                    variant="outlined"
+                    sx={fieldDes}
 
-            />
-            <TextField
-                onChange={handlePriceChange}
-                value={price}
-                label="قیمت"
-                variant="outlined"
-                sx={fieldDes}
+                />
 
-            />
-            <Button variant="contained" color="primary" onClick={handleAddRow}>
+                <TextField
+                    onChange={handlePriceChange}
+                    value={price}
+                    label="قیمت"
+                    variant="outlined"
+                    sx={fieldDes}
+
+                />
+            </Grid>
+            <Button onClick={handleAddRow}>
                 افزودن ردیف
             </Button>
 
@@ -111,7 +114,7 @@ const Rows = () => {
             <Button variant="contained" color="primary" onClick={handleSubmit} style={{ marginTop: '20px' }}>
                 ارسال به API
             </Button>
-        </div>
+        </Grid>
     );
 };
 

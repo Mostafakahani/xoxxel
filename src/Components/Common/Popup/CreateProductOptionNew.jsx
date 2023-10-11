@@ -96,7 +96,7 @@ const AddProductFeatureNew = ({ tableId }) => {
                     setName("");
                     setPrice("");
                     setRegion("")
-                    setCategory("")
+                    setCategory("ندارد")
                     setStep(true)
                 }}
             >
