@@ -1,5 +1,6 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem, Select, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
+import Rows from "./row";
 
 
 const AddProductFeatureNew = ({ tableId }) => {
@@ -51,18 +52,6 @@ const AddProductFeatureNew = ({ tableId }) => {
     const handleNext = () => {
         setStep(false);
     };
-    const [currentRow, setCurrentRow] = useState(null);
-
-    const deleteRow = (i) => {
-        setCurrentRow(i);
-
-        if (currentRow !== null) {
-            // setProducts(rows);
-            // setCurrentRow(currentRow + 1);
-            console.log(currentRow - 1)
-        }
-    };
-
     const renderRows = () => {
         return Array.from({ length: textFieldCount }, (v, i) => (
             <Grid key={i}>
@@ -170,15 +159,16 @@ const AddProductFeatureNew = ({ tableId }) => {
                                 <Grid sx={{ display: 'flex', justifyContent: 'space-evenly', width: "100%", my: '30px' }}>
                                     <Grid>
                                         <Typography>نام محصول</Typography>
-                                        {renderRows()}
+                                        {/* {renderRows()} */}
+                                        <Rows />
                                         <Grid>
-                                            <Button sx={{ backgroundColor: '#1C49F1', color: '#F4F4F4', "&:hover": { backgroundColor: '#4066f3' } }}
+                                            {/* <Button sx={{ backgroundColor: '#1C49F1', color: '#F4F4F4', "&:hover": { backgroundColor: '#4066f3' } }}
                                                 onClick={() => {
                                                     setTextFieldCount(textFieldCount + 1);
                                                 }}
                                             >
                                                 +
-                                            </Button>
+                                            </Button> */}
                                         </Grid>
                                     </Grid>
                                     {/* <Grid>
@@ -205,15 +195,7 @@ const AddProductFeatureNew = ({ tableId }) => {
                                             </Button>
                                         )
                                     }
-                                    {
-                                        textFieldCount > 1 && (
 
-                                            <Button sx={{ color: 'red' }} onClick={() => {
-                                                deleteRow();
-                                            }}>حذف آخرین ردیف</Button>
-                                        )
-
-                                    }
                                 </Grid>
                             </>
 
