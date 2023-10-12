@@ -1,6 +1,5 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem, Select, SvgIcon, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import Rows from "./row";
 
 
 const AddProductFeatureNew = ({ tableId }) => {
@@ -14,6 +13,9 @@ const AddProductFeatureNew = ({ tableId }) => {
     const ErrorList = ['نام محصول نمیتواند خالی باشد.', 'قیمت محصول نمی تواند خالی باشد.', 'نمی تواند تکراری باشد.']
     const [nameError, setNameError] = useState(false)
     const [priceError, setPriceError] = useState(false)
+    const [step, setStep] = useState(true)
+
+
     const handleAddRow = () => {
         if (name.trim() === "" || price.trim() === "") {
             console.log("نام و قیمت نمی‌تواند خالی باشد.");
@@ -22,10 +24,10 @@ const AddProductFeatureNew = ({ tableId }) => {
         } else {
             const isDuplicate = rows.some((row) => row.name === name && row.price === price);
             if (!isDuplicate) {
+                setIsPopular(false);
                 setRows([...rows, { id: Date.now(), name: name, price: price, isPopular: isPopular }]);
                 setName("");
                 setPrice("");
-                setIsPopular(false);
                 console.log("Ok");
                 setNameError(false)
                 setPriceError(false)
@@ -63,49 +65,6 @@ const AddProductFeatureNew = ({ tableId }) => {
         setPrice(e.target.value);
     };
 
-    const handleSubmit = () => {
-        const formattedData = rows.map((row) => {
-            return {
-                name: row.name,
-                price: row.price,
-                isPopular: row.isPopular
-            };
-        });
-        if (formattedData.name === '' || formattedData.price === '' || formattedData.isPopular === '') {
-
-            console.log('Error formattedData');
-        } else {
-            console.log(formattedData);
-        }
-    };
-
-    // const handleSubmit = () => {
-    //     const formattedData = rows.map((row) => {
-    //         return {
-    //             name: row.name,
-    //             price: row.price,
-    //             isPopular: row.isPopular
-    //         };
-    //     });
-    //     console.log(formattedData);
-    // };
-    const fieldDes = {
-        // width: '250px'
-    }
-    // const [name, setName] = useState("");
-    // const [price, setPrice] = useState("");
-    // const [favourite, setFavourite] = useState("");
-    // const [completedFirstStep, setCompletedFirstStep] = useState(false);
-    // const [products, setProducts] = useState([
-    //     { region: 'North America', category: 'دسته دوم', name: 'محصول یک', price: 100 },
-    //     { region: 'Europe', category: 'دسته سوم', name: 'محصول دو', price: 150 },
-    //     { region: 'Asia', category: 'ندارد', name: 'محصول سه', price: 200 },
-    // ]);
-
-    // const [textFieldCount, setTextFieldCount] = useState(1);
-
-    const [step, setStep] = useState(true)
-
 
     const menuItems = [
         { id: 1, value: 'North America', icon: '/images/Flags.png' },
@@ -134,8 +93,31 @@ const AddProductFeatureNew = ({ tableId }) => {
     const handleNext = () => {
         setStep(false);
     };
+    const handleSubmit = () => {
+        const formattedData = rows.map((row) => {
+            return {
+                name: row.name,
+                price: row.price,
+                isPopular: row.isPopular,
+                tableId: tableId
+            };
+        });
 
+        const isValidData = formattedData.every((data) => data.name && data.price !== '' && data.isPopular !== '' && data.tableId !== '');
+        if (isValidData) {
+            console.log(formattedData);
+        } else {
+            console.log('Error: همه فیلدها باید پر شوند.');
+        }
 
+        setOpen(false);
+        setName("");
+        setPrice("");
+        setRegion("");
+        setCategory("ندارد");
+        setStep(true);
+        setRows([]);
+    };
 
     return (
         <Grid>
@@ -250,23 +232,23 @@ const AddProductFeatureNew = ({ tableId }) => {
                                         </Grid>
 
                                         {rows.map((row) => (
-                                            <Grid container key={row.id} sx={{ my: '30px' }}>
+                                            <Grid container key={row.id} sx={{ my: '10px' }}>
                                                 <Grid container alignItems="center" marginTop={2}>
                                                     <Grid container xs={12} md={7}>
                                                         <Grid xs={12} md={8}>
                                                             <TextField value={row.name} label="نام" disabled
-                                                                sx={{ width: { xs: '100%', sm: '90%' }, my: '10px' }} />
+                                                                sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '10px' }} />
                                                         </Grid>
                                                         <Grid xs={12} md={4}>
                                                             <TextField value={row.price} label="قیمت (تومان)" disabled
-                                                                sx={{ width: { xs: '100%', sm: '100%' }, my: '10px' }} />
+                                                                sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }} />
                                                         </Grid>
                                                     </Grid>
                                                     <Grid container xs={12} md={5} alignItems={'center'} >
                                                         <Grid xs={6} md={6}>
                                                             <Button
                                                                 onClick={() => handleTogglePopular(row.id)}
-                                                                sx={{ color: '#4B4B57', p: '15px', marginLeft: { sm: '40px' }, border: '1px solid #bdbdbd', alignItems: 'center', display: 'flex', fontSize: '13px' }}
+                                                                sx={{ color: '#4B4B57', p: '15px', px: { sm: '40px', md: '15px' }, marginLeft: { sm: '0px', md: '40px' }, border: '1px solid #bdbdbd', alignItems: 'center', display: 'flex', fontSize: '13px' }}
                                                             >
                                                                 Popular
                                                                 {!row.isPopular ? (
@@ -309,26 +291,8 @@ const AddProductFeatureNew = ({ tableId }) => {
                                         </Button>
                                     </Grid>
                                 </Grid>
-
-                                <Grid>
-                                    {/* {
-                                        textFieldCount < 10 && (
-
-                                            <Button
-                                                onClick={() => {
-                                                    setTextFieldCount(textFieldCount + 1);
-                                                }}
-                                            >
-                                                افزودن ردیف +
-                                            </Button>
-                                        )
-                                    } */}
-
-                                </Grid>
                             </>
-
                         )
-
                     }
                     {
                         step && region !== null && (
@@ -339,7 +303,6 @@ const AddProductFeatureNew = ({ tableId }) => {
                     }
                 </DialogContent>
             </Dialog>
-
         </Grid >
     );
 };
