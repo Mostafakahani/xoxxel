@@ -114,10 +114,11 @@ const CreateProduct = () => {
                 <Grid sx={{ borderRadius: '10px', border: '2px dashed #5A5A5A', p: '20px', my: '15px' }}>
                     <ProductOption tableId={'tableId'} />
                 </Grid>
-                
+
                 <Grid sx={{ my: '25px' }}>
                     <Button sx={{ color: '#1C49F1' }}>ذخیره تغییرات</Button>
                     <Button sx={{ color: '#B12640' }}>انصراف</Button>
+                    <Button sx={{ color: '#1D1E2D', borderRadius: '5px', border: '1px solid #807D7D' }}>اضافه کردن ویژگی جدید</Button>
                 </Grid>
             </AccountLayout >
         </>

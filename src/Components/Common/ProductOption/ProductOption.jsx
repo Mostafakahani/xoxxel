@@ -10,14 +10,16 @@ const ProductOption = ({ tableId }) => {
     const ErrorList = ['نام محصول نمیتواند خالی باشد.', 'قیمت محصول نمی تواند خالی باشد.', 'نمی تواند تکراری باشد.']
     const [nameError, setNameError] = useState(false)
     const [priceError, setPriceError] = useState(false)
+    const [stockError, setStockError] = useState(false)
 
     const [stock, setStock] = useState("");
 
     const handleAddRow = () => {
-        if (name.trim() === "" || price.trim() === "") {
-            console.log("نام و قیمت نمی‌تواند خالی باشد.");
-            setNameError(true)
-            setPriceError(true)
+        if (name.trim() === "" || price.trim() === "" || stock.trim() === "") {
+            console.log("نام، قیمت و موجودی نمی‌توانند خالی باشند.");
+            setNameError(true);
+            setPriceError(true);
+            setStockError(true);
         } else {
             const isDuplicate = rows.some((row) => row.name === name && row.price === price);
             if (!isDuplicate) {
@@ -25,16 +27,16 @@ const ProductOption = ({ tableId }) => {
                 setRows([...rows, { id: Date.now(), name: name, price: price, stock: stock, region: region, category: category, isPopular: isPopular }]);
                 setName("");
                 setPrice("");
-                console.log(stock);
-                setNameError(false)
-                setPriceError(false)
-                setStock('')
-
+                setStock("");
+                setNameError(false);
+                setPriceError(false);
+                setStockError(false);
             } else {
-                console.log("این نام و قیمت قبلاً وارد شده است.");
+                console.log("این نام و قیمت قبلاً وارد شده‌اند.");
             }
         }
     };
+
 
     const handleDeleteRow = (id) => {
         setRows(rows.filter((row) => row.id !== id));
@@ -80,29 +82,30 @@ const ProductOption = ({ tableId }) => {
 
 
     const handleSubmit = () => {
-        const formattedData = rows.map((row) => {
-            return {
-                name: row.name,
-                price: row.price,
-                isPopular: row.isPopular,
-                stock: stock,
-                tableId: tableId
-            };
-        });
-
-        const isValidData = formattedData.every((data) => data.name && data.price !== '' && data.isPopular !== '' && data.stock !== '' && data.tableId !== '');
-        if (!isValidData) {
+        const isValidData = rows.every((data) => data.name && data.price && data.stock && data.isPopular !== "" && data.tableId !== "");
+        if (isValidData) {
+            const formattedData = rows.map((row) => {
+                return {
+                    name: row.name,
+                    price: row.price,
+                    isPopular: row.isPopular,
+                    stock: row.stock, // افزودن stock به اینجا
+                    tableId: tableId
+                };
+            });
             console.log(formattedData);
+            // انجام ارسال دیتا
+            setName("");
+            setPrice("");
+            setRegion('Europe');
+            setCategory("ندارد");
+            setRows([]);
+            setStock("");
         } else {
             console.log('Error: همه فیلدها باید پر شوند.');
         }
-        setName("");
-        setPrice("");
-        setRegion('Europe');
-        setCategory("ندارد");
-        setRows([]);
-        setStock('')
     };
+
 
     return (
         <Grid>
@@ -110,7 +113,7 @@ const ProductOption = ({ tableId }) => {
                 ریجن {region} و دسته {category}
             </Typography>
             <Grid container>
-                <Grid md={6}>
+                <Grid xs={12} md={5}>
                     <Typography>ریجن</Typography>
                     <Select
                         value={region}
@@ -118,7 +121,7 @@ const ProductOption = ({ tableId }) => {
                         fullWidth
                         displayEmpty
                         inputProps={{ "aria-label": "Region" }}
-                        sx={{ width: { md: '200px', xs: '100px' }, display: 'flex !important' }}
+                        sx={{ width: { md: '60%', xs: '100%' }, display: 'flex !important' }}
                     >
                         {menuItems.map((x) => (
                             <MenuItem key={x.id} value={x.value}>
@@ -130,7 +133,7 @@ const ProductOption = ({ tableId }) => {
                         ))}
                     </Select>
                 </Grid>
-                <Grid md={6}>
+                <Grid xs={12} md={5}>
                     <Typography>دسته</Typography>
                     <Select
                         value={category}
@@ -138,7 +141,7 @@ const ProductOption = ({ tableId }) => {
                         fullWidth
                         displayEmpty
                         inputProps={{ "aria-label": "Category" }}
-                        sx={{ width: { md: '200px', md: '100px' } }}
+                        sx={{ width: { md: '60%', xs: '100%' } }}
                     >
                         {menuCats.map((x) => (
                             <MenuItem key={x.id} value={x.value}>{x.value}</MenuItem>
@@ -149,8 +152,8 @@ const ProductOption = ({ tableId }) => {
             <Grid container sx={{ display: 'flex', justifyContent: { md: 'space-evenly' }, my: '30px' }}>
                 <Grid container>
                     <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Grid container sm={9} md={10}>
-                            <Grid xs={12} sm={7} md={6}>
+                        <Grid container sm={12} md={10}>
+                            <Grid xs={12} sm={12} md={6}>
                                 <TextField
                                     error={!nameError ? false : true}
                                     helperText={!nameError ? '' : ErrorList[0]}
@@ -158,20 +161,20 @@ const ProductOption = ({ tableId }) => {
                                     value={name}
                                     label="نام محصول"
                                     variant="outlined"
-                                    sx={{ width: { xs: '100%', sm: '80%', md: '90%' }, my: '5px' }}
+                                    sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '5px' }}
                                 />
                             </Grid>
-                            <Grid xs={12} sm={4} md={3}>
+                            <Grid xs={12} sm={5} md={3}>
                                 <TextField
                                     value={stock}
                                     onChange={handleStockChange}
                                     label="موجودی"
                                     variant="outlined"
-                                    sx={{ width: { xs: '100%', sm: '100%', md: '80%' }, my: '5px' }}
+                                    sx={{ width: { xs: '100%', sm: '90%', md: '80%' }, my: '5px' }}
                                 />
                             </Grid>
 
-                            <Grid xs={12} sm={4} md={3}>
+                            <Grid xs={12} sm={7} md={3}>
                                 <TextField
                                     error={!priceError ? false : true}
                                     helperText={!priceError ? '' : ErrorList[1]}
@@ -183,7 +186,7 @@ const ProductOption = ({ tableId }) => {
                                 />
                             </Grid>
                         </Grid>
-                        <Grid sm={3} md={2} sx={{ width: '100%', display: { xs: 'flex', sm: 'block' }, justifyContent: 'center' }}>
+                        <Grid sm={12} md={2} sx={{ width: '100%', display: { xs: 'flex', sm: 'block' }, justifyContent: 'center' }}>
                             <Button sx={{ color: '#362FD9' }} onClick={handleAddRow}>
                                 افزودن ردیف +
                             </Button>
@@ -197,15 +200,15 @@ const ProductOption = ({ tableId }) => {
                             </Typography>
                             <Grid container alignItems="center" marginTop={2}>
                                 <Grid container xs={12} md={7}>
-                                    <Grid xs={12} md={6}>
+                                    <Grid xs={12} sm={12} md={6}>
                                         <TextField value={row.name} label="نام" disabled
                                             sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '10px' }} />
                                     </Grid>
-                                    <Grid xs={12} md={3}>
+                                    <Grid xs={12} sm={5} md={3}>
                                         <TextField value={row.stock} label="موجودی" disabled
-                                            sx={{ width: { xs: '100%', sm: '100%', md: '80%' }, my: '10px' }} />
+                                            sx={{ width: { xs: '100%', sm: '90%', md: '80%' }, my: '10px' }} />
                                     </Grid>
-                                    <Grid xs={12} md={3}>
+                                    <Grid xs={12} sm={7} md={3}>
                                         <TextField value={row.price} label="قیمت (تومان)" disabled
                                             sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }} />
                                     </Grid>
