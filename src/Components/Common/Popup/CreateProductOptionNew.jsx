@@ -90,7 +90,7 @@ const AddProductFeatureNew = ({ tableId }) => {
     //     console.log(formattedData);
     // };
     const fieldDes = {
-        width: '250px'
+        // width: '250px'
     }
     // const [name, setName] = useState("");
     // const [price, setPrice] = useState("");
@@ -168,7 +168,7 @@ const AddProductFeatureNew = ({ tableId }) => {
                         step && (
                             <>
                                 <Grid container>
-                                    <Grid xs={6}>
+                                    <Grid md={6}>
                                         <Typography>ریجن</Typography>
                                         <Select
                                             value={region}
@@ -188,7 +188,7 @@ const AddProductFeatureNew = ({ tableId }) => {
                                             ))}
                                         </Select>
                                     </Grid>
-                                    <Grid xs={6}>
+                                    <Grid md={6}>
                                         <Typography>دسته</Typography>
                                         <Select
                                             value={category}
@@ -196,7 +196,7 @@ const AddProductFeatureNew = ({ tableId }) => {
                                             fullWidth
                                             displayEmpty
                                             inputProps={{ "aria-label": "Category" }}
-                                            sx={{ width: { md: '200px', xs: '100px' } }}
+                                            sx={{ width: { md: '200px', md: '100px' } }}
                                         >
                                             {menuCats.map((x) => (
                                                 <MenuItem key={x.id} value={x.value}>{x.value}</MenuItem>
@@ -215,13 +215,11 @@ const AddProductFeatureNew = ({ tableId }) => {
                                 <Grid>
                                     <DialogContentText align="left" sx={{ my: '20px' }}>ایجاد محصول برای ریجن {region}</DialogContentText>
                                 </Grid>
-                                <Grid sx={{ display: 'flex', justifyContent: 'space-evenly', width: "100%", my: '30px' }}>
-                                    <Grid>
-                                        {/* <Typography sx={{ my: '15px' }}>نام محصول</Typography> */}
-                                        {/* <Rows /> */}
+                                <Grid container sx={{ display: 'flex', justifyContent: { md: 'space-evenly' }, my: '30px' }}>
+                                    <Grid container>
                                         <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <Grid container xs={10} sx={{ width: '550px', display: 'flex', justifyContent: 'space-between' }}>
-                                                <Grid xs={6}>
+                                            <Grid container sm={9} md={9}>
+                                                <Grid xs={12} sm={7} md={7}>
                                                     <TextField
                                                         error={!nameError ? false : true}
                                                         helperText={!nameError ? '' : ErrorList[0]}
@@ -229,10 +227,10 @@ const AddProductFeatureNew = ({ tableId }) => {
                                                         value={name}
                                                         label="نام محصول"
                                                         variant="outlined"
-                                                        sx={fieldDes}
+                                                        sx={{ width: { xs: '100%', sm: '80%', md: '80%' }, my: '5px' }}
                                                     />
                                                 </Grid>
-                                                <Grid xs={6}>
+                                                <Grid xs={12} sm={4} md={4}>
                                                     <TextField
                                                         error={!priceError ? false : true}
                                                         helperText={!priceError ? '' : ErrorList[1]}
@@ -240,11 +238,11 @@ const AddProductFeatureNew = ({ tableId }) => {
                                                         value={price}
                                                         label="قیمت محصول"
                                                         variant="outlined"
-                                                        sx={fieldDes}
+                                                        sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '5px' }}
                                                     />
                                                 </Grid>
                                             </Grid>
-                                            <Grid xs={2}>
+                                            <Grid sm={3} md={3} sx={{ width: '100%', display: { xs: 'flex', sm: 'block' }, justifyContent: 'center' }}>
                                                 <Button sx={{ color: '#362FD9' }} onClick={handleAddRow}>
                                                     افزودن ردیف +
                                                 </Button>
@@ -252,23 +250,23 @@ const AddProductFeatureNew = ({ tableId }) => {
                                         </Grid>
 
                                         {rows.map((row) => (
-                                            <Grid key={row.id} sx={{ display: 'flex', justifyContent: 'space-evenly', width: "100%", my: '30px' }}>
-                                                <Grid container display="flex" alignItems="center" marginTop={2}>
-                                                    <Grid container xs={8}>
-                                                        <Grid xs={8}>
+                                            <Grid container key={row.id} sx={{ my: '30px' }}>
+                                                <Grid container alignItems="center" marginTop={2}>
+                                                    <Grid container xs={12} md={7}>
+                                                        <Grid xs={12} md={8}>
                                                             <TextField value={row.name} label="نام" disabled
-                                                                sx={{ width: '250px' }} />
+                                                                sx={{ width: { xs: '100%', sm: '90%' }, my: '10px' }} />
                                                         </Grid>
-                                                        <Grid xs={4}>
+                                                        <Grid xs={12} md={4}>
                                                             <TextField value={row.price} label="قیمت (تومان)" disabled
-                                                                sx={{ width: '120px' }} />
+                                                                sx={{ width: { xs: '100%', sm: '100%' }, my: '10px' }} />
                                                         </Grid>
                                                     </Grid>
-                                                    <Grid container xs={4} alignItems={'center'} >
-                                                        <Grid xs={10}>
+                                                    <Grid container xs={12} md={5} alignItems={'center'} >
+                                                        <Grid xs={6} md={6}>
                                                             <Button
                                                                 onClick={() => handleTogglePopular(row.id)}
-                                                                sx={{ color: '#4B4B57', p: '15px', marginLeft: '10px', border: '1px solid #bdbdbd', alignItems: 'center', display: 'flex', fontSize: '13px' }}
+                                                                sx={{ color: '#4B4B57', p: '15px', marginLeft: { sm: '40px' }, border: '1px solid #bdbdbd', alignItems: 'center', display: 'flex', fontSize: '13px' }}
                                                             >
                                                                 Popular
                                                                 {!row.isPopular ? (
@@ -290,11 +288,13 @@ const AddProductFeatureNew = ({ tableId }) => {
                                                                 )}
                                                             </Button>
                                                         </Grid>
-                                                        <Grid xs={2}>
+                                                        <Grid xs={4} md={6}>
                                                             <Button
                                                                 onClick={() => handleDeleteRow(row.id)}
                                                                 // style={{ marginLeft: '10px' }}
                                                                 color="secondary"
+                                                                fullWidth
+                                                                sx={{ marginLeft: { xs: '40px', sm: '20px' } }}
                                                             >
                                                                 حذف
                                                             </Button>
@@ -305,7 +305,7 @@ const AddProductFeatureNew = ({ tableId }) => {
                                         ))}
 
                                         <Button variant="contained" color="primary" onClick={handleSubmit} style={{ marginTop: '20px' }}>
-                                            ارسال به API
+                                            افزودن ویژگی
                                         </Button>
                                     </Grid>
                                 </Grid>
