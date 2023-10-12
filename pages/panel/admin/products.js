@@ -2,10 +2,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import NewT from "Components/Common/TableItems/NewT";
 import { useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-
-import AddProductFeatures from 'Components/Common/Popup/CreateProductOption'
 import { AddProductIcon, IconActiveProducts } from "Icons/icons";
-import Rows from "Components/Common/Popup/row";
 const Products = () => {
     const ButtonData = [
         { text: 'حذف دسته , ریجن , نوع' },

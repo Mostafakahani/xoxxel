@@ -9,7 +9,7 @@ function UploadFile({
   accept = "image/*",
   id,
   readOnly = false,
-  onChange = () => {},
+  onChange = () => { },
   fileName = null,
   srcImage = null,
 }) {
@@ -17,7 +17,7 @@ function UploadFile({
   const file = useRef();
 
   return (
-    <Box sx={styles.box} className="box-upload input-box">
+    <Box sx={{ ...styles.box, width: '100%', my: '15px' }} className="box-upload input-box">
       {label && <label htmlFor={id}>{label}</label>}
       <Box
         className="box-input center-between"
@@ -51,8 +51,8 @@ function UploadFile({
           {fileName
             ? fileName
             : srcImage
-            ? srcImage?.split("/")[srcImage?.split("/")?.length - 1]
-            : "فایل خود را انتخاب کنید"}
+              ? srcImage?.split("/")[srcImage?.split("/")?.length - 1]
+              : "فایل خود را انتخاب کنید"}
         </Typography>
         <StatusButton
           text="مشاهده"

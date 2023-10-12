@@ -113,7 +113,7 @@ const AddProductFeatureNew = ({ tableId }) => {
         setOpen(false);
         setName("");
         setPrice("");
-        setRegion("");
+        setRegion(null);
         setCategory("ندارد");
         setStep(true);
         setRows([]);
@@ -136,7 +136,7 @@ const AddProductFeatureNew = ({ tableId }) => {
                     setOpen(false)
                     setName("");
                     setPrice("");
-                    setRegion("")
+                    setRegion(null)
                     setCategory("ندارد")
                     setStep(true)
                 }}

@@ -12,8 +12,8 @@ import Checkbox from "@mui/material/Checkbox";
 import { Avatar, Button, Grid } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
-import AddProductFeatures from 'Components/Common/Popup/CreateProductOption'
 import AddProductFeatureNew from "../Popup/CreateProductOptionNew";
+import Link from "next/link";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -277,8 +277,7 @@ export default function TableItems({
                         {e?.type === "btn" && (
                           <>
                             <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-                              {/* <AddProductFeatures tableId={row.data[0]} /> */}
-                              <AddProductFeatureNew tableId={row.data[0]}/>
+                              <AddProductFeatureNew tableId={row.data[0]} />
                               {/* <Button
                                 onClick={(x) => console.log(row.data[0])}
                                 // onClick={() => props.show(row["id"])}
@@ -287,8 +286,10 @@ export default function TableItems({
 
                               </Button> */}
                               <Button sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
-                                <EyesIcon />
-                                <Typography>مشاهده و ویرایش</Typography>
+                                <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
+                                  <EyesIcon />
+                                  <Typography>مشاهده و ویرایش</Typography>
+                                </Link>
                               </Button>
                             </Grid>
                           </>
