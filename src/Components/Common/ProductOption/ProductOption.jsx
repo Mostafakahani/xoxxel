@@ -1,7 +1,7 @@
 import { Box, Button, Grid, MenuItem, Select, SvgIcon, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 const ProductOption = ({ tableId }) => {
-    const [region, setRegion] = useState(null);
+    const [region, setRegion] = useState('Europe');
     const [category, setCategory] = useState("ندارد");
     const [rows, setRows] = useState([]);
     const [name, setName] = useState("");
@@ -11,6 +11,7 @@ const ProductOption = ({ tableId }) => {
     const [nameError, setNameError] = useState(false)
     const [priceError, setPriceError] = useState(false)
 
+    const [stock, setStock] = useState("");
 
     const handleAddRow = () => {
         if (name.trim() === "" || price.trim() === "") {
@@ -21,12 +22,13 @@ const ProductOption = ({ tableId }) => {
             const isDuplicate = rows.some((row) => row.name === name && row.price === price);
             if (!isDuplicate) {
                 setIsPopular(false);
-                setRows([...rows, { id: Date.now(), name: name, price: price, isPopular: isPopular }]);
+                setRows([...rows, { id: Date.now(), name: name, price: price, stock: stock, region: region, category: category, isPopular: isPopular }]);
                 setName("");
                 setPrice("");
-                console.log("Ok");
+                console.log(stock);
                 setNameError(false)
                 setPriceError(false)
+                setStock('')
 
             } else {
                 console.log("این نام و قیمت قبلاً وارد شده است.");
@@ -60,6 +62,9 @@ const ProductOption = ({ tableId }) => {
     const handlePriceChange = (e) => {
         setPrice(e.target.value);
     };
+    const handleStockChange = (e) => {
+        setStock(e.target.value);
+    };
 
 
     const menuItems = [
@@ -80,21 +85,23 @@ const ProductOption = ({ tableId }) => {
                 name: row.name,
                 price: row.price,
                 isPopular: row.isPopular,
+                stock: stock,
                 tableId: tableId
             };
         });
 
-        const isValidData = formattedData.every((data) => data.name && data.price !== '' && data.isPopular !== '' && data.tableId !== '');
-        if (isValidData) {
+        const isValidData = formattedData.every((data) => data.name && data.price !== '' && data.isPopular !== '' && data.stock !== '' && data.tableId !== '');
+        if (!isValidData) {
             console.log(formattedData);
         } else {
             console.log('Error: همه فیلدها باید پر شوند.');
         }
         setName("");
         setPrice("");
-        setRegion(null);
+        setRegion('Europe');
         setCategory("ندارد");
         setRows([]);
+        setStock('')
     };
 
     return (
@@ -142,8 +149,8 @@ const ProductOption = ({ tableId }) => {
             <Grid container sx={{ display: 'flex', justifyContent: { md: 'space-evenly' }, my: '30px' }}>
                 <Grid container>
                     <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Grid container sm={9} md={9}>
-                            <Grid xs={12} sm={7} md={7}>
+                        <Grid container sm={9} md={10}>
+                            <Grid xs={12} sm={7} md={6}>
                                 <TextField
                                     error={!nameError ? false : true}
                                     helperText={!nameError ? '' : ErrorList[0]}
@@ -151,10 +158,20 @@ const ProductOption = ({ tableId }) => {
                                     value={name}
                                     label="نام محصول"
                                     variant="outlined"
-                                    sx={{ width: { xs: '100%', sm: '80%', md: '80%' }, my: '5px' }}
+                                    sx={{ width: { xs: '100%', sm: '80%', md: '90%' }, my: '5px' }}
                                 />
                             </Grid>
-                            <Grid xs={12} sm={4} md={4}>
+                            <Grid xs={12} sm={4} md={3}>
+                                <TextField
+                                    value={stock}
+                                    onChange={handleStockChange}
+                                    label="موجودی"
+                                    variant="outlined"
+                                    sx={{ width: { xs: '100%', sm: '100%', md: '80%' }, my: '5px' }}
+                                />
+                            </Grid>
+
+                            <Grid xs={12} sm={4} md={3}>
                                 <TextField
                                     error={!priceError ? false : true}
                                     helperText={!priceError ? '' : ErrorList[1]}
@@ -162,11 +179,11 @@ const ProductOption = ({ tableId }) => {
                                     value={price}
                                     label="قیمت محصول"
                                     variant="outlined"
-                                    sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '5px' }}
+                                    sx={{ width: { xs: '100%', sm: '100%', md: '70%' }, my: '5px' }}
                                 />
                             </Grid>
                         </Grid>
-                        <Grid sm={3} md={3} sx={{ width: '100%', display: { xs: 'flex', sm: 'block' }, justifyContent: 'center' }}>
+                        <Grid sm={3} md={2} sx={{ width: '100%', display: { xs: 'flex', sm: 'block' }, justifyContent: 'center' }}>
                             <Button sx={{ color: '#362FD9' }} onClick={handleAddRow}>
                                 افزودن ردیف +
                             </Button>
@@ -175,13 +192,20 @@ const ProductOption = ({ tableId }) => {
 
                     {rows.map((row) => (
                         <Grid container key={row.id} sx={{ my: '10px' }}>
+                            <Typography align="left" sx={{ mt: '40px', color: '#2C7EFA' }}>
+                                ریجن {row.region} و دسته {row.category}
+                            </Typography>
                             <Grid container alignItems="center" marginTop={2}>
                                 <Grid container xs={12} md={7}>
-                                    <Grid xs={12} md={8}>
+                                    <Grid xs={12} md={6}>
                                         <TextField value={row.name} label="نام" disabled
                                             sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '10px' }} />
                                     </Grid>
-                                    <Grid xs={12} md={4}>
+                                    <Grid xs={12} md={3}>
+                                        <TextField value={row.stock} label="موجودی" disabled
+                                            sx={{ width: { xs: '100%', sm: '100%', md: '80%' }, my: '10px' }} />
+                                    </Grid>
+                                    <Grid xs={12} md={3}>
                                         <TextField value={row.price} label="قیمت (تومان)" disabled
                                             sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }} />
                                     </Grid>
