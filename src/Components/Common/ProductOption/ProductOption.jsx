@@ -188,7 +188,7 @@ const ProductOption = ({ tableId }) => {
                         </Grid>
                         <Grid sm={12} md={2} sx={{ width: '100%', display: { xs: 'flex', sm: 'block' }, justifyContent: 'center' }}>
                             <Button sx={{ color: '#362FD9' }} onClick={handleAddRow}>
-                                افزودن ردیف +
+                               افزودن به لیست +
                             </Button>
                         </Grid>
                     </Grid>

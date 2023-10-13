@@ -4,6 +4,25 @@ import AccountLayout from "Components/Common/Layout/AccountLayout";
 import UploadFile from "Components/Common/UploadFile";
 import ProductOption from "Components/Common/ProductOption/ProductOption";
 const CreateProduct = () => {
+    const [productName, setProductName] = useState("");
+    const [productPrice, setProductPrice] = useState("");
+    const [starRating, setStarRating] = useState("");
+    const [labelInput, setLabelInput] = useState("");
+    const [placeholder, setPlaceholder] = useState("");
+    const [textArea, setTextArea] = useState("");
+
+    const [allData, setAllData] = useState([]);
+
+    const handleSubmit = () => {
+        setAllData([...allData, {
+            id: Date.now(), productName: productName, productPrice: productPrice, starRating: starRating, labelInput: labelInput,
+            placeholder: placeholder, textArea: textArea
+        }])
+        console.log(allData)
+    }
+
+
+
     return (
         <>
             <AccountLayout>
@@ -12,38 +31,38 @@ const CreateProduct = () => {
                         <Grid sm={9} md={12}>
                             <Typography>ایجاد محصول </Typography>
                         </Grid>
-                        <Grid container sm={9} md={12} sx={{ my: '15px' }}>
-                            <Grid xs={12} sm={7} md={3}>
+                        <Grid container xs={12} sm={12} md={12} sx={{ my: '15px' }}>
+                            <Grid xs={12} sm={6} md={3}>
                                 <TextField
                                     // error={!nameError ? false : true}
                                     // helperText={!nameError ? '' : ErrorList[0]}
-                                    // onChange={handleNameChange}
-                                    // value={name}
+                                    onChange={(e) => setProductName(e.target.value)}
+                                    value={productName}
                                     label="نام محصول"
                                     variant="outlined"
-                                    sx={{ my: '5px' }}
+                                    sx={{ my: '5px', width: { xs: '100%', sm: '90%', md: '80%' } }}
                                 />
                             </Grid>
-                            <Grid xs={12} sm={4} md={3}>
+                            <Grid xs={12} sm={3} md={3}>
                                 <TextField
                                     // error={!priceError ? false : true}
                                     // helperText={!priceError ? '' : ErrorList[1]}
-                                    // onChange={handlePriceChange}
-                                    // value={price}
+                                    onChange={(e) => setProductPrice(e.target.value)}
+                                    value={productPrice}
                                     label="قیمت محصول"
                                     variant="outlined"
-                                    sx={{ my: '5px' }}
+                                    sx={{ my: '5px', width: { xs: '100%', sm: '90%', md: '80%' } }}
                                 />
                             </Grid>
-                            <Grid xs={12} sm={4} md={3}>
+                            <Grid xs={12} sm={3} md={3}>
                                 <TextField
                                     // error={!priceError ? false : true}
                                     // helperText={!priceError ? '' : ErrorList[1]}
-                                    // onChange={handlePriceChange}
-                                    // value={price}
+                                    onChange={(e) => setStarRating(e.target.value)}
+                                    value={starRating}
                                     label="ستاره محصول"
                                     variant="outlined"
-                                    sx={{ my: '5px' }}
+                                    sx={{ my: '5px', width: { xs: '100%', sm: '100%', md: '80%' } }}
                                 />
                             </Grid>
                         </Grid>
@@ -76,22 +95,22 @@ const CreateProduct = () => {
                         <TextField
                             // error={!priceError ? false : true}
                             // helperText={!priceError ? '' : ErrorList[1]}
-                            // onChange={handlePriceChange}
-                            // value={price}
+                            onChange={(e) => setLabelInput(e.target.value)}
+                            value={labelInput}
                             label="Label input"
                             variant="outlined"
-                            sx={{ my: '5px' }}
+                            sx={{ my: '5px', width: { xs: '100%', sm: '90%', md: '80%' } }}
                         />
                     </Grid>
                     <Grid xs={12} sm={4} md={3}>
                         <TextField
                             // error={!priceError ? false : true}
                             // helperText={!priceError ? '' : ErrorList[1]}
-                            // onChange={handlePriceChange}
-                            // value={price}
+                            onChange={(e) => setPlaceholder(e.target.value)}
+                            value={placeholder}
                             label="Place holder"
                             variant="outlined"
-                            sx={{ my: '5px' }}
+                            sx={{ my: '5px', width: { xs: '100%', sm: '90%', md: '80%' } }}
                         />
                     </Grid>
 
@@ -102,8 +121,8 @@ const CreateProduct = () => {
                             fullWidth
                             // error={!priceError ? false : true}
                             // helperText={!priceError ? '' : ErrorList[1]}
-                            // onChange={handlePriceChange}
-                            // value={price}
+                            onChange={(e) => setTextArea(e.target.value)}
+                            value={textArea}
                             label='متن زیر Input'
                             variant="outlined"
                             sx={{ my: '5px' }}
@@ -116,7 +135,7 @@ const CreateProduct = () => {
                 </Grid>
 
                 <Grid sx={{ my: '25px' }}>
-                    <Button sx={{ color: '#1C49F1' }}>ذخیره تغییرات</Button>
+                    <Button sx={{ color: '#1C49F1' }} onClick={handleSubmit}>ذخیره تغییرات</Button>
                     <Button sx={{ color: '#B12640' }}>انصراف</Button>
                     <Button sx={{ color: '#1D1E2D', borderRadius: '5px', border: '1px solid #807D7D' }}>اضافه کردن ویژگی جدید</Button>
                 </Grid>
