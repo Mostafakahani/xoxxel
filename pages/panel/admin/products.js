@@ -3,6 +3,8 @@ import NewT from "Components/Common/TableItems/NewT";
 import { useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { AddProductIcon, IconActiveProducts } from "Icons/icons";
+import Link from "next/link";
+import CreateRegon from "Components/Common/CreateRegon/CreateRegon";
 const Products = () => {
     const ButtonData = [
         { text: 'حذف دسته , ریجن , نوع' },
@@ -11,86 +13,9 @@ const Products = () => {
         { text: 'ایجاد دسته' }
     ]
 
-    const headCells = [
-        // {
-        //     id: "id",
-        //     label: "#",
-        // },
-        {
-            id: "productCode",
-            label: "کد محصول",
-        },
-        {
-            id: "createdBy",
-            label: "ایجاد کننده",
-        },
-        {
-            id: "productName",
-            label: "نام محصول",
-        },
-        {
-            id: "type",
-            label: "نوع",
-        },
-        {
-            id: "createdAt",
-            label: "تاریخ ایجاد",
-        },
-        {
-            id: "actions",
-            label: "اقدامات",
-        },
-        // {
-        //     id: "status",
-        //     label: "تمدید",
-        // },
-    ];
-
-    function createData(
-        // id,
-        productCode,
-        createdBy,
-        type,
-        productName,
-        createdAt,
-        actions,
-        // CopyLink,
-    ) {
-        return {
-            // id,
-            productCode,
-            createdBy,
-            type,
-            productName,
-            createdAt,
-            actions,
-            // CopyLink,
-        };
-    }
-
-    const rows = [
-        createData(
-            "#234",
-            "مدیریت",
-            "Call of duty mobile",
-            " Gift card",
-            "1401/7/7",
-
-        ),
-        createData(
-            "#234",
-            "مدیریت",
-            "Call of duty mobile",
-            " Gift card",
-            "1401/7/7",
-
-        ),
-
-    ];
     const [itemsForDel, setItemsForDel] = useState([]);
 
     const [selected, setSelected] = useState([]);
-    const [tags, setTags] = useState([]);
     const dataHead = ["کد محصول", "ایجاد کننده", "نام محصول", "نوع", "تاریخ ایجاد", "اقدامات"]
     const dataBody = [
         {
@@ -167,11 +92,15 @@ const Products = () => {
                         </Grid>
                     </Grid>
                     <Grid xs={12} md={7}>
-                        {
+                        {/* {
                             ButtonData.map((x, index) => (
-                                <Button key={index} sx={{ mr: {md:"5px", xs: '2px'}, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}>{x.text}</Button>
+                                <Button key={index} sx={{ mr: { md: "5px", xs: '2px' }, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}>{x.text}</Button>
                             ))
-                        }
+                        } */}
+                        <Grid>
+                            <CreateRegon />
+                        </Grid>
+
                         <Button sx={{
                             backgroundColor: '#244CDF', py: "5px", px: '12px', borderRadius: "5px", color: "#FDFDFD",
                             "&:hover": {
@@ -179,9 +108,11 @@ const Products = () => {
                                 backgroundColor: '#4166ef'
                             }
                         }}>
-                            <Grid sx={{ display: 'flex', alignItems: "center" }}>
-                                ثبت محصول جدید
-                                <AddProductIcon />
+                            <Grid >
+                                <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: "center", color: '#FDFDFD' }}>
+                                    ثبت محصول جدید
+                                    <AddProductIcon />
+                                </Link>
                             </Grid>
                         </Button>
                     </Grid>
