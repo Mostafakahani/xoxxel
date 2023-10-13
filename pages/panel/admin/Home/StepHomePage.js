@@ -1,5 +1,4 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, TextField, Typography } from "@mui/material"
-import StepOne from "Components/Common/HomePageSteps/StepOne"
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import UploadFile from "Components/Common/UploadFile";
 import { useState } from "react";
@@ -46,12 +45,12 @@ const StepHomePage = () => {
             <AccountLayout>
                 <Grid sx={{ backgroundColor: '#fff', p: '25px' }}>
                     <Typography sx={{ color: '#333333', my: '15px', fontSize: '18px' }}> مراحل صفحه اصلی</Typography>
-                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
                         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                             <Typography sx={{ color: '#2C7EFA', my: '15px', fontSize: '16px' }}>مرحله اول</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid sx={{ border: '2px dashed #5A5A5A', borderRadius: '10px', p: '20px' }}>
+                            <Grid >
                                 <Grid container>
                                     <Grid container>
                                         <Grid item xs={12} sm={7} md={4}>
@@ -106,12 +105,12 @@ const StepHomePage = () => {
 
                         </AccordionDetails>
                     </Accordion>
-                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
                         <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
                             <Typography sx={{ color: '#2C7EFA', my: '15px', fontSize: '16px' }}>مرحله دوم</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid sx={{ border: '2px dashed #5A5A5A', borderRadius: '10px', p: '20px' }}>
+                            <Grid >
                                 <Grid container>
                                     <Grid container>
                                         <Grid item xs={12} sm={7} md={4}>
@@ -127,7 +126,7 @@ const StepHomePage = () => {
                                         </Grid>
                                     </Grid>
                                     <Grid container>
-                                    <Grid item xs={12} sm={7} md={7}>
+                                        <Grid item xs={12} sm={7} md={7}>
                                             <TextField
                                                 // error={!priceError ? false : true}
                                                 // helperText={!priceError ? '' : ErrorList[1]}
@@ -166,15 +165,15 @@ const StepHomePage = () => {
 
                         </AccordionDetails>
                     </Accordion>
-                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
                         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
                             <Typography sx={{ color: '#2C7EFA', my: '15px', fontSize: '16px' }}>مرحله سوم</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Grid sx={{ border: '2px dashed #5A5A5A', borderRadius: '10px', p: '20px' }}>
+                            <Grid >
                                 <Grid container>
                                     <Grid container>
-                                    <Grid item xs={12} sm={7} md={4}>
+                                        <Grid item xs={12} sm={7} md={4}>
                                             <TextField
                                                 // error={!priceError ? false : true}
                                                 // helperText={!priceError ? '' : ErrorList[1]}
@@ -187,7 +186,7 @@ const StepHomePage = () => {
                                         </Grid>
                                     </Grid>
                                     <Grid container>
-                                    <Grid item xs={12} sm={7} md={7}>
+                                        <Grid item xs={12} sm={7} md={7}>
                                             <TextField
                                                 // error={!priceError ? false : true}
                                                 // helperText={!priceError ? '' : ErrorList[1]}
@@ -226,7 +225,7 @@ const StepHomePage = () => {
                         </AccordionDetails>
                     </Accordion>
                     <Grid sx={{ my: '20px' }}>
-                        <Button onClick={handleSubmit} sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
+                        <Button variant="contained" disableElevation onClick={handleSubmit} sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
                     </Grid>
                 </Grid>
             </AccountLayout>
