@@ -1,13 +1,10 @@
 import { Accordion, AccordionDetails, AccordionSummary, Grid, TextField, Typography } from "@mui/material";
-import UploadFile from "../../UploadFile";
 import { useState } from "react";
 
 const StepOne = (props) => {
-    const [expanded, setExpanded] = useState(false);
     const [question, setQuestion] = useState('')
     const [answer, setAnswer] = useState('')
 
-    const [allData, setAllData] = useState([])
 
     const handleSubmit = () => {
         // let requestData = [];
@@ -29,11 +26,11 @@ const StepOne = (props) => {
     };
 
     const handleChange = (panel) => (event, isExpanded) => {
-        setExpanded(isExpanded ? panel : false);
+        props.onChange(panel, isExpanded);
     };
     return (
         <>
-            <Accordion expanded={expanded === `panel${props.id}`} onChange={handleChange(`panel${props.id}`)} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
+            <Accordion expanded={props.expanded === `panel${props.id}`} onChange={handleChange(`panel${props.id}`)} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
                 <AccordionSummary aria-controls={`panel${props.id}d-content`} id={`panel${props.id}d-header`}>
                     <Typography sx={{ color: '#2C7EFA', my: '10px', fontSize: '16px' }}>{props.textStep} </Typography>
                 </AccordionSummary>
