@@ -4,7 +4,10 @@ import { useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { AddProductIcon, IconActiveProducts } from "Icons/icons";
 import Link from "next/link";
-import CreateRegon from "Components/Common/CreateRegon/CreateRegon";
+import CreateRegon from "Components/Common/Creatives/CreateRegon";
+import CreateCategory from "Components/Common/Creatives/CreateCategory";
+import CreateType from "Components/Common/Creatives/CreateType";
+import EditOptionsDes from "Components/Common/Creatives/EditOptionsDes";
 const Products = () => {
     const ButtonData = [
         { text: 'حذف دسته , ریجن , نوع' },
@@ -79,10 +82,10 @@ const Products = () => {
         <>
             <AccountLayout>
                 <Grid
-                    // sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end  ' }}
                     container
                 >
-                    <Grid xs={12} md={5}>
+                    <Grid xs={12} md={4} sx={{ mb: { xs: '25px', md: '0' } }}>
                         <Grid sx={{ display: 'flex' }}>
                             <IconActiveProducts />
                             <Typography sx={{ ml: "10px" }}>لیست محصولات</Typography>
@@ -91,30 +94,40 @@ const Products = () => {
                             <Typography sx={{ mt: "10px", fontSize: '12px' }}>شما میتوانید در لیست زیر تمام محصولات ثبت شده را مشاهده و ویرایش کنید.</Typography>
                         </Grid>
                     </Grid>
-                    <Grid xs={12} md={7}>
-                        {/* {
-                            ButtonData.map((x, index) => (
-                                <Button key={index} sx={{ mr: { md: "5px", xs: '2px' }, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}>{x.text}</Button>
-                            ))
-                        } */}
-                        <Grid>
+                    <Grid container xs={12} md={8} sx={{
+                        display: { xs: 'flex', md: '' },
+                        flexWrap: { xs: 'nowrap', md: 'unset' },
+                        overflowX: { xs: "auto", md: 'unset' },
+                        whiteSpace: { xs: "nowrap", md: 'unset' },
+                    }}>
+                        <Grid md={1.8}>
                             <CreateRegon />
                         </Grid>
+                        <Grid md={1.8}>
+                            <CreateCategory />
+                        </Grid>
+                        <Grid md={1.8}>
+                            <CreateType />
+                        </Grid>
+                        <Grid md={3}>
+                            <EditOptionsDes />
+                        </Grid>
 
-                        <Button sx={{
-                            backgroundColor: '#244CDF', py: "5px", px: '12px', borderRadius: "5px", color: "#FDFDFD",
-                            "&:hover": {
-                                color: '#FDFDFD',
-                                backgroundColor: '#4166ef'
-                            }
-                        }}>
-                            <Grid >
+                        <Grid md={3}>
+                            <Button sx={{
+                                backgroundColor: '#244CDF', py: "5px", px: '12px', borderRadius: "5px", color: "#FDFDFD",
+                                fontSize: '12px',
+                                "&:hover": {
+                                    color: '#FDFDFD',
+                                    backgroundColor: '#4166ef'
+                                }
+                            }}>
                                 <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: "center", color: '#FDFDFD' }}>
                                     ثبت محصول جدید
                                     <AddProductIcon />
                                 </Link>
-                            </Grid>
-                        </Button>
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid >
                 <Grid sx={{ mt: "20px" }}>
