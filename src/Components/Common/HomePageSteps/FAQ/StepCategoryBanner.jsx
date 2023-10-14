@@ -2,7 +2,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Grid, TextField, Typogra
 import UploadFile from "Components/Common/UploadFile";
 import { useState } from "react";
 
-const StepChangeSlider = (props) => {
+const StepCategoryBanner = (props) => {
     const [text, setText] = useState('')
     const [link, setLink] = useState('')
     const [button, setButton] = useState('')
@@ -101,4 +101,4 @@ const StepChangeSlider = (props) => {
         </>
     )
 }
-export default StepChangeSlider;
+export default StepCategoryBanner;

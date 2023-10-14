@@ -2,10 +2,13 @@ import { Accordion, AccordionDetails, AccordionSummary, Grid, TextField, Typogra
 import UploadFile from "Components/Common/UploadFile";
 import { useState } from "react";
 
-const StepChangeSlider = (props) => {
-    const [text, setText] = useState('')
+const StepGiftCards = (props) => {
     const [link, setLink] = useState('')
+    const [deliveryType, setDeliveryType] = useState('')
+    const [customer, setCustomer] = useState('')
+    const [save, setSave] = useState('')
     const [button, setButton] = useState('')
+
 
 
     const handleSubmit = () => {
@@ -40,15 +43,15 @@ const StepChangeSlider = (props) => {
                     <Grid >
                         <Grid container>
                             <Grid container>
-                                <Grid item xs={12} sm={7} md={6}>
-                                    <TextField
-                                        // error={!priceError ? false : true}
-                                        // helperText={!priceError ? '' : ErrorList[1]}
-                                        onChange={(e) => setText(e.target.value)}
-                                        value={text}
-                                        label="متن  "
-                                        variant="outlined"
-                                        sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
+
+                            </Grid>
+                            <Grid container>
+                                <Grid item xs={12} sm={7} md={12}>
+                                    <UploadFile
+                                        id={"file1"}
+                                        accept="video/*"
+                                        label={"تصویر  ( 728*357)"}
+                                        onChange={(e) => console.log(e)}
                                     />
                                 </Grid>
                             </Grid>
@@ -59,7 +62,7 @@ const StepChangeSlider = (props) => {
                                         // helperText={!priceError ? '' : ErrorList[1]}
                                         onChange={(e) => setLink(e.target.value)}
                                         value={link}
-                                        label="لینک  "
+                                        label="لینک  ( 728*357)  "
                                         variant="outlined"
                                         // multiline
                                         // flexGrow={1}
@@ -72,26 +75,55 @@ const StepChangeSlider = (props) => {
                                     <TextField
                                         // error={!priceError ? false : true}
                                         // helperText={!priceError ? '' : ErrorList[1]}
+                                        onChange={(e) => setDeliveryType(e.target.value)}
+                                        value={deliveryType}
+                                        label="Delivery type"
+                                        variant="outlined"
+                                        // multiline
+                                        // flexGrow={1}
+                                        sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '10px' }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={7} md={3}>
+                                    <TextField
+                                        // error={!priceError ? false : true}
+                                        // helperText={!priceError ? '' : ErrorList[1]}
+                                        onChange={(e) => setCustomer(e.target.value)}
+                                        value={customer}
+                                        label="customer"
+                                        variant="outlined"
+                                        // multiline
+                                        // flexGrow={1}
+                                        sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '10px' }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={7} md={3}>
+                                    <TextField
+                                        // error={!priceError ? false : true}
+                                        // helperText={!priceError ? '' : ErrorList[1]}
+                                        onChange={(e) => setSave(e.target.value)}
+                                        value={save}
+                                        label="Save"
+                                        variant="outlined"
+                                        // multiline
+                                        // flexGrow={1}
+                                        sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '10px' }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={7} md={3}>
+                                    <TextField
+                                        // error={!priceError ? false : true}
+                                        // helperText={!priceError ? '' : ErrorList[1]}
                                         onChange={(e) => setButton(e.target.value)}
                                         value={button}
-                                        label="متن دکمه (حداکثر 10 کاراکتر)  "
+                                        label="Button"
                                         variant="outlined"
+                                        // multiline
+                                        // flexGrow={1}
                                         sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
                                     />
                                 </Grid>
                             </Grid>
-                            <Grid container>
-                                <Grid item xs={12} sm={7} md={12}>
-                                    <UploadFile
-                                        id={"file1"}
-                                        accept="video/*"
-                                        label={"تصویر  ( 728*357)"}
-                                        onChange={(e) => console.log(e)}
-                                    />
-                                </Grid>
-                            </Grid>
-
-
                         </Grid>
                     </Grid>
 
@@ -101,4 +133,4 @@ const StepChangeSlider = (props) => {
         </>
     )
 }
-export default StepChangeSlider;
+export default StepGiftCards;

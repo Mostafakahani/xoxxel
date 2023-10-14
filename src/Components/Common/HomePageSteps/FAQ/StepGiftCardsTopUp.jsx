@@ -2,10 +2,11 @@ import { Accordion, AccordionDetails, AccordionSummary, Grid, TextField, Typogra
 import UploadFile from "Components/Common/UploadFile";
 import { useState } from "react";
 
-const StepChangeSlider = (props) => {
-    const [text, setText] = useState('')
+const StepGiftCardsTopUp = (props) => {
     const [link, setLink] = useState('')
-    const [button, setButton] = useState('')
+    const [titel, setTitel] = useState('')
+
+
 
 
     const handleSubmit = () => {
@@ -40,42 +41,16 @@ const StepChangeSlider = (props) => {
                     <Grid >
                         <Grid container>
                             <Grid container>
-                                <Grid item xs={12} sm={7} md={6}>
-                                    <TextField
-                                        // error={!priceError ? false : true}
-                                        // helperText={!priceError ? '' : ErrorList[1]}
-                                        onChange={(e) => setText(e.target.value)}
-                                        value={text}
-                                        label="متن  "
-                                        variant="outlined"
-                                        sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container>
                                 <Grid item xs={12} sm={7} md={12}>
                                     <TextField
                                         // error={!priceError ? false : true}
                                         // helperText={!priceError ? '' : ErrorList[1]}
-                                        onChange={(e) => setLink(e.target.value)}
-                                        value={link}
-                                        label="لینک  "
+                                        onChange={(e) => setTitel(e.target.value)}
+                                        value={titel}
+                                        label="عنوان"
                                         variant="outlined"
                                         // multiline
                                         // flexGrow={1}
-                                        sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container>
-                                <Grid item xs={12} sm={7} md={3}>
-                                    <TextField
-                                        // error={!priceError ? false : true}
-                                        // helperText={!priceError ? '' : ErrorList[1]}
-                                        onChange={(e) => setButton(e.target.value)}
-                                        value={button}
-                                        label="متن دکمه (حداکثر 10 کاراکتر)  "
-                                        variant="outlined"
                                         sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
                                     />
                                 </Grid>
@@ -89,16 +64,35 @@ const StepChangeSlider = (props) => {
                                         onChange={(e) => console.log(e)}
                                     />
                                 </Grid>
+                                <Grid item xs={12} sm={7} md={12}>
+                                    <UploadFile
+                                        id={"file1"}
+                                        accept="video/*"
+                                        label={"ایکون بازی ( 110*110)"}
+                                        onChange={(e) => console.log(e)}
+                                    />
+                                </Grid>
                             </Grid>
-
-
+                            <Grid container>
+                                <Grid item xs={12} sm={7} md={12}>
+                                    <TextField
+                                        // error={!priceError ? false : true}
+                                        // helperText={!priceError ? '' : ErrorList[1]}
+                                        onChange={(e) => setLink(e.target.value)}
+                                        value={link}
+                                        label="لینک  ( 728*357)"
+                                        variant="outlined"
+                                        // multiline
+                                        // flexGrow={1}
+                                        sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
+                                    />
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
-
                 </AccordionDetails>
             </Accordion>
-
         </>
     )
 }
-export default StepChangeSlider;
+export default StepGiftCardsTopUp;
