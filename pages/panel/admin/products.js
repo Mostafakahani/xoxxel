@@ -100,33 +100,35 @@ const Products = () => {
                         overflowX: { xs: "auto", md: 'unset' },
                         whiteSpace: { xs: "nowrap", md: 'unset' },
                     }}>
-                        <Grid md={1.8}>
-                            <CreateRegon />
-                        </Grid>
-                        <Grid md={1.8}>
-                            <CreateCategory />
-                        </Grid>
-                        <Grid md={1.8}>
-                            <CreateType />
-                        </Grid>
-                        <Grid md={3}>
-                            <EditOptionsDes />
-                        </Grid>
+                        <Grid container md={12}>
 
-                        <Grid md={3}>
-                            <Button sx={{
-                                backgroundColor: '#244CDF', py: "5px", px: '12px', borderRadius: "5px", color: "#FDFDFD",
-                                fontSize: '12px',
-                                "&:hover": {
-                                    color: '#FDFDFD',
-                                    backgroundColor: '#4166ef'
-                                }
-                            }}>
-                                <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: "center", color: '#FDFDFD' }}>
-                                    ثبت محصول جدید
-                                    <AddProductIcon />
-                                </Link>
-                            </Button>
+                            <Grid md={1.8}>
+                                <CreateRegon />
+                            </Grid>
+                            <Grid md={1.8}>
+                                <CreateCategory />
+                            </Grid>
+                            <Grid md={1.8}>
+                                <CreateType />
+                            </Grid>
+                            <Grid md={3}>
+                                <EditOptionsDes />
+                            </Grid>
+                            <Grid md={3}>
+                                <Button sx={{
+                                    backgroundColor: '#244CDF', py: "5px", px: '12px', borderRadius: "5px", color: "#FDFDFD",
+                                    fontSize: '12px',
+                                    "&:hover": {
+                                        color: '#FDFDFD',
+                                        backgroundColor: '#4166ef'
+                                    }
+                                }}>
+                                    <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: "center", color: '#FDFDFD' }}>
+                                        ثبت محصول جدید
+                                        <AddProductIcon />
+                                    </Link>
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid >
