@@ -151,10 +151,11 @@ export default function TableItems({
       // اگر متن سرچ خالی باشد، نمایش همه موارد
       setFilteredData(dataBody);
     } else {
-      // در غیر این صورت، جستجو در موارد و فیلتر کردن موارد با متن سرچ
+      // در غیر این صورت، جستجو در موارد و فیلتر کردن موارد با متن سرچ به حروف کوچک
+      const lowercaseSearchText = searchText.toLowerCase();
       const filteredItems = dataBody.filter(row => {
-        // جستجو درون فیلد textBold
-        const hasTextBold = row.data.some(e => e.type === 'textBold' && e.text.includes(searchText));
+        // جستجو درون فیلد textBold و تبدیل مقدار به حروف کوچک
+        const hasTextBold = row.data.some(e => e.type === 'textBold' && e.text.toLowerCase().includes(lowercaseSearchText));
         return hasTextBold;
       });
       setFilteredData(filteredItems);
