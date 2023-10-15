@@ -148,13 +148,10 @@ export default function TableItems({
 
   useEffect(() => {
     if (searchText.trim() === '') {
-      // اگر متن سرچ خالی باشد، نمایش همه موارد
       setFilteredData(dataBody);
     } else {
-      // در غیر این صورت، جستجو در موارد و فیلتر کردن موارد با متن سرچ به حروف کوچک
       const lowercaseSearchText = searchText.toLowerCase();
       const filteredItems = dataBody.filter(row => {
-        // جستجو درون فیلد textBold و تبدیل مقدار به حروف کوچک
         const hasTextBold = row.data.some(e => e.type === 'textBold' && e.text.toLowerCase().includes(lowercaseSearchText));
         return hasTextBold;
       });
@@ -164,7 +161,7 @@ export default function TableItems({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Grid sx={{ width: { xs: '100%', sm: '60%', md: '50%' } }}>
+      <Grid sx={{ width: { xs: '100%', sm: '60%', md: '50%', lg: '30%' } }}>
         <TextField
           size="small"
           placeholder="جستجو محصول مورد نظر"
