@@ -9,10 +9,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import { Avatar, Button, Grid } from "@mui/material";
+import { Avatar, Button, Grid, InputAdornment, SvgIcon, TextField } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import Link from "next/link";
+import { useState } from "react";
+import { useEffect } from "react";
+import SearchComponent from "./Search";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -135,8 +138,47 @@ export default function TableItems({
     }
   };
 
+
+
+
+
+  // Search
+  const [searchText, setSearchText] = useState('');
+  const [filteredData, setFilteredData] = useState(dataBody);
+
+  useEffect(() => {
+    if (searchText.trim() === '') {
+      // اگر متن سرچ خالی باشد، نمایش همه موارد
+      setFilteredData(dataBody);
+    } else {
+      // در غیر این صورت، جستجو در موارد و فیلتر کردن موارد با متن سرچ
+      const filteredItems = dataBody.filter(row => {
+        // جستجو درون فیلد textBold
+        const hasTextBold = row.data.some(e => e.type === 'textBold' && e.text.includes(searchText));
+        return hasTextBold;
+      });
+      setFilteredData(filteredItems);
+    }
+  }, [searchText, dataBody]);
+
   return (
     <Box sx={{ width: "100%" }}>
+      <Grid sx={{ width: { xs: '100%', sm: '60%', md: '50%' } }}>
+        <TextField
+          size="small"
+          placeholder="جستجو محصول مورد نظر"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          variant="outlined"
+          fullWidth
+          sx={{ mb: 2, backgroundColor: '#EBEBEC', borderRadius: '15px', border: 'none', "& fieldset": { border: 'none' }, }}
+          InputProps={{
+            startAdornment: <InputAdornment position="start">
+              <Box component={'img'} src="/images/light.svg" />
+            </InputAdornment>,
+          }}
+        />
+      </Grid>
       <TableContainer className="container-table table-scroll">
         <Table
           stickyHeader
@@ -202,8 +244,8 @@ export default function TableItems({
             selected={selected}
           />
           <TableBody sx={{ transform: "translateY(7px)" }}>
-            {dataBody?.length !== 0 &&
-              dataBody?.map((row, index) => {
+            {filteredData?.length !== 0 &&
+              filteredData?.map((row, index) => {
                 const isItemSelected = isSelected(row?.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -276,7 +318,7 @@ export default function TableItems({
                         {e?.type === "btn" && (
                           <>
                             <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-                              {/* <AddProductFeatureNew tableId={row.data[0]} /> */}
+                              {/* <AddProductFeatureNew tableIdi={row.data[0]} /> */}
                               {/* <Button
                                 onClick={(x) => console.log(row.data[0])}
                                 // onClick={() => props.show(row["id"])}

@@ -82,7 +82,7 @@ const Products = () => {
         <>
             <AccountLayout>
                 <Grid
-                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end  ' }}
+                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                     container
                 >
                     <Grid xs={12} md={4} sx={{ mb: { xs: '25px', md: '0' } }}>
@@ -94,44 +94,45 @@ const Products = () => {
                             <Typography sx={{ mt: "10px", fontSize: '12px' }}>شما میتوانید در لیست زیر تمام محصولات ثبت شده را مشاهده و ویرایش کنید.</Typography>
                         </Grid>
                     </Grid>
-                    <Grid container xs={12} md={8} sx={{
+                    <Grid container xs={12} md={6} sx={{
                         display: { xs: 'flex', md: '' },
                         flexWrap: { xs: 'nowrap', md: 'unset' },
                         overflowX: { xs: "auto", md: 'unset' },
                         whiteSpace: { xs: "nowrap", md: 'unset' },
+                        justifyContent: 'flex-end'
+                        
                     }}>
-                        <Grid container md={12}>
-
-                            <Grid md={1.8}>
-                                <CreateRegon />
-                            </Grid>
-                            <Grid md={1.8}>
-                                <CreateCategory />
-                            </Grid>
-                            <Grid md={1.8}>
-                                <CreateType />
-                            </Grid>
-                            <Grid md={3}>
-                                <EditOptionsDes />
-                            </Grid>
-                            <Grid md={3}>
-                                <Button sx={{
-                                    backgroundColor: '#244CDF', py: "5px", px: '12px', borderRadius: "5px", color: "#FDFDFD",
-                                    fontSize: '12px',
-                                    "&:hover": {
-                                        color: '#FDFDFD',
-                                        backgroundColor: '#4166ef'
-                                    }
-                                }}>
-                                    <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: "center", color: '#FDFDFD' }}>
-                                        ثبت محصول جدید
-                                        <AddProductIcon />
-                                    </Link>
-                                </Button>
-                            </Grid>
+                        <Grid md={1.2}>
+                            <CreateRegon />
+                        </Grid>
+                        <Grid md={1.2}>
+                            <CreateCategory />
+                        </Grid>
+                        <Grid md={1.2}>
+                            <CreateType />
+                        </Grid>
+                        <Grid item md={2}>
+                            <EditOptionsDes />
+                        </Grid>
+                        <Grid item md={2}>
+                            <Button sx={{
+                                backgroundColor: '#244CDF', py: "5px", px: '12px', borderRadius: "5px", color: "#FDFDFD",
+                                fontSize: '12px',
+                                "&:hover": {
+                                    color: '#FDFDFD',
+                                    backgroundColor: '#4166ef'
+                                }
+                            }}>
+                                <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: "center", color: '#FDFDFD' }}>
+                                    ثبت محصول جدید
+                                    <AddProductIcon />
+                                </Link>
+                            </Button>
                         </Grid>
                     </Grid>
-                </Grid >
+                </Grid>
+
+
                 <Grid sx={{ mt: "20px" }}>
                     <Grid sx={{ display: 'flex', justifyContent: 'right' }}>
                         {/* {

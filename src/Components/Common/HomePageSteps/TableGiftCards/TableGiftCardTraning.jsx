@@ -5,17 +5,17 @@ import { useState } from "react";
 const TableGiftCardTraning = () => {
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [selected, setSelected] = useState([]);
-    const dataHead = ["کد محصول", "ایجاد کننده", "نام محصول", "نوع"]
+    const dataHead = [
+        "کد محصول",
+        "نام محصول",
+        "نوع",
+        "تاریخ ایجاد ",
+    ]
     const dataBody = [
         {
             id: 1,
             data: [
                 "#254",
-                {
-                    type: "avatar",
-                    text: "مدیریت",
-                    url: '/images/avatar.png'
-                },
                 {
                     type: "textBold",
                     text: "Call of duty mobile",
@@ -24,7 +24,11 @@ const TableGiftCardTraning = () => {
                     type: "text",
                     text: "Gift card",
                 },
-                
+                {
+                    type: "text",
+                    text: "1401/7/7",
+                },
+
             ],
         },
         {
@@ -32,20 +36,35 @@ const TableGiftCardTraning = () => {
             data: [
                 "#204",
                 {
-                    type: "avatar",
-                    text: "مدیریت",
-                    url: '/images/avatar.png'
-                },
-                {
                     type: "textBold",
-                    text: "Call of duty mobile",
+                    text: "sag",
                 },
                 {
                     type: "text",
                     text: "Gift card",
                 },
-             
-
+                {
+                    type: "text",
+                    text: "1401/7/7",
+                },
+            ],
+        },
+        {
+            id: 4,
+            data: [
+                "#204",
+                {
+                    type: "textBold",
+                    text: "maaaaa",
+                },
+                {
+                    type: "text",
+                    text: "Gift card",
+                },
+                {
+                    type: "text",
+                    text: "1401/7/7",
+                },
             ],
         },
     ]
@@ -60,9 +79,6 @@ const TableGiftCardTraning = () => {
                     // show={(x) => console.log(dataBody.data[0])}
                     selectedItemId={selectedItemId}
                 />
-
-
-
             </Grid>
 
         </>
