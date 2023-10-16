@@ -15,7 +15,6 @@ import { EyesIcon } from "Icons/icons";
 import Link from "next/link";
 import { useState } from "react";
 import { useEffect } from "react";
-import SearchComponent from "./Search";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;

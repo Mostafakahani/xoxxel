@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from "@mui/material";
-import NewGift from "Components/Common/HomePageSteps/TableGiftCards/NewGift";
+import NewGift from "Components/Common/HomePageSteps/TableGiftCards/Tables/TableGiftCardTraning";
 
 const TableGiftCardTraning = () => {
     const [selectedItemId, setSelectedItemId] = useState(null);

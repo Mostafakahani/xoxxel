@@ -1,20 +1,20 @@
-import TableGiftCardTraning from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTableGiftCardTraning";
+import TableTopUpGames from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTableTopUpGames";
 import { Button, Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import { useState } from "react";
-const TableGiftCardTraningPage = () => {
+const TableTopUpGamesPage = () => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
     return (
         <>
-            <Grid >
+            <Grid>
                 <Grid md={6}>
                     <Button variant="contained" onClick={handleOpen} style={{ marginLeft: '10px' }}>
-                        صفحه اصلی Trending gift card
+                        صفحه اصلی top up games
                     </Button>
                     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
                         <DialogContent>
-                            <TableGiftCardTraning />
+                            <TableTopUpGames />
                         </DialogContent>
                         <Grid sx={{ m: '20px' }}>
                             <Button onClick={handleOpen} variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
@@ -26,4 +26,4 @@ const TableGiftCardTraningPage = () => {
         </>
     )
 }
-export default TableGiftCardTraningPage;
+export default TableTopUpGamesPage;
