@@ -30,7 +30,7 @@ export default function MenuList() {
           endIcon={<IconArrowMenu />}
           sx={{ pr: "0 !important", color: "#2A2A2A !important" }}
         >
-          امیر محمد دیمه
+          بهروز قائمی
         </Button>
         <Typography
           component={"h6"}
@@ -43,7 +43,7 @@ export default function MenuList() {
             display: { xs: "none", sm: "block" },
           }}
         >
-          ادمین
+          مدیریت
         </Typography>
       </Box>
       <Menu

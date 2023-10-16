@@ -36,22 +36,22 @@ export default function Navbar({ setOpen, open }) {
                 <IconClose sx={{ color: "#444" }} />
               )}
             </IconButton>
-            <Image
-              src={"/images/logo.png"}
-              layout="fixed"
-              width={18}
-              height={21}
-              alt="logo"
-              loader={({ src }) => src}
-              className="logo"
-            />
             <Typography
               component={"h1"}
               className="title-logo rokh"
               sx={{ color: "#292929 !important", fontWeight: "800 !important" }}
             >
-              ارشام طب نوین{" "}
+              XOXXEL{" "}
             </Typography>
+            <Image
+              src={"/images/logo.svg"}
+              layout="fixed"
+              width={50}
+              height={50}
+              alt="logo"
+              loader={({ src }) => src}
+              className="logo"
+            />
           </Box>
           <Search />
         </Box>

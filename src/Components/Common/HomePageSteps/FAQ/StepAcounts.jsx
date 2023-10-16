@@ -1,8 +1,9 @@
 import { Accordion, AccordionDetails, AccordionSummary, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import HandleTableCategoryTopUpForYou from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTableCategoryTopUpForYou";
 
-const StepOne = (props) => {
-    const [type, setType] = useState('')
+const StepAcounts = (props) => {
+    const [question, setQuestion] = useState('')
     const [answer, setAnswer] = useState('')
 
 
@@ -42,15 +43,19 @@ const StepOne = (props) => {
                                     <TextField
                                         // error={!priceError ? false : true}
                                         // helperText={!priceError ? '' : ErrorList[1]}
-                                        onChange={(e) => setType(e.target.value)}
-                                        value={type}
-                                        label="نوع  "
+                                        onChange={(e) => setQuestion(e.target.value)}
+                                        value={question}
+                                        label="سوال  "
                                         variant="outlined"
                                         sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
                                     />
                                 </Grid>
                             </Grid>
-
+                            <Grid container>
+                                <Grid item xs={12} sm={7} md={12}>
+                                   <HandleTableCategoryTopUpForYou/>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
 
@@ -60,4 +65,4 @@ const StepOne = (props) => {
         </>
     )
 }
-export default StepOne;
+export default StepAcounts;
