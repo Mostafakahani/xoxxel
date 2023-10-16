@@ -5,6 +5,7 @@ import TableTopUpGamesPage from "./TableTopUpGamesPage";
 import TableTrendingGamePage from "./TableTrendingGamePage";
 import TablePupolarGiftCardPage from "./TablePupolarGiftCardPage";
 import TableCategoryTopUpTopGamesPage from "./TableCategoryTopUpTopGamesPage";
+import TableCategoryTopUpsTrendGamingPage from "./TableCategoryTopUpsTrendGamingPage";
 
 const ListTablePopup = () => {
 
@@ -29,6 +30,9 @@ const ListTablePopup = () => {
                 </Grid>
                 <Grid md={6}>
                     <TableCategoryTopUpTopGamesPage />
+                </Grid>
+                <Grid md={6}>
+                    <TableCategoryTopUpsTrendGamingPage />
                 </Grid>
 
 
