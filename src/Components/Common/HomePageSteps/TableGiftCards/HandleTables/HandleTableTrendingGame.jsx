@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from "@mui/material";
-import NewGift from "Components/Common/HomePageSteps/TableGiftCards/Tables/TableGiftCardTraning";
+import NewGift from "Components/Common/HomePageSteps/TableGiftCards/Tables/TableTopUpGames";
 
-const HandleTableGiftCardTraning = () => {
+const HandleTableTrendingGame = () => {
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [selected, setSelected] = useState([]);
     const [dataBody, setDataBody] = useState([]);
@@ -57,4 +57,4 @@ const HandleTableGiftCardTraning = () => {
     );
 }
 
-export default HandleTableGiftCardTraning;
+export default HandleTableTrendingGame;

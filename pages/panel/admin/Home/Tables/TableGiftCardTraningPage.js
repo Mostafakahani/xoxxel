@@ -1,4 +1,4 @@
-import TableGiftCardTraning from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTableGiftCardTraning";
+import HandleTableGiftCardTraning from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTableGiftCardTraning";
 import { Button, Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 const TableGiftCardTraningPage = () => {
@@ -14,7 +14,7 @@ const TableGiftCardTraningPage = () => {
                     </Button>
                     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
                         <DialogContent>
-                            <TableGiftCardTraning />
+                            <HandleTableGiftCardTraning />
                         </DialogContent>
                         <Grid sx={{ m: '20px' }}>
                             <Button onClick={handleOpen} variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
