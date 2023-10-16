@@ -2,6 +2,8 @@ import { Button, Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import TableGiftCardTraningPage from "./TableGiftCardTraningPage";
 import TableTopUpGamesPage from "./TableTopUpGamesPage";
+import TableTrendingGamePage from "./TableTrendingGamePage";
+import TablePupolarGiftCardPage from "./TablePupolarGiftCardPage";
 
 const ListTablePopup = () => {
 
@@ -17,6 +19,12 @@ const ListTablePopup = () => {
                 </Grid>
                 <Grid md={6}>
                     <TableTopUpGamesPage />
+                </Grid>
+                <Grid md={6}>
+                    <TableTrendingGamePage />
+                </Grid>
+                <Grid md={6}>
+                    <TablePupolarGiftCardPage />
                 </Grid>
 
 
