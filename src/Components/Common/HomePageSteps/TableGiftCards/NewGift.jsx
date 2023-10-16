@@ -159,9 +159,15 @@ export default function TableItems({
     }
   }, [searchText, dataBody]);
 
+
+
+
   return (
     <Box sx={{ width: "100%" }}>
-      <Grid sx={{ width: { xs: '100%', sm: '60%', md: '50%', lg: '30%' } }}>
+      <Typography sx={{ color: '#3C3C3C', fontWeight: 700, my: '15px' }}>
+        صفحه اصلی Trending gift card
+      </Typography>
+      <Grid sx={{ width: { xs: '100%', sm: '60%', md: '50%', lg: '30%' }, my: '15px' }}>
         <TextField
           size="small"
           placeholder="جستجو محصول مورد نظر"
@@ -169,22 +175,28 @@ export default function TableItems({
           onChange={(e) => setSearchText(e.target.value)}
           variant="outlined"
           fullWidth
-          sx={{ mb: 2, backgroundColor: '#EBEBEC', borderRadius: '15px', border: 'none', "& fieldset": { border: 'none' }, }}
-          InputProps={{
-            startAdornment: <InputAdornment position="start">
-              <Box component={'img'} src="/images/light.svg" />
-            </InputAdornment>,
-          }}
+          sx={{
+            "& input::placeholder": {
+              fontSize: 13, 
+              // color: "#B0B0B0", 
+            }, mb: 2, backgroundColor: '#EBEBEC', borderRadius: '15px', border: 'none', "& fieldset": {border: 'none' }, }}
+        InputProps={{
+          startAdornment: <InputAdornment position="start">
+            <Box component={'img'} src="/images/light.svg" />
+          </InputAdornment>,
+
+        }}
+          
         />
       </Grid>
-      <TableContainer className="container-table table-scroll">
+      <TableContainer className="container-table table-scroll" sx={{ border: '1px solid #E0E0E0', borderRadius: '15px', py: ' 15px', px: '5px' }}>
         <Table
           stickyHeader
           aria-label="sticky table"
           sx={{
             borderRadius: "8px",
             overflow: "hidden",
-            minWidth: 1000,
+            minWidth: 500,
             "td,tr": {
               fontSize: "12.67px",
               color: "#212121",

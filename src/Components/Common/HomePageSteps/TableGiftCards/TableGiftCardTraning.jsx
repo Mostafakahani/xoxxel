@@ -1,87 +1,60 @@
+import React, { useState, useEffect } from 'react';
 import { Grid } from "@mui/material";
 import NewGift from "Components/Common/HomePageSteps/TableGiftCards/NewGift";
-import { useState } from "react";
 
 const TableGiftCardTraning = () => {
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [selected, setSelected] = useState([]);
+    const [dataBody, setDataBody] = useState([]);
     const dataHead = [
         "کد محصول",
         "نام محصول",
         "نوع",
-        "تاریخ ایجاد ",
-    ]
-    const dataBody = [
-        {
-            id: 1,
-            data: [
-                "#254",
-                {
-                    type: "textBold",
-                    text: "Call of duty mobile",
-                },
-                {
-                    type: "text",
-                    text: "Gift card",
-                },
-                {
-                    type: "text",
-                    text: "1401/7/7",
-                },
+        "تاریخ ایجاد",
+    ];
 
-            ],
-        },
-        {
-            id: 3,
-            data: [
-                "#204",
-                {
-                    type: "textBold",
-                    text: "sag",
-                },
-                {
-                    type: "text",
-                    text: "Gift card",
-                },
-                {
-                    type: "text",
-                    text: "1401/7/7",
-                },
-            ],
-        },
-        {
-            id: 4,
-            data: [
-                "#204",
-                {
-                    type: "textBold",
-                    text: "maaaaa",
-                },
-                {
-                    type: "text",
-                    text: "Gift card",
-                },
-                {
-                    type: "text",
-                    text: "1401/7/7",
-                },
-            ],
-        },
-    ]
+    useEffect(() => {
+        fetch('https://api.thecatapi.com/v1/images/search?limit=20')
+            .then(response => response.json())
+            .then(data => {
+                setDataBody(data.map((item, index) => ({
+                    id: index + 1,
+                    data: [
+                        `#${index + 1}`,
+                        {
+                            type: "textBold",
+                            text: item.id || "نام ناشناخته",
+                            // text: item?.breeds[0]?.name || "نام ناشناخته",
+                        },
+                        {
+                            type: "text",
+                            text: "Gift card",
+                        },
+                        {
+                            type: "text",
+                            text: "1401/7/7",
+                        },
+                    ],
+                })));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }, []);
+
     return (
         <>
-            <Grid sx={{ p: '50px' }}>
+            <Grid>
                 <NewGift
                     selected={selected}
                     setSelected={setSelected}
                     dataHead={dataHead}
                     dataBody={dataBody}
-                    // show={(x) => console.log(dataBody.data[0])}
                     selectedItemId={selectedItemId}
                 />
             </Grid>
-
         </>
-    )
+    );
 }
+
 export default TableGiftCardTraning;
