@@ -15,7 +15,7 @@ const Setting = () => {
         <AccountLayout>
             <Grid>
                 <Grid>
-//                     <Button onClick={() => {
+                    <Button onClick={() => {
                         setSelectedButton("Faq");
                         handleClickOpen();
                     }}>
@@ -36,12 +36,28 @@ const Setting = () => {
                 </Grid>
                 {
                     selectedButton === "Faq" && (
-
-                        <Grid>
-                            <Link href={'/panel/admin/Home/AboutUsOurVsionFaq'}>
-                                <Button variant="contained">صفحه اصلی About us,our vision,faq</Button>
-                            </Link>
-                        </Grid>
+                        <>
+                            <Grid>
+                                <Link href={'/panel/admin/Home/AboutUsOurVsionFaq'}>
+                                    <Button variant="contained">صفحه اصلی About us,our vision,faq</Button>
+                                </Link>
+                            </Grid>
+                            <Grid>
+                                <Link href={'/panel/admin/Home/StepHomePage'}>
+                                    <Button variant="contained">مراحل صفحه اصلی</Button>
+                                </Link>
+                            </Grid>
+                            <Grid>
+                                <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                    <Button variant="contained">اسلایدر های صفحه اصلی</Button>
+                                </Link>
+                            </Grid>
+                            <Grid>
+                                <Link href={'/panel/admin/Home/ChangeCompanies'}>
+                                    <Button variant="contained">کمپانی صفحه اصلی</Button>
+                                </Link>
+                            </Grid>
+                        </>
                     ) ||
                     selectedButton === "About" && (
 
@@ -59,11 +75,7 @@ const Setting = () => {
 
                     )
                 }
-                <Grid>
-                    <Link href={'/panel/admin/Home/ChangeCompanies'}>
-                        <Button variant="contained">کمپانی صفحه اصلی</Button>
-                    </Link>
-                </Grid>
+
 
             </Grid>
         </AccountLayout>
