@@ -9,28 +9,63 @@ const Setting = () => {
     const handleClickOpen = () => {
         setOpen(true);
     };
+    const buttonStyle = {
+        position: "relative",
+        "&::after": {
+            content: '""',
+            width: "100%",
+            height: "4px",
+            borderRadius: "6px",
+            backgroundColor: "primary.main",
+            position: "absolute",
+            top: "100%",
+            left: "0%",
+            transform: "translateY(-50%)",
+            display: "block",
+            animation: 'slideIn .5s forwards',
 
+        },
 
+        '@keyframes slideIn': { // تعریف انیمیشن
+            from: {
+                width: 0,
+            },
+            to: {
+                width: '100%',
+            },
+        },
+       
+    };
     return (
         <AccountLayout>
             <Grid>
-                <Grid>
+                <Grid sx={{
+                    mb: '20px',
+                }}>
                     <Button onClick={() => {
                         setSelectedButton("Faq");
                         handleClickOpen();
-                    }}>
+                    }}
+                        sx={selectedButton === "Faq" ? buttonStyle : {}}
+                    >
                         FAQ
                     </Button>
                     <Button onClick={() => {
                         setSelectedButton("About");
                         handleClickOpen();
-                    }}>
+                    }}
+                        sx={selectedButton === "About" ? buttonStyle : {}}
+
+                    >
                         About us
                     </Button>
                     <Button onClick={() => {
                         setSelectedButton("ourV");
                         handleClickOpen();
-                    }}>
+                    }}
+                        sx={selectedButton === "ourV" ? buttonStyle : {}}
+
+                    >
                         Our visions
                     </Button>
                 </Grid>
