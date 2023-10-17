@@ -27,43 +27,43 @@ import {
 
 export const dataSidebar = [
   {
-    href: "/panel/admin",
+    href: "/panel/admin/products",
     text: "محصول",
     icon: <IconProductDisable />,
     iconActive: <IconProduct size="22" />,
   },
   {
-    href: "/panel/admin/users",
+    href: "/panel/admin/Prices",
     text: "اعلامیه قیمت",
     icon: <IconPriceDisable size="22" />,
     iconActive: <IconPrice size="22" />,
   },
   {
-    href: "/panel/admin/blogs",
+    href: "/panel/admin/Access",
     text: "دسترسی",
     icon: <IconAccessDisable size="22" />,
     iconActive: <IconAccess size="22" />,
   },
   {
-    href: "/panel/admin/learns",
+    href: "/panel/admin/Orders",
     text: "سفارشات",
     icon: <IconOrdersDisable size="22" />,
     iconActive: <IconOrders size="22" />,
   },
   {
-    href: "/panel/admin/products",
+    href: "/panel/admin/Tickets",
     text: "تیکت ها",
     icon: <IconTicketsDisable size="22" />,
     iconActive: <IconTickets size="22" />,
   },
   {
-    href: "/panel/admin/chats",
+    href: "/panel/admin/Customer",
     text: "مشتری",
     icon: <IconCustomerDisable size="22" />,
     iconActive: <IconCustomer size="22" />,
   },
   {
-    href: "/panel/admin/chats",
+    href: "/panel/admin/Xp",
     text: "Xp",
     icon: <IconXpDisable size="22" />,
     iconActive: <IconXp size="22" />,

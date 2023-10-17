@@ -1,12 +1,11 @@
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { useState } from "react";
 import Link from "next/link";
-import { IconProduct, IconSetting } from "Icons/icons";
 
-const Setting = () => {
+const Faq = () => {
     const [open, setOpen] = useState(false);
-    const [selectedButton, setSelectedButton] = useState('Home');
+    const [selectedButton, setSelectedButton] = useState('Faq');
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -15,7 +14,7 @@ const Setting = () => {
         "&::after": {
             content: '""',
             width: "100%",
-            height: "2px",
+            height: "4px",
             borderRadius: "6px",
             backgroundColor: "primary.main",
             position: "absolute",
@@ -35,94 +34,74 @@ const Setting = () => {
                 width: '100%',
             },
         },
-
+       
     };
     return (
         <AccountLayout>
             <Grid>
-                <Grid item xs={12} md={6} sx={{ mb: { xs: '25px', md: '20px' } }}>
-                    <Grid sx={{ display: 'flex' }}>
-                        <IconSetting />
-                        <Typography sx={{ ml: "10px" }}> تنظیمات</Typography>
-                    </Grid>
-                    {/* <Grid>
-                        <Typography sx={{ mt: "10px", fontSize: '12px' }}>شما میتوانید در لیست زیر تمام محصولات ثبت شده را مشاهده و ویرایش کنید.</Typography>
-                    </Grid> */}
-                </Grid>
                 <Grid sx={{
                     mb: '20px',
                 }}>
                     <Button onClick={() => {
-                        setSelectedButton("Home");
+                        setSelectedButton("Faq");
                         handleClickOpen();
                     }}
-                        sx={selectedButton === "Home" ? buttonStyle : {}}
+                        sx={selectedButton === "Faq" ? buttonStyle : {}}
                     >
-                        Home
+                        FAQ
                     </Button>
                     <Button onClick={() => {
-                        setSelectedButton("Dashboard shop");
+                        setSelectedButton("About");
                         handleClickOpen();
                     }}
-                        sx={selectedButton === "Dashboard shop" ? buttonStyle : {}}
+                        sx={selectedButton === "About" ? buttonStyle : {}}
 
                     >
-                        Dashboard shop
+                        About us
                     </Button>
                     <Button onClick={() => {
-                        setSelectedButton("Category gift card");
+                        setSelectedButton("ourV");
                         handleClickOpen();
                     }}
-                        sx={selectedButton === "Category gift card" ? buttonStyle : {}}
+                        sx={selectedButton === "ourV" ? buttonStyle : {}}
 
                     >
-                        Category gift card
-                    </Button>
-                    <Button onClick={() => {
-                        setSelectedButton("Category top up");
-                        handleClickOpen();
-                    }}
-                        sx={selectedButton === "Category top up" ? buttonStyle : {}}
-
-                    >
-                        Category top up
+                        Our visions
                     </Button>
                 </Grid>
                 {
-                    selectedButton === "Home" && (
+                    selectedButton === "Faq" && (
                         <>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} md={3}>
-                                    <Link href={'/panel/admin/Home/AboutUsOurVsionFaq'}>
-                                        <Button variant="contained">صفحه اصلی About us,our vision,faq</Button>
-                                    </Link>
-                                </Grid>
-                                <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/StepHomePage'}>
-                                        <Button variant="contained">مراحل صفحه اصلی</Button>
-                                    </Link>
-                                </Grid>
-                                <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                        <Button variant="contained">اسلایدر های صفحه اصلی</Button>
-                                    </Link>
-                                </Grid>
-                                <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeCompanies'}>
-                                        <Button variant="contained">کمپانی صفحه اصلی</Button>
-                                    </Link>
-                                </Grid>
+                            <Grid>
+                                <Link href={'/panel/admin/Home/AboutUsOurVsionFaq'}>
+                                    <Button variant="contained">صفحه اصلی About us,our vision,faq</Button>
+                                </Link>
+                            </Grid>
+                            <Grid>
+                                <Link href={'/panel/admin/Home/StepHomePage'}>
+                                    <Button variant="contained">مراحل صفحه اصلی</Button>
+                                </Link>
+                            </Grid>
+                            <Grid>
+                                <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                    <Button variant="contained">اسلایدر های صفحه اصلی</Button>
+                                </Link>
+                            </Grid>
+                            <Grid>
+                                <Link href={'/panel/admin/Home/ChangeCompanies'}>
+                                    <Button variant="contained">کمپانی صفحه اصلی</Button>
+                                </Link>
                             </Grid>
                         </>
                     ) ||
-                    selectedButton === "Dashboard shop" && (
+                    selectedButton === "About" && (
 
                         <Grid>
                             <Link href={'/panel/admin/Home/StepHomePage'}>
                                 <Button variant="contained">مراحل صفحه اصلی</Button>
                             </Link>
                         </Grid>
-                    ) || selectedButton === "Category gift card" && (
+                    ) || selectedButton === "ourV" && (
                         <Grid>
                             <Link href={'/panel/admin/Home/ChangeSlider'}>
                                 <Button variant="contained">اسلایدر های صفحه اصلی</Button>
@@ -138,7 +117,7 @@ const Setting = () => {
     );
 };
 
-export default Setting;
+export default Faq;
 
 // درصورت نشدنه
 

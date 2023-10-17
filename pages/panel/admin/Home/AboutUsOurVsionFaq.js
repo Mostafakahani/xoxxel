@@ -27,15 +27,64 @@ const AboutUsOurVsionFaq = () => {
         setSelectedButton(buttonType);
         handleClickOpen();
     };
+    const buttonStyle = {
+        position: "relative",
+        "&::after": {
+            content: '""',
+            width: "100%",
+            height: "2px",
+            borderRadius: "6px",
+            backgroundColor: "primary.main",
+            position: "absolute",
+            top: "100%",
+            left: "0%",
+            transform: "translateY(-50%)",
+            display: "block",
+            animation: 'slideIn .5s forwards',
 
+        },
+
+        '@keyframes slideIn': { // تعریف انیمیشن
+            from: {
+                width: 0,
+            },
+            to: {
+                width: '100%',
+            },
+        },
+
+    };
     return (
         <AccountLayout>
             <Grid>
-                <Grid sx={{ display: 'flex' , justifyContent: 'space-between', alignItems: 'center', mb: '10px'}}>
+                <Grid sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '10px' }}>
                     <Grid>
-                        <Button onClick={() => handleButtonClick("Faq")}>FAQ</Button>
-                        <Button onClick={() => handleButtonClick("About")}>About us</Button>
-                        <Button onClick={() => handleButtonClick("ourV")}>Our visions</Button>
+                        <Button onClick={() => {
+                            setSelectedButton("Faq");
+                            handleClickOpen();
+                        }}
+                            sx={selectedButton === "Faq" ? buttonStyle : {}}
+                        >
+                            FAQ
+                        </Button>
+                        <Button onClick={() => {
+                            setSelectedButton("About");
+                            handleClickOpen();
+                        }}
+                            sx={selectedButton === "About" ? buttonStyle : {}}
+
+                        >
+                            About us
+                        </Button>
+                        <Button onClick={() => {
+                            setSelectedButton("ourV");
+                            handleClickOpen();
+                        }}
+                            sx={selectedButton === "ourV" ? buttonStyle : {}}
+
+                        >
+                            Our visions
+                        </Button>
                     </Grid>
                     <BackArrow />
                 </Grid>

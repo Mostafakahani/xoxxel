@@ -2,7 +2,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import NewT from "Components/Common/TableItems/NewT";
 import { useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-import { AddProductIcon, IconTickets } from "Icons/icons";
+import { AddProductIcon, IconProduct, IconTickets } from "Icons/icons";
 import Link from "next/link";
 import CreateRegon from "Components/Common/Creatives/CreateRegon";
 import CreateCategory from "Components/Common/Creatives/CreateCategory";
@@ -85,7 +85,7 @@ const Products = () => {
                 <Grid container spacing={2} justifyContent="flex-end" alignItems="center">
                     <Grid item xs={12} md={6} sx={{ mb: { xs: '25px', md: '0' } }}>
                         <Grid sx={{ display: 'flex' }}>
-                            <IconTickets />
+                            <IconProduct />
                             <Typography sx={{ ml: "10px" }}>لیست محصولات</Typography>
                         </Grid>
                         <Grid>
