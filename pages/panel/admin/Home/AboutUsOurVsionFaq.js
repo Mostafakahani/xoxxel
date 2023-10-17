@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import ChangeFaqs from "./ChangeFaqs";
 import ChangeAbout from "./ChangeAbout";
 import ChangeOurVision from "./ChangeOurVision";
+import BackArrow from "Components/Common/Back";
 
 
 const components = {
@@ -30,10 +31,13 @@ const AboutUsOurVsionFaq = () => {
     return (
         <AccountLayout>
             <Grid>
-                <Grid>
-                    <Button onClick={() => handleButtonClick("Faq")}>FAQ</Button>
-                    <Button onClick={() => handleButtonClick("About")}>About us</Button>
-                    <Button onClick={() => handleButtonClick("ourV")}>Our visions</Button>
+                <Grid sx={{ display: 'flex' , justifyContent: 'space-between', alignItems: 'center', mb: '10px'}}>
+                    <Grid>
+                        <Button onClick={() => handleButtonClick("Faq")}>FAQ</Button>
+                        <Button onClick={() => handleButtonClick("About")}>About us</Button>
+                        <Button onClick={() => handleButtonClick("ourV")}>Our visions</Button>
+                    </Grid>
+                    <BackArrow />
                 </Grid>
                 <Grid>
                     {Component && <Component />}

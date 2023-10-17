@@ -1,18 +1,67 @@
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { Button, Grid } from "@mui/material";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 const Setting = () => {
-
+    const [open, setOpen] = useState(false);
+    const [selectedButton, setSelectedButton] = useState('Faq');
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
 
     return (
         <AccountLayout>
             <Grid>
                 <Grid>
-                    <Link href={'/panel/admin/Home/AboutUsOurVsionFaq'}>
-                        <Button variant="contained">صفحه اصلی About us,our vision,faq</Button>
+//                     <Button onClick={() => {
+                        setSelectedButton("Faq");
+                        handleClickOpen();
+                    }}>
+                        FAQ
+                    </Button>
+                    <Button onClick={() => {
+                        setSelectedButton("About");
+                        handleClickOpen();
+                    }}>
+                        About us
+                    </Button>
+                    <Button onClick={() => {
+                        setSelectedButton("ourV");
+                        handleClickOpen();
+                    }}>
+                        Our visions
+                    </Button>
+                </Grid>
+                {
+                    selectedButton === "Faq" && (
+
+                        <Grid>
+                            <Link href={'/panel/admin/Home/AboutUsOurVsionFaq'}>
+                                <Button variant="contained">صفحه اصلی About us,our vision,faq</Button>
+                            </Link>
+                        </Grid>
+                    ) ||
+                    selectedButton === "About" && (
+
+                        <Grid>
+                            <Link href={'/panel/admin/Home/StepHomePage'}>
+                                <Button variant="contained">مراحل صفحه اصلی</Button>
+                            </Link>
+                        </Grid>
+                    ) || selectedButton === "ourV" && (
+                        <Grid>
+                            <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                <Button variant="contained">اسلایدر های صفحه اصلی</Button>
+                            </Link>
+                        </Grid>
+
+                    )
+                }
+                <Grid>
+                    <Link href={'/panel/admin/Home/ChangeCompanies'}>
+                        <Button variant="contained">کمپانی صفحه اصلی</Button>
                     </Link>
                 </Grid>
 

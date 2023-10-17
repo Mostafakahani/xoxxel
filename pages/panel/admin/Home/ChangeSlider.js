@@ -1,4 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
+import BackArrow from "Components/Common/Back";
 import StepChangeSlider from "Components/Common/HomePageSteps/FAQ/StepChangeSlider";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { useState } from "react";
@@ -21,7 +22,10 @@ const ChangeSlider = () => {
         <>
             <AccountLayout>
                 <Grid sx={{ backgroundColor: '#fff', p: '25px' }}>
-                    <Typography sx={{ color: '#333333', my: '15px', fontSize: '18px' }}> اسلایدر صفحه اصلی</Typography>
+                    <Grid sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '10px' }}>
+                        <Typography sx={{ color: '#333333', my: '15px', fontSize: '18px' }}> اسلایدر صفحه اصلی</Typography>
+                        <BackArrow />
+                    </Grid>
 
                     <Grid>
                         {sliderData.map((x, index) => (

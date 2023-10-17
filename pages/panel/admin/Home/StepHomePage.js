@@ -1,4 +1,5 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, Grid, TextField, Typography } from "@mui/material"
+import BackArrow from "Components/Common/Back";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import UploadFile from "Components/Common/UploadFile";
 import { useState } from "react";
@@ -44,7 +45,11 @@ const StepHomePage = () => {
         <>
             <AccountLayout>
                 <Grid sx={{ backgroundColor: '#fff', p: '25px' }}>
-                    <Typography sx={{ color: '#333333', my: '15px', fontSize: '18px' }}> مراحل صفحه اصلی</Typography>
+                    <Grid sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '10px' }}>
+                        <Typography sx={{ color: '#333333', my: '15px', fontSize: '18px' }}> مراحل صفحه اصلی</Typography>
+                        <BackArrow />
+                    </Grid>
+
                     <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
                         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                             <Typography sx={{ color: '#2C7EFA', my: '15px', fontSize: '16px' }}>مرحله اول</Typography>
