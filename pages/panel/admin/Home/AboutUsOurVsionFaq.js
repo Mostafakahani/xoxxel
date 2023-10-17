@@ -1,27 +1,49 @@
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { Button, Grid } from "@mui/material";
 import { useState, useMemo } from "react";
-import Link from "next/link";
+import ChangeFaqs from "./ChangeFaqs";
+import ChangeAbout from "./ChangeAbout";
+import ChangeOurVision from "./ChangeOurVision";
 
-const Setting = () => {
 
+const components = {
+    Faq: ChangeFaqs,
+    About: ChangeAbout,
+    ourV: ChangeOurVision
+};
 
+const AboutUsOurVsionFaq = () => {
+    const [open, setOpen] = useState(false);
+    const [selectedButton, setSelectedButton] = useState('Faq');
+
+    const Component = useMemo(() => components[selectedButton], [selectedButton]);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleButtonClick = (buttonType) => {
+        setSelectedButton(buttonType);
+        handleClickOpen();
+    };
 
     return (
         <AccountLayout>
             <Grid>
                 <Grid>
-                    <Link href={'/panel/admin/Home/AboutUsOurVsionFaq'}>
-                        <Button variant="contained">صفحه اصلی About us,our vision,faq</Button>
-                    </Link>
+                    <Button onClick={() => handleButtonClick("Faq")}>FAQ</Button>
+                    <Button onClick={() => handleButtonClick("About")}>About us</Button>
+                    <Button onClick={() => handleButtonClick("ourV")}>Our visions</Button>
                 </Grid>
-
+                <Grid>
+                    {Component && <Component />}
+                </Grid>
             </Grid>
         </AccountLayout>
     );
 };
 
-export default Setting;
+export default AboutUsOurVsionFaq;
 
 // درصورت نشدنه
 
@@ -34,7 +56,7 @@ export default Setting;
 // import ChangeOurVision from "../Home/ChangeOurVision";
 
 
-// const Setting = () => {
+// const AboutUsOurVsionFaq = () => {
 //     const [open, setOpen] = useState(false);
 //     const [selectedButton, setSelectedButton] = useState('Faq');
 //     const handleClickOpen = () => {
@@ -81,4 +103,4 @@ export default Setting;
 //         </AccountLayout>
 //     )
 // }
-// export default Setting;
+// export default AboutUsOurVsionFaq;
