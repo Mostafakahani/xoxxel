@@ -3,7 +3,7 @@ import { useState } from "react";
 import HandleTableCategoryTopUpForYou from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTableCategoryTopUpForYou";
 
 const StepAcounts = (props) => {
-    const [question, setQuestion] = useState('')
+    const [type, setType] = useState('')
     const [answer, setAnswer] = useState('')
 
 
@@ -43,9 +43,9 @@ const StepAcounts = (props) => {
                                     <TextField
                                         // error={!priceError ? false : true}
                                         // helperText={!priceError ? '' : ErrorList[1]}
-                                        onChange={(e) => setQuestion(e.target.value)}
-                                        value={question}
-                                        label="سوال  "
+                                        onChange={(e) => setType(e.target.value)}
+                                        value={type}
+                                        label="نوع"
                                         variant="outlined"
                                         sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
                                     />

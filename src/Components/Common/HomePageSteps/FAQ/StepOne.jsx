@@ -2,7 +2,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Grid, TextField, Typogra
 import { useState } from "react";
 
 const StepOne = (props) => {
-    const [type, setType] = useState('')
+    const [question, setQuestion] = useState('')
     const [answer, setAnswer] = useState('')
 
 
@@ -42,11 +42,27 @@ const StepOne = (props) => {
                                     <TextField
                                         // error={!priceError ? false : true}
                                         // helperText={!priceError ? '' : ErrorList[1]}
-                                        onChange={(e) => setType(e.target.value)}
-                                        value={type}
-                                        label="نوع  "
+                                        onChange={(e) => setQuestion(e.target.value)}
+                                        value={question}
+                                        label="سوال"
                                         variant="outlined"
                                         sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Grid container>
+                                <Grid item xs={12} sm={7} md={12}>
+                                    <TextField
+                                        // error={!priceError ? false : true}
+                                        // helperText={!priceError ? '' : ErrorList[1]}
+                                        onChange={(e) => setAnswer(e.target.value)}
+                                        value={answer}
+                                        label="جواب"
+                                        variant="outlined"
+                                        sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
+                                        multiline
+                                        fullWidth
+
                                     />
                                 </Grid>
                             </Grid>

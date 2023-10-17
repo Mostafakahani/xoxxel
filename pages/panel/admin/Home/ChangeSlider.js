@@ -1,6 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
 import StepChangeSlider from "Components/Common/HomePageSteps/FAQ/StepChangeSlider";
-import StepOne from "Components/Common/HomePageSteps/FAQ/StepOne";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { useState } from "react";
 const ChangeSlider = () => {

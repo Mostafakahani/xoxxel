@@ -2,13 +2,12 @@ import { Button, Grid, Typography } from "@mui/material";
 import NewT from "Components/Common/TableItems/NewT";
 import { useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-import { AddProductIcon, IconActiveProducts } from "Icons/icons";
+import { AddProductIcon, IconTickets } from "Icons/icons";
 import Link from "next/link";
 import CreateRegon from "Components/Common/Creatives/CreateRegon";
 import CreateCategory from "Components/Common/Creatives/CreateCategory";
 import CreateType from "Components/Common/Creatives/CreateType";
 import EditOptionsDes from "Components/Common/Creatives/EditOptionsDes";
-import App from "./res";
 const Products = () => {
     const ButtonData = [
         { text: 'حذف دسته , ریجن , نوع' },
@@ -79,20 +78,14 @@ const Products = () => {
         },
     ]
     const [selectedItemId, setSelectedItemId] = useState(null);
-    const buttonData = [
-        { id: 1, text: 'کوتاه 1' },
-        { id: 2, text: 'کوتاه 2' },
-        { id: 3, text: 'کوتاه 3' },
-        { id: 4, text: 'بلند 1' },
-        { id: 5, text: 'بلند 2' },
-    ];
+
     return (
         <>
             <AccountLayout>
                 <Grid container spacing={2} justifyContent="flex-end" alignItems="center">
                     <Grid item xs={12} md={6} sx={{ mb: { xs: '25px', md: '0' } }}>
                         <Grid sx={{ display: 'flex' }}>
-                            <IconActiveProducts />
+                            <IconTickets />
                             <Typography sx={{ ml: "10px" }}>لیست محصولات</Typography>
                         </Grid>
                         <Grid>
@@ -107,8 +100,6 @@ const Products = () => {
                             whiteSpace: { xs: "nowrap", md: 'unset' },
                             justifyContent: { xs: 'flex-start', md: 'flex-end' }
                         }}>
-                            {/* {buttonData.map((button) => ( */}
-                            {/* <Button variant="contained" style={{ margin: '4px' }}> */}
                             <CreateRegon />
                             <CreateCategory />
                             <CreateType />
@@ -126,47 +117,11 @@ const Products = () => {
                                     <AddProductIcon />
                                 </Button>
                             </Link>
-                            {/* </Button> */}
-                            {/* // ))} */}
+
                         </Grid>
                     </Grid>
                 </Grid>
-                {/* <Grid container xs={12} md={6} sx={{
-                        display: { xs: 'flex', md: '' },
-                        flexWrap: { xs: 'nowrap', md: 'unset' },
-                        overflowX: { xs: "auto", md: 'unset' },
-                        whiteSpace: { xs: "nowrap", md: 'unset' },
-                        justifyContent: 'flex-end'
-                        
-                    }}>
-                        <Grid item xs={3} sm={1.4} md={1.6}>
-                            <CreateRegon />
-                        </Grid>
-                        <Grid item xs={3} sm={1.4} md={1.6}>
-                            <CreateCategory />
-                        </Grid>
-                        <Grid item xs={3} sm={1.4} md={1.6}>
-                            <CreateType />
-                        </Grid>
-                        <Grid item xs={5} sm={2.5} md={2.8}>
-                            <EditOptionsDes />
-                        </Grid>
-                        <Grid item  xs={3.5}sm={2} md={2.5}>
-                            <Button sx={{
-                                backgroundColor: '#244CDF', py: "5px", px: '12px', borderRadius: "5px", color: "#FDFDFD",
-                                fontSize: '12px',
-                                "&:hover": {
-                                    color: '#FDFDFD',
-                                    backgroundColor: '#4166ef'
-                                }
-                            }}>
-                                <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: "center", color: '#FDFDFD' }}>
-                                    ثبت محصول جدید
-                                    <AddProductIcon />
-                                </Link>
-                            </Button>
-                        </Grid>
-                    </Grid> */}
+
 
 
                 <Grid sx={{ mt: "20px" }}>
@@ -184,7 +139,6 @@ const Products = () => {
                         }}>حذف</Button>
                         {/* } */}
                     </Grid>
-                    {/* <SimplePopup /> */}
 
                     {/* <CustomTable
                         headCells={headCells}

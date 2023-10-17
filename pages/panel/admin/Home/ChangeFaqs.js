@@ -19,7 +19,6 @@ const ChangeFaqs = () => {
 
     return (
         <>
-            <AccountLayout>
                 <Grid sx={{ backgroundColor: '#fff', p: '25px' }}>
                     <Grid>
                         {faqsData.map((x, index) => (
@@ -36,7 +35,6 @@ const ChangeFaqs = () => {
                         <Button variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
                     </Grid>
                 </Grid>
-            </AccountLayout>
 
         </>
     )

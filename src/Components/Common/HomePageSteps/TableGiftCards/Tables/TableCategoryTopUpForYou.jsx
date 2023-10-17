@@ -166,15 +166,15 @@ export default function TableItems({
       <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
         <Grid xs={12} sm={5} md={4}>
           <Typography sx={{ color: '#3C3C3C', fontWeight: 700, my: '15px', fontSize: '16px' }}>
-            Category top up top games
+            محصولات
 
           </Typography>
         </Grid>
-        <Grid xs={12} sm={5} md={4}>
+        {/* <Grid xs={12} sm={5} md={4}>
           <Typography sx={{ color: '#3C3C3C', fontWeight: 500, my: '15px', fontSize: '13px' }}>
             (16 مورد انتخاب شود)
           </Typography>
-        </Grid>
+        </Grid> */}
       </Grid>
       <Grid sx={{ width: { xs: '100%', sm: '60%', md: '50%', lg: '30%' }, my: '15px' }}>
         <TextField
