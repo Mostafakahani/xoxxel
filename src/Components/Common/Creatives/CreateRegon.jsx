@@ -48,6 +48,7 @@ const CreateRegon = ({ tableId }) => {
 
     return (
         <Grid>
+            
             <Button sx={{ fontSize: '12px', mr: { md: "5px", xs: '2px' }, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}
                 onClick={() => {
                     handleClickOpen()
