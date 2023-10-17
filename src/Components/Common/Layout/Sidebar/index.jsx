@@ -90,7 +90,7 @@ export default function Sidebar({ data, open, titleBadge = null }) {
                       color: active ? "#2A2A2A" : "#616161",
                       position: "relative",
                       ".MuiTypography-root": {
-                        fontSize: "16.01px",
+                        fontSize: "15px",
                       },
                       "&::before": {
                         content: '""',
