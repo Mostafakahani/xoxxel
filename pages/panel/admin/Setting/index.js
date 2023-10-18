@@ -116,19 +116,18 @@ const Setting = () => {
                         </>
                     ) ||
                     selectedButton === "Dashboard shop" && (
-
-                        <Grid>
+                        <Grid item xs={12} md={6}>
                             <Link href={'/panel/admin/Home/StepHomePage'}>
                                 <Button variant="contained">مراحل صفحه اصلی</Button>
                             </Link>
                         </Grid>
-                    ) || selectedButton === "Category gift card" && (
-                        <Grid>
+                    ) ||
+                    selectedButton === "Category gift card" && (
+                        <Grid item xs={12} md={6}>
                             <Link href={'/panel/admin/Home/ChangeSlider'}>
                                 <Button variant="contained">اسلایدر های صفحه اصلی</Button>
                             </Link>
                         </Grid>
-
                     )
                 }
 
