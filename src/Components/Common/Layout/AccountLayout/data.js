@@ -33,7 +33,7 @@ export const dataSidebar = [
     iconActive: <IconProduct size="22" />,
   },
   {
-    href: "/panel/admin/Prices",
+    href: "/panel/admin/UpdatePrices",
     text: "اعلامیه قیمت",
     icon: <IconPriceDisable size="22" />,
     iconActive: <IconPrice size="22" />,
