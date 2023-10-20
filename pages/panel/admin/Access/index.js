@@ -1,10 +1,11 @@
 import { Button, Grid, Typography } from "@mui/material";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-import { IconPrice } from "Icons/icons";
+import { IconAccess, IconPrice } from "Icons/icons";
 import Link from "next/link";
 import TableUpdatePrice from 'Components/Common/TableItems/TableUpdatePrice'
 import { useState } from "react";
-const UpdatePrices = () => {
+
+const Access = () => {
     const [selected, setSelected] = useState([]);
     const dataHead = ["کد محصول", "ویژگی ", "نوع ", "ریجن", " دسته", "قیمت به دلار"]
     const dataBody = [
@@ -127,8 +128,8 @@ const UpdatePrices = () => {
                 <Grid container spacing={2} justifyContent="flex-end" alignItems="center">
                     <Grid item xs={12} md={6} sx={{ mb: { xs: '25px', md: '0' } }}>
                         <Grid sx={{ display: 'flex' }}>
-                            <IconPrice />
-                            <Typography sx={{ ml: "10px" }}>اپدیت قیمت </Typography>
+                            <IconAccess />
+                            <Typography sx={{ ml: "10px" }}>لیست دسترسی</Typography>
                         </Grid>
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -139,7 +140,6 @@ const UpdatePrices = () => {
                             whiteSpace: { xs: "nowrap", md: 'unset' },
                             justifyContent: { xs: 'flex-start', md: 'space-around' }
                         }}>
-
                             <Typography>نوع: Top ups</Typography>
                             <Typography>ریجن: همه</Typography>
                             <Typography>
@@ -162,8 +162,7 @@ const UpdatePrices = () => {
 
                 </Grid>
             </AccountLayout>
-
         </>
     )
 }
-export default UpdatePrices;
+export default Access;

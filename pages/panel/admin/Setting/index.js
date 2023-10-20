@@ -94,22 +94,22 @@ const Setting = () => {
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={3}>
                                     <Link href={'/panel/admin/Home/AboutUsOurVsionFaq'}>
-                                        <Button variant="contained">صفحه اصلی About us,our vision,faq</Button>
+                                        <Button sx={{ fontSize: '12px'}} variant="contained">صفحه اصلی About us,our vision,faq</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
                                     <Link href={'/panel/admin/Home/StepHomePage'}>
-                                        <Button variant="contained">مراحل صفحه اصلی</Button>
+                                        <Button sx={{ fontSize: '12px'}} variant="contained">مراحل صفحه اصلی</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
                                     <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                        <Button variant="contained">اسلایدر های صفحه اصلی</Button>
+                                        <Button sx={{ fontSize: '12px'}} variant="contained">اسلایدر های صفحه اصلی</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
                                     <Link href={'/panel/admin/Home/ChangeCompanies'}>
-                                        <Button variant="contained">کمپانی صفحه اصلی</Button>
+                                        <Button sx={{ fontSize: '12px'}} variant="contained">کمپانی صفحه اصلی</Button>
                                     </Link>
                                 </Grid>
                             </Grid>
@@ -118,14 +118,14 @@ const Setting = () => {
                     selectedButton === "Dashboard shop" && (
                         <Grid item xs={12} md={6}>
                             <Link href={'/panel/admin/Home/StepHomePage'}>
-                                <Button variant="contained">مراحل صفحه اصلی</Button>
+                                <Button sx={{ fontSize: '12px'}} variant="contained">مراحل صفحه اصلی</Button>
                             </Link>
                         </Grid>
                     ) ||
                     selectedButton === "Category gift card" && (
                         <Grid item xs={12} md={6}>
                             <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                <Button variant="contained">اسلایدر های صفحه اصلی</Button>
+                                <Button sx={{ fontSize: '12px'}} variant="contained">اسلایدر های صفحه اصلی</Button>
                             </Link>
                         </Grid>
                     )
