@@ -9,7 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import { Avatar, Button, Dialog, DialogContent, DialogContentText, FormControlLabel, Grid, TextField } from "@mui/material";
+import { AccordionSummary, Accordion, AccordionDetails, Avatar, Button, Dialog, DialogContent, DialogContentText, FormControlLabel, Grid, TextField } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import Link from "next/link";
@@ -375,28 +375,50 @@ export default function TableItems({
                                   <TextField
                                     size={'small'}
                                     label={'نوع'}
-
                                   />
                                   <TextField
                                     size={'small'}
                                     label={'کارمند'}
-
                                   />
 
                                 </Grid>
-                                <FormControlLabel
-                                  label="اشخاص"
-                                  control={
-                                    <Checkbox
-                                      checked={checked[0] && checked[1]}
-                                      indeterminate={checked[0] !== checked[1]}
-                                      onChange={handleChange1}
-                                    />
-                                  }
-                                />
-                                {children}
+                                <Grid>
+                                  <FormControlLabel
+                                    label="همه دسترسی ها"
+                                    control={<Checkbox checked={checked[1]} onChange={() => handleChange3()} />}
+                                  />
+                                  <FormControlLabel
+                                    label="دسترسی اختصاصی"
+                                    control={<Checkbox checked={checked[1]} onChange={() => handleChange3()} />}
+                                  />
+                                </Grid>
 
-
+                                <Grid>
+                                  <Accordion>
+                                    <AccordionSummary
+                                      // expandIcon={<ExpandMoreIcon />}
+                                      aria-controls="panel1a-content"
+                                      id="panel1a-header"
+                                    >
+                                      <FormControlLabel
+                                        label="اشخاص"
+                                        control={
+                                          <Checkbox
+                                            checked={checked[0] && checked[1]}
+                                            indeterminate={checked[0] !== checked[1]}
+                                            onChange={handleChange1}
+                                          />
+                                        }
+                                      />
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                      {children}
+                                    </AccordionDetails>
+                                  </Accordion>
+                                </Grid>
+                                <Grid>
+                                  <Button variant="contained" disableElevation sx={{ borderRadius: '8px', backgroundColor: '#e0b207', color: '#000', fontWeight: 800 }}>ایجاد</Button>
+                                </Grid>
                               </DialogContent>
                             </Dialog>
                           </>
