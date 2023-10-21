@@ -97,25 +97,6 @@ export default function TableItems({
   const [orderBy, setOrderBy] = React.useState("calories");
 
 
-  const [open, setOpen] = React.useState(false);
-  const [checked, setChecked] = React.useState([true, false]);
-
-  const handleChange1 = (event) => {
-    setChecked([event.target.checked, event.target.checked]);
-  };
-
-  const handleChange2 = (event) => {
-    setChecked([event.target.checked, checked[1]]);
-  };
-
-  const handleChange3 = (event) => {
-    setChecked([checked[0], event.target.checked]);
-  };
-
-
-
-
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -159,49 +140,125 @@ export default function TableItems({
     }
   };
 
+  const [open, setOpen] = React.useState(false);
+  const [checked, setChecked] = React.useState({
+    accessCustomerList: false,
+    accessCustomerInfo: false,
+    accessNotes: false,
+    accessAttachment: false,
+    accessCreateCustomer: false,
+    accessActivityCustomer: false,
+    accessDocumentsCustomer: false,
+    accessHistoryCustomer: false,
+    allAccess: false,
+    customAccess: false,
+  });
+
+  const handleChange = (event, name) => {
+    setChecked({
+      ...checked,
+      [name]: event.target.checked,
+    });
+  };
+
+  const logValues = () => {
+    // جمع‌آوری مقادیر انتخابی
+    const values = {
+      accessCustomerList: checked.accessCustomerList,
+      accessCustomerInfo: checked.accessCustomerInfo,
+      accessNotes: checked.accessNotes,
+      accessAttachment: checked.accessAttachment,
+      accessCreateCustomer: checked.accessCreateCustomer,
+      accessActivityCustomer: checked.accessActivityCustomer,
+      accessDocumentsCustomer: checked.accessDocumentsCustomer,
+      accessHistoryCustomer: checked.accessHistoryCustomer,
+      customAccess: checked.customAccess,
+      allAccess: checked.allAccess
+    };
+
+    // چاپ مقادیر در کنسول
+    console.log("مقادیر:", values);
+  };
+
   const children = (
     <Box sx={{ display: 'flex', flexDirection: 'row', ml: 3, justifyContent: 'space-around' }}>
       <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
         <FormControlLabel
           label="لیست اشخاص"
-          control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
-        />
+          control={
+            <Checkbox
+              checked={checked.accessCustomerList}
+              onChange={(event) => handleChange(event, 'accessCustomerList')}
+            />
+          } />
         <FormControlLabel
           label="اطلاعات اشخاص"
-          control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
+          control={
+            <Checkbox
+              checked={checked.accessCustomerInfo}
+              onChange={(event) => handleChange(event, 'accessCustomerInfo')}
+            />
+          }
         />
         <FormControlLabel
           label="یادداشت ها"
-          control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
+          control={
+            <Checkbox
+              checked={checked.accessNotes}
+              onChange={(event) => handleChange(event, 'AccessNotes')}
+            />
+          }
         />
         <FormControlLabel
           label="پیوست ها"
-          control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
+          control={
+            <Checkbox
+              checked={checked.accessAttachment}
+              onChange={(event) => handleChange(event, 'AccessAttachment')}
+            />
+          }
         />
       </Grid>
       <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
         <FormControlLabel
           label="ایجاد شخص"
-          control={<Checkbox checked={checked[0]} onChange={handleChange2} />}
+          control={
+            <Checkbox
+              checked={checked.accessCreateCustomer}
+              onChange={(event) => handleChange(event, 'AccessCreateCustomer')}
+            />
+          }
         />
         <FormControlLabel
           label="فعالیت"
-          control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
+          control={
+            <Checkbox
+              checked={checked.accessActivityCustomer}
+              onChange={(event) => handleChange(event, 'AccessActivityCustomer')}
+            />
+          }
         />
         <FormControlLabel
           label="اسناد ها"
-          control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
+          control={
+            <Checkbox
+              checked={checked.accessDocumentsCustomer}
+              onChange={(event) => handleChange(event, 'AccessDocumentsCustomer')}
+            />
+          }
         />
         <FormControlLabel
           label="سابقه ها"
-          control={<Checkbox checked={checked[1]} onChange={handleChange3} />}
+          control={
+            <Checkbox
+              checked={checked.accessHistoryCustomer}
+              onChange={(event) => handleChange(event, 'AccessHistoryCustomer')}
+            />
+          }
         />
       </Grid>
-
-
     </Box>
   );
-
 
 
   return (
@@ -385,11 +442,21 @@ export default function TableItems({
                                 <Grid>
                                   <FormControlLabel
                                     label="همه دسترسی ها"
-                                    control={<Checkbox checked={checked[1]} onChange={() => handleChange3()} />}
+                                    control={
+                                      <Checkbox
+                                        checked={checked.allAccess}
+                                        onChange={(event) => handleChange(event, 'AllAccess')}
+                                      />
+                                    }
                                   />
                                   <FormControlLabel
                                     label="دسترسی اختصاصی"
-                                    control={<Checkbox checked={checked[1]} onChange={() => handleChange3()} />}
+                                    control={
+                                      <Checkbox
+                                        checked={checked.customAccess}
+                                        onChange={(event) => handleChange(event, 'CustomAccess')}
+                                      />
+                                    }
                                   />
                                 </Grid>
 
@@ -406,7 +473,7 @@ export default function TableItems({
                                           <Checkbox
                                             checked={checked[0] && checked[1]}
                                             indeterminate={checked[0] !== checked[1]}
-                                            onChange={handleChange1}
+                                            onChange={checked}
                                           />
                                         }
                                       />
@@ -417,7 +484,7 @@ export default function TableItems({
                                   </Accordion>
                                 </Grid>
                                 <Grid>
-                                  <Button variant="contained" disableElevation sx={{ borderRadius: '8px', backgroundColor: '#e0b207', color: '#000', fontWeight: 800 }}>ایجاد</Button>
+                                  <Button variant="contained" onClick={logValues} disableElevation sx={{ borderRadius: '8px', backgroundColor: '#e0b207', color: '#000', fontWeight: 800 }}>ایجاد</Button>
                                 </Grid>
                               </DialogContent>
                             </Dialog>
