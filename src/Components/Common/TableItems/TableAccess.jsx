@@ -9,10 +9,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import { AccordionSummary, Accordion, AccordionDetails, Avatar, Button, Dialog, DialogContent, DialogContentText, FormControlLabel, Grid, TextField } from "@mui/material";
+import { Avatar, Button, Dialog, DialogContent, DialogContentText, FormControlLabel, Grid, TextField } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import Link from "next/link";
+import CreateAccessLevel from "../Popup/CreateAccessLevel";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -139,126 +140,6 @@ export default function TableItems({
       }
     }
   };
-
-  const [open, setOpen] = React.useState(false);
-  const [checked, setChecked] = React.useState({
-    accessCustomerList: false,
-    accessCustomerInfo: false,
-    accessNotes: false,
-    accessAttachment: false,
-    accessCreateCustomer: false,
-    accessActivityCustomer: false,
-    accessDocumentsCustomer: false,
-    accessHistoryCustomer: false,
-    allAccess: false,
-    customAccess: false,
-  });
-
-  const handleChange = (event, name) => {
-    setChecked({
-      ...checked,
-      [name]: event.target.checked,
-    });
-  };
-
-  const logValues = () => {
-    // جمع‌آوری مقادیر انتخابی
-    const values = {
-      accessCustomerList: checked.accessCustomerList,
-      accessCustomerInfo: checked.accessCustomerInfo,
-      accessNotes: checked.accessNotes,
-      accessAttachment: checked.accessAttachment,
-      accessCreateCustomer: checked.accessCreateCustomer,
-      accessActivityCustomer: checked.accessActivityCustomer,
-      accessDocumentsCustomer: checked.accessDocumentsCustomer,
-      accessHistoryCustomer: checked.accessHistoryCustomer,
-      customAccess: checked.customAccess,
-      allAccess: checked.allAccess
-    };
-
-    // چاپ مقادیر در کنسول
-    console.log("مقادیر:", values);
-  };
-
-  const children = (
-    <Box sx={{ display: 'flex', flexDirection: 'row', ml: 3, justifyContent: 'space-around' }}>
-      <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
-        <FormControlLabel
-          label="لیست اشخاص"
-          control={
-            <Checkbox
-              checked={checked.accessCustomerList}
-              onChange={(event) => handleChange(event, 'accessCustomerList')}
-            />
-          } />
-        <FormControlLabel
-          label="اطلاعات اشخاص"
-          control={
-            <Checkbox
-              checked={checked.accessCustomerInfo}
-              onChange={(event) => handleChange(event, 'accessCustomerInfo')}
-            />
-          }
-        />
-        <FormControlLabel
-          label="یادداشت ها"
-          control={
-            <Checkbox
-              checked={checked.accessNotes}
-              onChange={(event) => handleChange(event, 'AccessNotes')}
-            />
-          }
-        />
-        <FormControlLabel
-          label="پیوست ها"
-          control={
-            <Checkbox
-              checked={checked.accessAttachment}
-              onChange={(event) => handleChange(event, 'AccessAttachment')}
-            />
-          }
-        />
-      </Grid>
-      <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
-        <FormControlLabel
-          label="ایجاد شخص"
-          control={
-            <Checkbox
-              checked={checked.accessCreateCustomer}
-              onChange={(event) => handleChange(event, 'AccessCreateCustomer')}
-            />
-          }
-        />
-        <FormControlLabel
-          label="فعالیت"
-          control={
-            <Checkbox
-              checked={checked.accessActivityCustomer}
-              onChange={(event) => handleChange(event, 'AccessActivityCustomer')}
-            />
-          }
-        />
-        <FormControlLabel
-          label="اسناد ها"
-          control={
-            <Checkbox
-              checked={checked.accessDocumentsCustomer}
-              onChange={(event) => handleChange(event, 'AccessDocumentsCustomer')}
-            />
-          }
-        />
-        <FormControlLabel
-          label="سابقه ها"
-          control={
-            <Checkbox
-              checked={checked.accessHistoryCustomer}
-              onChange={(event) => handleChange(event, 'AccessHistoryCustomer')}
-            />
-          }
-        />
-      </Grid>
-    </Box>
-  );
 
 
   return (
@@ -402,6 +283,8 @@ export default function TableItems({
                         {e?.type === "btn" && (
                           <>
                             <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
+
+                              <CreateAccessLevel tableId={row.data[0]} />
                               {/* <Button
                                 onClick={(x) => console.log(row.data[0])}
                                 // onClick={() => props.show(row["id"])}
@@ -409,85 +292,7 @@ export default function TableItems({
                                 sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
 
                               </Button> */}
-                              <Button onClick={() => setOpen(true)} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
-                                <Grid style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
-                                  <EyesIcon />
-                                  <Typography>مشاهده و ویرایش</Typography>
-                                </Grid>
-                              </Button>
                             </Grid>
-                            <Dialog
-                              fullWidth
-                              maxWidth={'sm'}
-                              open={open}
-                              onClose={() => {
-                                setOpen(false)
-                              }}
-                            >
-                              <DialogContent
-                                sx={{ px: "50px", py: "30px" }}
-                              >
-                                <Typography align="left" sx={{ my: ' 15px' }}>ایجاد ویژگی محصول</Typography>
-                                <Grid sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                  <TextField
-                                    size={'small'}
-                                    label={'نوع'}
-                                  />
-                                  <TextField
-                                    size={'small'}
-                                    label={'کارمند'}
-                                  />
-
-                                </Grid>
-                                <Grid>
-                                  <FormControlLabel
-                                    label="همه دسترسی ها"
-                                    control={
-                                      <Checkbox
-                                        checked={checked.allAccess}
-                                        onChange={(event) => handleChange(event, 'AllAccess')}
-                                      />
-                                    }
-                                  />
-                                  <FormControlLabel
-                                    label="دسترسی اختصاصی"
-                                    control={
-                                      <Checkbox
-                                        checked={checked.customAccess}
-                                        onChange={(event) => handleChange(event, 'CustomAccess')}
-                                      />
-                                    }
-                                  />
-                                </Grid>
-
-                                <Grid>
-                                  <Accordion>
-                                    <AccordionSummary
-                                      // expandIcon={<ExpandMoreIcon />}
-                                      aria-controls="panel1a-content"
-                                      id="panel1a-header"
-                                    >
-                                      <FormControlLabel
-                                        label="اشخاص"
-                                        control={
-                                          <Checkbox
-                                            checked={checked[0] && checked[1]}
-                                            indeterminate={checked[0] !== checked[1]}
-                                            onChange={checked}
-                                          />
-                                        }
-                                      />
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                      {children}
-                                    </AccordionDetails>
-                                  </Accordion>
-                                </Grid>
-                                <Grid>
-                                  <Button variant="contained" onClick={logValues} disableElevation sx={{ borderRadius: '8px', backgroundColor: '#e0b207', color: '#000', fontWeight: 800 }}>ایجاد</Button>
-                                </Grid>
-                              </DialogContent>
-                            </Dialog>
                           </>
                         )}
 
