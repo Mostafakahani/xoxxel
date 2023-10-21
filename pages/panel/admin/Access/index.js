@@ -2,12 +2,12 @@ import { Button, Grid, Typography } from "@mui/material";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { IconAccess, IconPrice } from "Icons/icons";
 import Link from "next/link";
-import TableUpdatePrice from 'Components/Common/TableItems/TableUpdatePrice'
+import TableAccess from 'Components/Common/TableItems/TableAccess'
 import { useState } from "react";
 
 const Access = () => {
     const [selected, setSelected] = useState([]);
-    const dataHead = ["کد محصول", "ویژگی ", "نوع ", "ریجن", " دسته", "قیمت به دلار"]
+    const dataHead = ["کد دسترسی", "نام شخص ", "سمت ", "تاریخ ایجاد", "اقدامات"]
     const dataBody = [
         {
             id: 1,
@@ -15,25 +15,22 @@ const Access = () => {
                 "#254",
 
                 {
-                    type: "text",
-                    text: "120 Cp",
-                },
-                {
                     type: "textBold",
-                    text: "Top ups",
+                    text: "Soroush norozy",
                 },
                 {
                     type: "text",
-                    text: "United state",
+                    text: "طراح Ui",
                 },
                 {
                     type: "text",
-                    text: "Cp",
-                },
-                {
-                    type: "input",
                     text: "1401/7/7",
                 },
+                {
+                    type: "btn",
+                    text: "Cp",
+                },
+
             ],
         },
         {
@@ -42,25 +39,22 @@ const Access = () => {
                 "#25v",
 
                 {
-                    type: "text",
-                    text: "120 Cp",
-                },
-                {
                     type: "textBold",
-                    text: "Top ups",
+                    text: "Soroush norozy",
                 },
                 {
                     type: "text",
-                    text: "United state",
+                    text: "طراح Ui",
                 },
                 {
                     type: "text",
-                    text: "Cp",
-                },
-                {
-                    type: "input",
                     text: "1401/7/7",
                 },
+                {
+                    type: "btn",
+                    text: "Cp",
+                },
+
             ],
         },
         {
@@ -69,25 +63,22 @@ const Access = () => {
                 "#z54",
 
                 {
-                    type: "text",
-                    text: "120 Cp",
-                },
-                {
                     type: "textBold",
-                    text: "Top ups",
+                    text: "Soroush norozy",
                 },
                 {
                     type: "text",
-                    text: "United state",
+                    text: "طراح Ui",
                 },
                 {
                     type: "text",
-                    text: "Cp",
-                },
-                {
-                    type: "input",
                     text: "1401/7/7",
                 },
+                {
+                    type: "btn",
+                    text: "Cp",
+                },
+
             ],
         },
         {
@@ -96,25 +87,22 @@ const Access = () => {
                 "#2a4",
 
                 {
-                    type: "text",
-                    text: "120 Cp",
-                },
-                {
                     type: "textBold",
-                    text: "Top ups",
+                    text: "Soroush norozy",
                 },
                 {
                     type: "text",
-                    text: "United state",
+                    text: "طراح Ui",
                 },
                 {
                     type: "text",
-                    text: "Cp",
-                },
-                {
-                    type: "input",
                     text: "1401/7/7",
                 },
+                {
+                    type: "btn",
+                    text: "Cp",
+                },
+
             ],
         },
 
@@ -126,31 +114,28 @@ const Access = () => {
         <>
             <AccountLayout>
                 <Grid container spacing={2} justifyContent="flex-end" alignItems="center">
-                    <Grid item xs={12} md={6} sx={{ mb: { xs: '25px', md: '0' } }}>
+                    <Grid item xs={6} md={6} sx={{ mb: { xs: '0px', md: '0' } }}>
                         <Grid sx={{ display: 'flex' }}>
                             <IconAccess />
                             <Typography sx={{ ml: "10px" }}>لیست دسترسی</Typography>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={6} md={6}>
                         <Grid sx={{
                             display: 'flex', flexDirection: 'row',
                             flexWrap: { xs: 'nowrap', md: 'wrap' },
                             overflowX: { xs: "auto", md: 'unset' },
                             whiteSpace: { xs: "nowrap", md: 'unset' },
-                            justifyContent: { xs: 'flex-start', md: 'space-around' }
+                            justifyContent: { xs: 'flex-end', md: 'flex-end' },
+                            alignItems: 'center'
                         }}>
-                            <Typography>نوع: Top ups</Typography>
-                            <Typography>ریجن: همه</Typography>
-                            <Typography>
-                                دسته:
-                                Cp
-                            </Typography>
+                            <Button variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ایجاد دسترسی جدید   </Button>
+
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid sx={{ mt: '20px' }}>
-                    <TableUpdatePrice
+                    <TableAccess
                         selected={selected}
                         setSelected={setSelected}
                         dataHead={dataHead}
