@@ -5,7 +5,30 @@ import React, { useEffect, useState } from "react";
 
 const CreateAccessLevel = ({ tableId }) => {
     const [open, setOpen] = useState(false);
-    const [dataBody, setDataBody] = useState([]);
+    const [dataBody, setDataBody] = useState([
+        {
+            id: '2321',
+            data: [
+                'Mostafa',
+                {
+                    type: "textBold",
+                    text: 'Text Test item',
+                    img: '/images/icons/access.svg'
+                },
+            ],
+        },
+        {
+            id: '2zz321',
+            data: [
+                'zzMostafa',
+                {
+                    type: "textBold",
+                    text: 'zzText Test item',
+                    img: '/images/icons/setting.svg'
+                },
+            ],
+        },
+    ]);
 
     // useEffect(() => {
     //     fetch('https://api.thecatapi.com/v1/images/search?limit=20')
@@ -28,30 +51,30 @@ const CreateAccessLevel = ({ tableId }) => {
     //             console.error('Error:', error);
     //         });
     // }, []);
-    useEffect(() => {
-        fetch('https://api.thecatapi.com/v1/images/search?limit=20')
-            .then(response => response.json())
-            .then(data => {
-                if (Array.isArray(data)) {
-                    setDataBody(data.map((item, index) => ({
-                        id: index + 1,
-                        data: [
-                            `#${index + 1}`,
-                            {
-                                type: "textBold",
-                                text: item.id || "نام ناشناخته",
-                                img: item.url
-                            },
-                        ],
-                    })));
-                } else {
-                    console.error('Invalid response format. Expected an array.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     fetch('https://api.thecatapi.com/v1/images/search?limit=20')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (Array.isArray(data)) {
+    //                 setDataBody(data.map((item, index) => ({
+    //                     id: index + 1,
+    //                     data: [
+    //                         `#${index + 1}`,
+    //                         {
+    //                             type: "textBold",
+    //                             text: item.id || "نام ناشناخته",
+    //                             img: item.url
+    //                         },
+    //                     ],
+    //                 })));
+    //             } else {
+    //                 console.error('Invalid response format. Expected an array.');
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //         });
+    // }, []);
 
 
 
@@ -197,7 +220,7 @@ const CreateAccessLevel = ({ tableId }) => {
     }, [searchText, dataBody]);
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedValue, setSelectedValue] = useState(null);
+    const [selectedValue, setSelectedValue] = useState(dataBody);
     // const data = [
     //     { label: 'مقدار 1', value: 1, icon: '/images/icons/access.svg' },
     //     { label: 'مقدار 2', value: 2, icon: '/images/icons/setting.svg' },

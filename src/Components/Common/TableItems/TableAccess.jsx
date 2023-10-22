@@ -14,6 +14,7 @@ import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import Link from "next/link";
 import CreateAccessLevel from "../Popup/CreateAccessLevel";
+import CreateAccessLevelNew from "../Popup/CreateAccessLevelNew";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -284,7 +285,7 @@ export default function TableItems({
                           <>
                             <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
 
-                              <CreateAccessLevel tableId={row.data[0]} />
+                              <CreateAccessLevelNew tableId={row.data[0]} />
                               {/* <Button
                                 onClick={(x) => console.log(row.data[0])}
                                 // onClick={() => props.show(row["id"])}
