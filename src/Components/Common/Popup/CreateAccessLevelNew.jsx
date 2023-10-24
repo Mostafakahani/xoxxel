@@ -1,143 +1,161 @@
-import { AccordionSummary, Accordion, AccordionDetails, Box, Button, Checkbox, Dialog, DialogContent, DialogContentText, DialogTitle, FormControlLabel, Grid, MenuItem, Select, SvgIcon, TextField, Typography, InputAdornment, ListItemIcon, ListItemText, ListItem, List, FormControl, InputLabel, Autocomplete, CircularProgress } from "@mui/material";
-import { EyesIcon } from "Icons/icons";
 import React, { useEffect, useState } from "react";
+import {
+    AccordionSummary, Accordion, AccordionDetails, Box, Button, Checkbox,
+    Dialog, DialogContent, DialogTitle, FormControlLabel, Grid, TextField,
+    Typography, Autocomplete
+} from "@mui/material";
+import { EyesIcon } from "Icons/icons";
+import AccessCustomerList from "./CheckBoxAccess/AccessCustomerList";
 
-function sleep(duration) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve();
-        }, duration);
-    });
-}
+
+
 const CreateAccessLevelNew = ({ tableId }) => {
-    const [open, setOpen] = useState(false);
-    const [openComplete, setOpenComplete] = useState(false);
-    const [dataBody, setDataBody] = useState([
-        {
-            id: '2321',
-            data: [
-                'Mostafa',
-                {
-                    type: "textBold",
-                    text: 'Text Test item',
-                    img: '/images/icons/access.svg'
-                },
-            ],
-        },
-        {
-            id: '2zz321',
-            data: [
-                'zzMostafa',
-                {
-                    type: "textBold",
-                    text: 'zzText Test item',
-                    img: '/images/icons/setting.svg'
-                },
-            ],
-        },
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [options, setOptions] = useState([]);
+    const [value, setValue] = useState(options[0]);
+    const [inputValue, setInputValue] = useState('');
+
+    const [accessControl, setAccessControl] = useState([
+        { action: "accessCustomerList", status: false, text: "لیست اشخاص" },
+        { action: "accessCustomerInfo", status: false, text: "اطلاعات اشخاص" },
+        { action: "accessNotes", status: false, text: "یادداشت ها" },
+        { action: "accessAttachment", status: false, text: "پیوست ها" },
+        { action: "accessCreateCustomer", status: false, text: "ایجاد شخص" },
+        { action: "accessActivityCustomer", status: false, text: "فعالیت" },
+        { action: "accessDocumentsCustomer", status: false, text: "اسناد ها" },
+        { action: "accessHistoryCustomer", status: false, text: "سابقه ها" },
+        { action: "customAccess", status: false, text: 'test' },
+        { action: "test", status: false, text: 'aa' },
     ]);
-    const [options, setOptions] = React.useState([]);
-    const loading = open && options.length === 0;
 
-    React.useEffect(() => {
-        let active = true;
+    const handleUpdateAccessControl = (updatedAccessControl) => {
+        setAccessControl(updatedAccessControl);
+    };
 
-        if (!loading) {
-            return undefined;
-        }
+    const Employee = [
+        { code: 'AD', label: 'سروش نوروزی', icon: '/images/iconAccess.png' },
+        { code: 'AE', label: 'مصطفی کاهانی', icon: '/images/iconAccess.png' },
+        { code: 'AF', label: 'بهروز صدیقی', icon: '/images/iconAccess.png' },
+        { code: 'AG', label: 'رضا کاهانی', icon: '/images/iconAccess.png' },
+    ];
 
-        (async () => {
-            await sleep(1e3); // For demo purposes.
+    const handleDialogClose = () => {
+        setIsDialogOpen(false);
+    };
 
-            if (active) {
-                setOptions([...dataBody]);
-            }
-        })();
-
-        return () => {
-            active = false;
-        };
-    }, [loading]);
-
-    React.useEffect(() => {
-        if (!open) {
-            setOptions([]);
-        }
-    }, [open]);
-
-    // Tests
-    // const items = dataBody.map((x) => x)
+    const handleCreateAccess = () => {
+        console.log(value);
+        // انجام عملیات مورد نظر بر اساس مقدار انتخابی (value)
+    };
 
     return (
-        <Grid>
-            <Button onClick={() => { setOpen(true); }} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
-                <Grid style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
-                    <EyesIcon />
-                    <Typography>مشاهده و ویرایش</Typography>
+        <Grid container>
+            <Button
+                onClick={() => {
+                    setIsDialogOpen(true);
+                }}
+                sx={{
+                    backgroundColor: "#1C49F11A",
+                    color: "#1C49F1",
+                    borderRadius: "5px",
+                }}
+            >
+                <Grid
+                    container
+                    alignItems="center"
+                    spacing={1}
+                    justifyContent="center"
+                >
+                    <Grid item>
+                        <EyesIcon />
+                    </Grid>
+                    <Grid item>
+                        <Typography>مشاهده و ویرایش</Typography>
+                    </Grid>
                 </Grid>
             </Button>
             <Dialog
                 fullWidth
-                maxWidth={'sm'}
-                open={open}
-                onClose={() => {
-                    setOpen(false);
-                }}
+                maxWidth={"sm"}
+                open={isDialogOpen}
+                onClose={handleDialogClose}
             >
-                <DialogContent
-                    sx={{ px: "50px", py: "30px" }}
-                >
-                    <Autocomplete
-                        id="asynchronous-demo"
-                        sx={{ width: 300 }}
-                        open={openComplete}
-                        onOpen={() => {
-                            setOpenComplete(true);
-                        }}
-                        onClose={() => {
-                            setOpenComplete(false);
-                        }}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
-                        getOptionLabel={(option) => (
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <img src={option.icon} alt={option.id} style={{ marginRight: '8px' }} />
-                                {option.text}
-                            </div>
-                        )}
-                        getOptionSelected={(option, value) => option.text === value.text}
-                        options={options}
-                        loading={loading}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Asynchronous"
-                                InputProps={{
-                                    ...params.InputProps,
-                                    endAdornment: (
-                                        <React.Fragment>
-                                            {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                            {params.InputProps.endAdornment}
-                                        </React.Fragment>
-                                    ),
+                <DialogContent sx={{ px: "50px", py: "30px" }}>
+                    <Typography sx={{ my: "10px" }} align="left">
+                        ایجاد سطح دسترسی
+                    </Typography>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField label="نوع" fullWidth />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Autocomplete
+                                value={value || null}
+                                autoComplete
+                                inputValue={inputValue}
+                                onInputChange={(event, newInputValue) => {
+                                    setInputValue(newInputValue);
                                 }}
+                                onChange={(event, newValue) => {
+                                    setValue(newValue);
+                                    setInputValue(newValue ? newValue.label : "");
+                                }}
+                                options={Employee}
+                                getOptionLabel={(option) => option.label}
+                                renderOption={(props, option) => (
+                                    <Box
+                                        component="li"
+                                        {...props}
+                                        sx={{ display: "flex", alignItems: "center" }}
+                                    >
+                                        <img
+                                            loading="lazy"
+                                            width="25"
+                                            src={`${option.icon}`}
+                                            alt=""
+                                        />
+                                        {option.label}
+                                    </Box>
+                                )}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="کارمند"
+                                        inputProps={{
+                                            ...params.inputProps,
+                                            autoComplete: "off",
+                                        }}
+                                        fullWidth
+                                    />
+                                )}
                             />
-                        )}
-
-
-                    />
-
-                    <Grid>
-                        <Button variant="contained"
-                            // onClick={() => console.log(options[0].data[1].img)} // از options استفاده کنید
-                            disableElevation sx={{ mt: '100px', borderRadius: '8px', backgroundColor: '#e0b207', color: '#000', fontWeight: 800 }}
-                        >
-                            ایجاد
-                        </Button>
-
+                        </Grid>
+                        <Grid item xs={12} sx={{ my: "25px" }}>
+                            <AccessCustomerList
+                                titelParent={"اشخاص"}
+                                accessControl={accessControl}
+                                onUpdateAccessControl={handleUpdateAccessControl}
+                                tableId={tableId}
+                            />
+                        </Grid>
                     </Grid>
+                    <Button
+                        variant="contained"
+                        onClick={handleCreateAccess}
+                        disableElevation
+                        sx={{
+                            mt: "20px",
+                            borderRadius: "8px",
+                            backgroundColor: "#e0b207",
+                            color: "#000",
+                            fontWeight: 800,
+                        }}
+                    >
+                        ایجاد
+                    </Button>
                 </DialogContent>
             </Dialog>
-        </Grid >
+        </Grid>
     );
 };
 
