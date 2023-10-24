@@ -9,11 +9,15 @@ import AccessCustomerList from "./CheckBoxAccess/AccessCustomerList";
 
 
 
-const CreateAccessLevelNew = ({ tableId }) => {
+const CreateAccessLevelNew = ({ tableId, dataBodyFormat }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [options, setOptions] = useState([]);
     const [value, setValue] = useState(options[0]);
     const [inputValue, setInputValue] = useState('');
+    const [selectedValue, setSelectedValue] = useState(dataBodyFormat);
+  useEffect(() => {
+    setInputValue(dataBodyFormat);
+  }, [dataBodyFormat]);
 
     const [accessControl, setAccessControl] = useState([
         { action: "accessCustomerList", status: false, text: "لیست اشخاص" },
@@ -29,7 +33,7 @@ const CreateAccessLevelNew = ({ tableId }) => {
     const [allData, setAllData] = useState([]);
 
     const Employee = [
-        { code: 'AD', label: 'سروش نوروزی', icon: '/images/iconAccess.png' },
+        { code: 'AD', label: dataBodyFormat, icon: '/images/iconAccess.png' },
         { code: 'AE', label: 'مصطفی کاهانی', icon: '/images/iconAccess.png' },
         { code: 'AF', label: 'بهروز صدیقی', icon: '/images/iconAccess.png' },
         { code: 'AG', label: 'رضا کاهانی', icon: '/images/iconAccess.png' },
@@ -43,9 +47,13 @@ const CreateAccessLevelNew = ({ tableId }) => {
     };
 
     const handleCreateAccess = () => {
-        const newData = [...accessControl, inputValue];
+        const newData = [...accessControl, inputValue, tableId];
         setAllData(newData);
-        console.log(newData);
+        console.log(newData); // or allData k farghi nadare
+        setAllData([])
+        setInputValue('')
+
+
     };
 
     return (
@@ -88,7 +96,7 @@ const CreateAccessLevelNew = ({ tableId }) => {
             >
                 <DialogContent sx={{ px: "50px", py: "30px" }}>
                     <Typography sx={{ my: "15px", fontWeight: 800 }} align="left">
-                        ایجاد سطح دسترسی
+                        ویرایش سطح دسترسی
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
@@ -96,15 +104,18 @@ const CreateAccessLevelNew = ({ tableId }) => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Autocomplete
-                                value={value || null}
-                                autoComplete
+                                value={Employee.find(item => item.label === selectedValue) || null}
                                 inputValue={inputValue}
                                 onInputChange={(event, newInputValue) => {
                                     setInputValue(newInputValue);
                                 }}
                                 onChange={(event, newValue) => {
-                                    setValue(newValue);
-                                    setInputValue(newValue ? newValue.label : "");
+                                    if (newValue) {
+                                        setSelectedValue(newValue.label);
+                                        setInputValue(newValue.label);
+                                    } else {
+                                        setSelectedValue('');
+                                    }
                                 }}
                                 options={Employee}
                                 getOptionLabel={(option) => option.label}
@@ -141,7 +152,7 @@ const CreateAccessLevelNew = ({ tableId }) => {
                                 titelParent={"اشخاص"}
                                 accessControl={accessControl}
                                 onUpdateAccessControl={handleUpdateAccessControl}
-                                tableId={tableId}
+                            // tableId={tableId}
                             />
                         </Grid>
                     </Grid>

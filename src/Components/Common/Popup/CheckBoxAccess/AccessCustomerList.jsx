@@ -1,7 +1,7 @@
 import React from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Checkbox, FormControlLabel, Grid, TextField } from "@mui/material";
 
-const AccessCustomerList = ({ titelParent, accessControl, onUpdateAccessControl, tableId }) => {
+const AccessCustomerList = ({ titelParent, accessControl, onUpdateAccessControl }) => {
     const handleButtonClick = (buttonIndex) => {
         const updatedAccessControl = [...accessControl];
         updatedAccessControl[buttonIndex].status = !updatedAccessControl[buttonIndex].status;
@@ -13,7 +13,7 @@ const AccessCustomerList = ({ titelParent, accessControl, onUpdateAccessControl,
         const updatedAccessControl = accessControl.map((item) => ({
             ...item,
             status: isChecked,
-            tableId: tableId,
+            // tableId: tableId,
         }));
         onUpdateAccessControl(updatedAccessControl);
         // console.log(updatedAccessControl)

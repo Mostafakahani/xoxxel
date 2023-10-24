@@ -17,7 +17,7 @@ import CreateAccessLevel from "../Popup/CreateAccessLevel";
 import CreateAccessLevelNew from "../Popup/CreateAccessLevelNew";
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
+  const { onSelectAllClick, numSelected, rowCount, dataHead, selected, updatedData } = props;
 
   return (
     <TableHead sx={{ height: "48px" }}>
@@ -142,6 +142,11 @@ export default function TableItems({
     }
   };
 
+  // Update Datas
+  const [updatedData, setUpdatedData] = React.useState(null);
+  const handleDataUpdate = (newData) => {
+    setUpdatedData(newData);
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -285,7 +290,7 @@ export default function TableItems({
                           <>
                             <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
 
-                              <CreateAccessLevelNew tableId={row.data[0]} />
+                              <CreateAccessLevelNew onDataUpdate={handleDataUpdate} tableId={row.data[0]} dataBodyFormat={row.data[1].text} />
                               {/* <Button
                                 onClick={(x) => console.log(row.data[0])}
                                 // onClick={() => props.show(row["id"])}
