@@ -16,7 +16,7 @@ const AccessCustomerList = ({ titelParent, accessControl, onUpdateAccessControl,
             tableId: tableId,
         }));
         onUpdateAccessControl(updatedAccessControl);
-        console.log(updatedAccessControl)
+        // console.log(updatedAccessControl)
     };
 
     return (

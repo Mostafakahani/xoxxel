@@ -24,13 +24,9 @@ const CreateAccessLevelNew = ({ tableId }) => {
         { action: "accessActivityCustomer", status: false, text: "فعالیت" },
         { action: "accessDocumentsCustomer", status: false, text: "اسناد ها" },
         { action: "accessHistoryCustomer", status: false, text: "سابقه ها" },
-        { action: "customAccess", status: false, text: 'test' },
-        { action: "test", status: false, text: 'aa' },
     ]);
 
-    const handleUpdateAccessControl = (updatedAccessControl) => {
-        setAccessControl(updatedAccessControl);
-    };
+    const [allData, setAllData] = useState([]);
 
     const Employee = [
         { code: 'AD', label: 'سروش نوروزی', icon: '/images/iconAccess.png' },
@@ -39,13 +35,17 @@ const CreateAccessLevelNew = ({ tableId }) => {
         { code: 'AG', label: 'رضا کاهانی', icon: '/images/iconAccess.png' },
     ];
 
+    const handleUpdateAccessControl = (updatedAccessControl) => {
+        setAccessControl(updatedAccessControl);
+    };
     const handleDialogClose = () => {
         setIsDialogOpen(false);
     };
 
     const handleCreateAccess = () => {
-        console.log(value);
-        // انجام عملیات مورد نظر بر اساس مقدار انتخابی (value)
+        const newData = [...accessControl, inputValue];
+        setAllData(newData);
+        console.log(newData);
     };
 
     return (
@@ -66,10 +66,16 @@ const CreateAccessLevelNew = ({ tableId }) => {
                     spacing={1}
                     justifyContent="center"
                 >
-                    <Grid item>
-                        <EyesIcon />
-                    </Grid>
-                    <Grid item>
+                    <Grid
+                        item alignItems="center"
+                        justifyContent="center"
+                        sx={{ display: 'flex' }}
+                    >
+                        <Box alignItems="center"
+                            justifyContent="center"
+                            sx={{ display: 'flex', mr: '8px' }}>
+                            <EyesIcon />
+                        </Box>
                         <Typography>مشاهده و ویرایش</Typography>
                     </Grid>
                 </Grid>
@@ -81,7 +87,7 @@ const CreateAccessLevelNew = ({ tableId }) => {
                 onClose={handleDialogClose}
             >
                 <DialogContent sx={{ px: "50px", py: "30px" }}>
-                    <Typography sx={{ my: "10px" }} align="left">
+                    <Typography sx={{ my: "15px", fontWeight: 800 }} align="left">
                         ایجاد سطح دسترسی
                     </Typography>
                     <Grid container spacing={2}>
