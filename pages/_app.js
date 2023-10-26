@@ -27,7 +27,7 @@ export default function MyApp(props) {
         <Head>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
 
-          <title>ارشام طب نوین</title>
+          <title>xoxxol admin</title>
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link rel="icon" type="image/x-icon" href="/images/logo.png" />
         </Head>

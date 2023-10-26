@@ -74,4 +74,5 @@ export const dataSidebar = [
     icon: <IconSettingDisable size="22" />,
     iconActive: <IconSetting size="22" />,
   },
+
 ];
