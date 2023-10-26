@@ -9,7 +9,7 @@ import AccessCustomerList from "./CheckBoxAccess/AccessCustomerList";
 
 
 
-const CreateAccessLevelNew = ({ tableId, dataBodyFormat }) => {
+const EditOrder = ({ tableId, dataBodyFormat }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [options, setOptions] = useState([]);
     const [value, setValue] = useState(options[0]);
@@ -59,7 +59,6 @@ const CreateAccessLevelNew = ({ tableId, dataBodyFormat }) => {
     return (
         <Grid container justifyContent={'center'}>
             <Button
-                startIcon={<EyesIcon />}
                 onClick={() => {
                     setIsDialogOpen(true);
                 }}
@@ -67,9 +66,28 @@ const CreateAccessLevelNew = ({ tableId, dataBodyFormat }) => {
                     backgroundColor: "#1C49F11A",
                     color: "#1C49F1",
                     borderRadius: "5px",
+                    width: '100%'
                 }}
             >
-                مشاهده و ویرایش
+                <Grid
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row'
+                    }}
+                >
+                    <Grid sx={{
+                        mr: '10px', display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row'
+                    }}>
+                        <EyesIcon />
+                    </Grid>
+                    <Typography>مشاهده و ویرایش</Typography>
+
+                </Grid>
             </Button>
             <Dialog
                 fullWidth
@@ -159,4 +177,4 @@ const CreateAccessLevelNew = ({ tableId, dataBodyFormat }) => {
     );
 };
 
-export default CreateAccessLevelNew;
+export default EditOrder;

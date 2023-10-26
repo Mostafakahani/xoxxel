@@ -288,17 +288,14 @@ export default function TableItems({
                         )}
                         {e?.type === "btn" && (
                           <>
-                            <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-
-                              <CreateAccessLevelNew onDataUpdate={handleDataUpdate} tableId={row.data[0]} dataBodyFormat={row.data[1].text} />
-                              {/* <Button
+                            <CreateAccessLevelNew onDataUpdate={handleDataUpdate} tableId={row.data[0]} dataBodyFormat={row.data[1].text} />
+                            {/* <Button
                                 onClick={(x) => console.log(row.data[0])}
                                 // onClick={() => props.show(row["id"])}
 
                                 sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
 
                               </Button> */}
-                            </Grid>
                           </>
                         )}
 

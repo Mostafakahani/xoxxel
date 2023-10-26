@@ -285,10 +285,9 @@ export default function TableItems({
                                 sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
 
                               </Button> */}
-                              <Button sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
+                              <Button startIcon={<EyesIcon />} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
                                 <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
-                                  <EyesIcon />
-                                  <Typography>مشاهده و ویرایش</Typography>
+                                  مشاهده و ویرایش
                                 </Link>
                               </Button>
                             </Grid>

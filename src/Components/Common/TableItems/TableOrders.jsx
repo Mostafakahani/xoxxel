@@ -15,6 +15,7 @@ import { EyesIcon } from "Icons/icons";
 import Link from "next/link";
 import CreateAccessLevel from "../Popup/CreateAccessLevel";
 import CreateAccessLevelNew from "../Popup/CreateAccessLevelNew";
+import EditOrder from "../Popup/EditOrder";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected, updatedData } = props;
@@ -66,8 +67,8 @@ function EnhancedTableHead(props) {
             padding={"normal"}
             sx={{
               color: "#212121", pb: 3,
-              textAlign: i >= dataHead.length - 1 ? "center !Important" : "right",
-              width: i === dataHead.length - 1 ? "250px" : "fit-content"
+              textAlign: i >= dataHead.length - 2 ? "center !Important" : "right",
+              width: i === dataHead.length - 2 ? "250px" : "fit-content"
 
             }}
           >
@@ -157,7 +158,7 @@ export default function TableItems({
           sx={{
             borderRadius: "8px",
             overflow: "hidden",
-            minWidth: 1000,
+            minWidth: 1200,
             "td,tr": {
               fontSize: "12.67px",
               color: "#212121",
@@ -248,7 +249,7 @@ export default function TableItems({
                     )}
                     {row?.data?.map((e, i) => (
                       <TableCell align="center" sx={{
-                        textAlign: 'left'
+                        textAlign: i >= dataHead.length - 2 ? "center !Important" : "left",
                       }} key={i}>
                         {!e?.type && e}
                         {e?.type === "avatar" && (
@@ -288,22 +289,29 @@ export default function TableItems({
                         )} */}
                         {e?.type === "status" && (
                           <>
-                            <Button sx={{ color: e?.color === 'succesfull'?'#66DC53': '', backgroundColor: '#F0FCEE', '&:hover': { backgroundColor: '#F0FCEE' } }}>{e.text}</Button>
+                            <Button disableElevation sx={{
+                              px: '15px', width: '120px',
+                              color: e?.color === 'succesfull' ? '#66DC53' : e?.color === 'pending' ? '#EDA437' : '#2C7EFA',
+                              backgroundColor: e?.color === 'succesfull' ? '#F0FCEE' : e?.color === 'pending' ? '#FDF6EB' : '#EAF2FF',
+                              '&:hover': { backgroundColor: e?.color === 'succesfull' ? '#F0FCEE' : e?.color === 'pending' ? '#FDF6EB' : '#EAF2FF' }
+                            }}
+                            >{e.text}</Button>
                           </>
                         )}
                         {e?.type === "btn" && (
                           <>
-                            <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-
-                              <CreateAccessLevelNew onDataUpdate={handleDataUpdate} tableId={row.data[0]} dataBodyFormat={row.data[1].text} />
-                              {/* <Button
-                                onClick={(x) => console.log(row.data[0])}
-                                // onClick={() => props.show(row["id"])}
-
-                                sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
-
-                              </Button> */}
-                            </Grid>
+                            {/* <EditOrder onDataUpdate={handleDataUpdate} tableId={row.data[0]} dataBodyFormat={row.data[1].text} /> */}
+                            <Link href={'/panel/admin/Orders/ChangeOrder'}>
+                              <Button
+                                startIcon={<EyesIcon />}
+                                sx={{
+                                  backgroundColor: "#1C49F11A",
+                                  color: "#1C49F1",
+                                  borderRadius: "5px",
+                                }}>
+                                مشاهده و ویرایش
+                              </Button>
+                            </Link>
                           </>
                         )}
 

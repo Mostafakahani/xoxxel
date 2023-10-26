@@ -23,9 +23,50 @@ const Orders = () => {
             data: [
                 "#254",
 
+
+                {
+                    type: "avatar",
+                    text: "Soroush norozy",
+                    url: '/images/avatar.png'
+                },
+                {
+                    type: "textBold",
+                    text: "Call of duty mobile",
+                },
                 {
                     type: "text",
+                    text: "Top ups",
+                },
+                {
+                    type: "text",
+                    text: "1401/7/7",
+                },
+                {
+                    type: "text",
+                    text: "2,000,000",
+                },
+                {
+                    type: "status",
+                    text: "pending",
+                    color: "pending",
+                },
+                {
+                    type: "btn",
+                    text: "opto",
+                },
+
+            ],
+        },
+        {
+            id: 2,
+            data: [
+                "#254",
+
+
+                {
+                    type: "avatar",
                     text: "Soroush norozy",
+                    url: '/images/avatar.png'
                 },
                 {
                     type: "textBold",
@@ -46,7 +87,84 @@ const Orders = () => {
                 {
                     type: "status",
                     text: "Succesfull",
-                    color: "Succesfull",
+                    color: "succesfull",
+                },
+                {
+                    type: "btn",
+                    text: "opto",
+                },
+
+            ],
+        },
+        {
+            id: 3,
+            data: [
+                "#254",
+
+
+                {
+                    type: "avatar",
+                    text: "Soroush norozy",
+                    url: '/images/avatar.png'
+                },
+                {
+                    type: "textBold",
+                    text: "Call of duty mobile",
+                },
+                {
+                    type: "text",
+                    text: "Top ups",
+                },
+                {
+                    type: "text",
+                    text: "1401/7/7",
+                },
+                {
+                    type: "text",
+                    text: "2,000,000",
+                },
+                {
+                    type: "status",
+                    text: "Pay",
+                    color: "n",
+                },
+                {
+                    type: "btn",
+                    text: "opto",
+                },
+
+            ],
+        },
+        {
+            id: 3,
+            data: [
+                "#254",
+
+                {
+                    type: "avatar",
+                    text: "Soroush norozy",
+                    url: '/images/avatar.png'
+                },
+                {
+                    type: "textBold",
+                    text: "Call of duty mobile",
+                },
+                {
+                    type: "text",
+                    text: "Top ups",
+                },
+                {
+                    type: "text",
+                    text: "1401/7/7",
+                },
+                {
+                    type: "text",
+                    text: "2,000,000",
+                },
+                {
+                    type: "status",
+                    text: "Pay Pending",
+                    color: "n",
                 },
                 {
                     type: "btn",

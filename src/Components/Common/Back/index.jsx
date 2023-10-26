@@ -2,15 +2,14 @@ import { Grid, SvgIcon, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const BackArrow = (props) => {
+const BackArrow = (props, { link }) => {
     const router = useRouter();
     const handleGoBack = () => {
-        // اگر کاربر از یک لینک قبلی به این صفحه آمده باشد، به صفحه قبلی منتقل شود.
-        // در غیر این صورت به مسیر /panel/admin/Setting منتقل شود.
         if (router.asPath === props.link) {
-            window.history.back();
-        } else {
             router.push("/panel/admin/Setting");
+        }
+        else {
+            window.history.back()
         }
     };
 
