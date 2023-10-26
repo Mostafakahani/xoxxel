@@ -14,7 +14,7 @@ import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import AddProductFeatureNew from "../Popup/CreateProductOptionNew";
 import Link from "next/link";
-import EditOptionsDes from "../Creatives/EditOptionsDes";
+import EditOptionsDes from "../Creatives/EditOptions/EditOptionsDes";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;

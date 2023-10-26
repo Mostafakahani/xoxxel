@@ -7,7 +7,7 @@ import Link from "next/link";
 import CreateRegon from "Components/Common/Creatives/CreateRegon";
 import CreateCategory from "Components/Common/Creatives/CreateCategory";
 import CreateType from "Components/Common/Creatives/CreateType";
-import EditOptionsDes from "Components/Common/Creatives/EditOptionsDes";
+import EditOptionsDes from "Components/Common/Creatives/EditOptions/EditOptionsDes";
 const Products = () => {
     const ButtonData = [
         { text: 'حذف دسته , ریجن , نوع' },
