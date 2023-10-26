@@ -88,7 +88,7 @@ EnhancedTableHead.propTypes = {
 export default function TableItems({
   dataHead,
   dataBody,
-  setSelected = false,
+  setSelected = () => { }, // تابع setSelected را به عنوان پارامتر دریافت می‌کنیم
   selected = false,
 }) {
   const [order, setOrder] = React.useState("asc");
@@ -118,10 +118,10 @@ export default function TableItems({
 
       if (index === -1) {
         copySelects.push(id);
-        setSelected(copySelects);
+        setSelected(copySelects); // مقدار جدید را به تابع setSelected پاس می‌دهیم
       } else {
         const filterSelects = copySelects.filter((x) => x !== id);
-        setSelected(filterSelects);
+        setSelected(filterSelects); // مقدار جدید را به تابع setSelected پاس می‌دهیم
       }
     }
   };
