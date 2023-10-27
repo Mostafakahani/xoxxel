@@ -1,11 +1,13 @@
 import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from "@mui/material";
+import axios from "axios";
 import React, { useState } from "react";
+import ServerURL from "../Layout/config";
 
 
-const CreateCategory = ({ tableId }) => {
+const CreateCategory = () => {
     const [open, setOpen] = useState(false);
     const [category, setCategory] = useState("");
-    const [categorys, setCategorys] = useState([]);
+    const [requestError, setRequestError] = useState(null); // برای نمایش پیام خطا در TextField
 
     const ErrorList = ['نام محصول نمیتواند خالی باشد.', 'قیمت محصول نمی تواند خالی باشد.', 'نمی تواند تکراری باشد.']
     // const [regionError, setRegionError] = useState(false)
@@ -14,37 +16,51 @@ const CreateCategory = ({ tableId }) => {
         setOpen(true);
     };
 
-    const handleSubmit = () => {
-        if (category !== "" && category !== "") {
-            setCategorys(prevRegions => [
-                ...prevRegions,
-                {
-                    region: category,
-                    tableId: tableId
+
+
+    const handleSubmit = async () => {
+        if (category !== "") {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `${ServerURL.Bear}`
+                    }
+                };
+                const data = {
+                    title: category
+                };
+
+                const response = await axios.post(`${ServerURL.url}/admin/cat/create`, data, config);
+
+                if (response.status === 401) {
+                    setRequestError("این دسته وجود دارد");
+                } else {
+                    setCategory("");
+                    setOpen(false);
+                    setRequestError(null);
                 }
-            ]);
-            console.log(categorys)
-
-            setCategory("");
+            } catch (error) {
+                console.error(error);
+                setRequestError("اطلاعات درست وارد کنید");
+            }
         } else {
-            console.log('Error: نام ریجن نمی‌تواند خالی باشد.');
+            setRequestError("اطلاعات درست وارد کنید");
         }
-
-        setOpen(false);
     };
+
+
 
     const handleClosePanel = () => {
         setOpen(false);
         setCategory("");
-        setCategorys([]);
+        // setCategorys([]);
     }
 
     return (
         <Grid>
-            <Button sx={{ fontSize: '12px',mr: { md: "5px", xs: '2px' }, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}
+            <Button sx={{ fontSize: '12px', mr: { md: "5px", xs: '2px' }, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}
                 onClick={() => {
                     handleClickOpen()
-                    console.log(open)
                 }}>
                 ایجاد دسته
             </Button>
@@ -64,9 +80,9 @@ const CreateCategory = ({ tableId }) => {
                         <Typography align="left" sx={{ my: ' 15px' }}>ایجاد دسته</Typography>
                         <Grid xs={12} md={12}>
                             <TextField
-                                // error={!priceError ? false : true}
-                                // helperText={!priceError ? '' : ErrorList[1]}
-                                onChange={(e) => setCategory(e.target.value)}
+                                error={requestError}
+                                helperText={requestError}
+                                onChange={(e) => { setCategory(e.target.value); setRequestError('') }}
                                 value={category}
                                 label="نام دسته "
                                 variant="outlined"

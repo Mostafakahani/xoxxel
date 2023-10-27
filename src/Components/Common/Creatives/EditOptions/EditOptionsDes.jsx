@@ -1,10 +1,11 @@
-import { Button, Dialog, DialogContent, DialogTitle, Grid } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, Grid, SvgIcon } from "@mui/material";
 import { useState } from "react";
 import TabelOptions from "Components/Common/TableItems/TabelOptions";
 import { useEffect } from "react";
 import axios from "axios";
 import ServerURL from "../../Layout/config";
 import CategoryEdit from "./categoryEdit";
+import TypeEdit from "./TypeEdit";
 
 const EditOptionsDes = () => {
     const [open, setOpen] = useState(false);
@@ -104,7 +105,6 @@ const EditOptionsDes = () => {
                 <Button sx={{ fontSize: '12px', mr: { md: "5px", xs: '2px' }, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}
                     onClick={() => {
                         handleClickOpen()
-                        console.log(open)
                     }}>
                     ویرایش دسته,ریجن,نوع
                 </Button>
@@ -116,7 +116,14 @@ const EditOptionsDes = () => {
                         setOpen(false)
                     }}
                 >
-                    <DialogTitle>ویرایش دسته,ریجن,نوع</DialogTitle>
+                    <Grid container sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <DialogTitle>ویرایش دسته,ریجن,نوع</DialogTitle>
+                        <SvgIcon onClick={() => setOpen(false)} sx={{ mr: '20px', cursor: 'pointer' }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="23" viewBox="0 0 24 23" fill="none">
+                                <path d="M15.9324 7.94292L8.07031 15.805M15.9324 15.805L8.07031 7.94287" stroke="#181818" strokeWidth="1.38984" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </SvgIcon>
+                    </Grid>
                     <DialogContent>
                         <Grid sx={{ my: '10px' }}>
                             <Button
@@ -149,28 +156,28 @@ const EditOptionsDes = () => {
                         </Grid>
                         <Grid>
                             {
-                                selectedButton === "region" && (
-                                    <>
-                                        <CategoryEdit />
-                                    </>
-                                )
-                            }
-                            {
                                 selectedButton === "category" && (
                                     <>
                                         <CategoryEdit />
                                     </>
                                 )
                             }
+                            {
+                                selectedButton === "type" && (
+                                    <>
+                                        <TypeEdit />
+                                    </>
+                                )
+                            }
                         </Grid>
 
-                        <Button onClick={() => setOpen(false)}>
+                        {/* <Button onClick={() => setOpen(false)}>
                             بستن
-                        </Button>
+                        </Button> */}
                     </DialogContent>
-                </Dialog>
+                </Dialog >
 
-            </Grid>
+            </Grid >
         </>
     );
 };

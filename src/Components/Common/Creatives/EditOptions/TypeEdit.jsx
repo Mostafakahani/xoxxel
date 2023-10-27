@@ -4,14 +4,15 @@ import TabelOptions from "Components/Common/TableItems/TabelOptions";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const CategoryEdit = () => {
+const TypeEdit = () => {
     const [regionData, setRegionData] = useState([]);
     const [selected, setSelected] = useState([]);
     const [updateData, setUpdateData] = useState(false);
+    const [page, setPage] = useState(1);
 
     const dataHead = [
         "id",
-        "نام دسته",
+        "نام نوع",
     ];
 
     useEffect(() => {
@@ -22,7 +23,9 @@ const CategoryEdit = () => {
                         Authorization: `${ServerURL.Bear}`
                     }
                 };
-                const response = await axios.get("https://xoxxel.dicato.net/admin/storage/get-all-cat?page=1", config);
+                setUpdateData(false);
+
+                const response = await axios.get(`${ServerURL.url}/admin/storage/get-all-type-product?page=${page}`, config);
                 const apiData = response.data;
                 const updatedRegionData = apiData.data.map(item => {
                     return {
@@ -57,7 +60,7 @@ const CategoryEdit = () => {
                 ids: selected
             };
 
-            await axios.post("https://xoxxel.dicato.net/admin/cat/delete", deleteData, config);
+            await axios.post(`${ServerURL.url}/admin/type-product/delete`, deleteData, config);
             setUpdateData(true);
         } catch (error) {
             console.error("Error sending delete request:", error);
@@ -77,7 +80,7 @@ const CategoryEdit = () => {
                         />
                         {
                             selected.length !== 0 && (
-                                <Button onClick={handleDelete} disableElevation sx={{ my: '10px', px: '10px',backgroundColor: '#D80027', color: '#fff' ,'&:hover': { color: '#000'}}}>حذف کردن</Button>
+                                <Button onClick={handleDelete} disableElevation sx={{ my: '10px', px: '10px', backgroundColor: '#D80027', color: '#fff', '&:hover': { color: '#000' } }}>حذف کردن</Button>
                             )
                         }
                     </>
@@ -90,4 +93,4 @@ const CategoryEdit = () => {
     );
 };
 
-export default CategoryEdit;
+export default TypeEdit;

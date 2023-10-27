@@ -1,11 +1,13 @@
 import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
+import ServerURL from "../Layout/config";
+import axios from "axios";
 
 
 const CreateType = ({ tableId }) => {
     const [open, setOpen] = useState(false);
     const [type, setType] = useState("");
-    const [types, setTypes] = useState([]);
+    const [requestError, setRequestError] = useState(null); // برای نمایش پیام خطا در TextField
 
     const ErrorList = ['نام محصول نمیتواند خالی باشد.', 'قیمت محصول نمی تواند خالی باشد.', 'نمی تواند تکراری باشد.']
     // const [regionError, setRegionError] = useState(false)
@@ -14,37 +16,45 @@ const CreateType = ({ tableId }) => {
         setOpen(true);
     };
 
-    const handleSubmit = () => {
-        if (type !== "" && type !== "") {
-            setTypes(prevRegions => [
-                ...prevRegions,
-                {
-                    region: type,
-                    tableId: tableId
+    const handleSubmit = async () => {
+        if (type !== "") {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `${ServerURL.Bear}`
+                    }
+                };
+                const data = {
+                    title: type
+                };
+
+                const response = await axios.post(`${ServerURL.url}/admin/type-product/create`, data, config);
+
+                if (response.status === 400) {
+                    setRequestError("این دسته وجود دارد");
+                } else {
+                    setType("");
+                    setOpen(false);
+                    setRequestError(null);
                 }
-            ]);
-            console.log(types)
-
-            setType("");
+            } catch (error) {
+                console.error(error);
+                setRequestError("اطلاعات درست وارد کنید");
+            }
         } else {
-            console.log('Error: نام ریجن نمی‌تواند خالی باشد.');
+            setRequestError("مشکلی در ارتباط با سرور وجود دارد");
         }
-
-        setOpen(false);
     };
-
     const handleClosePanel = () => {
         setOpen(false);
         setType("");
-        setTypes([]);
     }
 
     return (
         <Grid>
-            <Button sx={{ fontSize: '12px',mr: { md: "5px", xs: '2px' }, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}
+            <Button sx={{ fontSize: '12px', mr: { md: "5px", xs: '2px' }, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}
                 onClick={() => {
                     handleClickOpen()
-                    console.log(open)
                 }}>
                 ایجاد نوع
             </Button>
@@ -64,9 +74,9 @@ const CreateType = ({ tableId }) => {
                         <Typography align="left" sx={{ my: ' 15px' }}>ایجاد نوع</Typography>
                         <Grid xs={12} md={12}>
                             <TextField
-                                // error={!priceError ? false : true}
-                                // helperText={!priceError ? '' : ErrorList[1]}
-                                onChange={(e) => setType(e.target.value)}
+                                error={requestError}
+                                helperText={requestError}
+                                onChange={(e) => { setType(e.target.value); setRequestError('') }}
                                 value={type}
                                 label="نام نوع "
                                 variant="outlined"
