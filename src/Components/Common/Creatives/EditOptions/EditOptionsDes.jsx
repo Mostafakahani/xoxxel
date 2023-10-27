@@ -169,6 +169,13 @@ const EditOptionsDes = () => {
                                     </>
                                 )
                             }
+                            {
+                                selectedButton === "region" && (
+                                    <>
+                                        <TypeEdit />
+                                    </>
+                                )
+                            }
                         </Grid>
 
                         {/* <Button onClick={() => setOpen(false)}>

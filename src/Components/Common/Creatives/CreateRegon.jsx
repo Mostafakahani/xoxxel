@@ -7,6 +7,7 @@ const CreateRegon = ({ tableId }) => {
     const [open, setOpen] = useState(false);
     const [region, setRegion] = useState("");
     const [regions, setRegions] = useState([]);
+    const [requestError, setRequestError] = useState(null); // برای نمایش پیام خطا در TextField
 
     const ErrorList = ['نام محصول نمیتواند خالی باشد.', 'قیمت محصول نمی تواند خالی باشد.', 'نمی تواند تکراری باشد.']
     const [regionError, setRegionError] = useState(false)
@@ -48,7 +49,7 @@ const CreateRegon = ({ tableId }) => {
 
     return (
         <Grid>
-            
+
             <Button sx={{ fontSize: '12px', mr: { md: "5px", xs: '2px' }, py: '5px', px: '12px', border: '1px solid #B6B6B6', color: '#525252', borderRadius: "5px" }}
                 onClick={() => {
                     handleClickOpen()
@@ -71,24 +72,17 @@ const CreateRegon = ({ tableId }) => {
                     <Grid container>
                         <Typography align="left" sx={{ my: ' 15px' }}>ایجاد ریجن</Typography>
                         <Grid xs={12} md={12}>
-                            <Typography>نام ریجن</Typography>
-                            <Select
-                                value={region}
-                                onChange={(e) => setRegion(e.target.value)}
-                                fullWidth
-                                displayEmpty
-                                inputProps={{ "aria-label": "Region" }}
-                                sx={{ width: { md: '200px', xs: '100%' }, display: 'flex !important', my: '10px' }}
-                            >
-                                {menuItems.map((x) => (
-                                    <MenuItem key={x.id} value={x.value}>
-                                        <Grid sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <Box component={'img'} src={x.icon} width={'30'} height={'auto'} sx={{ mr: "10px" }} />
-                                            <Typography>{x.value}</Typography>
-                                        </Grid>
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                            <Grid xs={12} md={6}>
+                                <TextField
+                                    error={requestError}
+                                    helperText={requestError}
+                                    onChange={(e) => { setRegion(e.target.value); setRequestError('') }}
+                                    value={region}
+                                    label="نام ریجن "
+                                    variant="outlined"
+                                    sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
+                                />
+                            </Grid>
                         </Grid>
                         <Grid xs={12} md={12}>
                             <UploadFile

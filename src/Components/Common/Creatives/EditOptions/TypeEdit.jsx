@@ -33,7 +33,7 @@ const TypeEdit = () => {
                         data: [
                             `#${item.id}`,
                             {
-                                type: "text",
+                                type: "textBold",
                                 text: item.title
                             }
                         ]
