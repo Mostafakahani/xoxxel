@@ -155,6 +155,13 @@ const EditOptionsDes = () => {
                                     </>
                                 )
                             }
+                            {
+                                selectedButton === "category" && (
+                                    <>
+                                        <CategoryEdit />
+                                    </>
+                                )
+                            }
                         </Grid>
 
                         <Button onClick={() => setOpen(false)}>
