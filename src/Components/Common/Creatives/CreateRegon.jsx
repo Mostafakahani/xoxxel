@@ -7,8 +7,9 @@ const CreateRegon = ({ tableId }) => {
     const [open, setOpen] = useState(false);
     const [region, setRegion] = useState("");
     const [regions, setRegions] = useState([]);
-    const [requestError, setRequestError] = useState(null); // برای نمایش پیام خطا در TextField
-
+    const [requestError, setRequestError] = useState(null);
+    const [imageData, setImageData] = useState('')
+    const [imageName, setImageName] = useState('')
     const ErrorList = ['نام محصول نمیتواند خالی باشد.', 'قیمت محصول نمی تواند خالی باشد.', 'نمی تواند تکراری باشد.']
     const [regionError, setRegionError] = useState(false)
 
@@ -22,23 +23,37 @@ const CreateRegon = ({ tableId }) => {
         setOpen(true);
     };
 
-    const handleSubmit = () => {
-        if (region !== "" && region !== "") {
-            setRegions(prevRegions => [
-                ...prevRegions,
-                {
-                    region: region,
-                    tableId: tableId
+    const handleSubmit = async () => {
+        if (type !== "") {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `${ServerURL.Bear}`
+                    }
+                };
+                const data = {
+                    body: {
+                        title: type
+
+                    }
+                };
+
+                const response = await axios.post(`${ServerURL.url}/admin/type-product/create`, data, config);
+
+                if (response.status === 400) {
+                    setRequestError("این دسته وجود دارد");
+                } else {
+                    setType("");
+                    setOpen(false);
+                    setRequestError(null);
                 }
-            ]);
-            console.log(regions)
-
-            setRegion("");
+            } catch (error) {
+                console.error(error);
+                setRequestError("اطلاعات درست وارد کنید");
+            }
         } else {
-            console.log('Error: نام ریجن نمی‌تواند خالی باشد.');
+            setRequestError("مشکلی در ارتباط با سرور وجود دارد");
         }
-
-        setOpen(false);
     };
 
     const handleClosePanel = () => {
@@ -46,6 +61,10 @@ const CreateRegon = ({ tableId }) => {
         setRegion("");
         setRegions([]);
     }
+    const [fileUrl, setFileUrl] = useState(null);
+    const [fileName, setFileName] = useState(null);
+    const [fileSize, setFileSize] = useState(null);
+    const [filePath, setFilePath] = useState(null);
 
     return (
         <Grid>
@@ -87,17 +106,28 @@ const CreateRegon = ({ tableId }) => {
                         <Grid xs={12} md={12}>
                             <UploadFile
                                 id={"file1"}
-                                accept="video/*"
+                                accept="image/png, image/jpg, image/jpeg"
                                 label={"ایکون ( با اندازه برابر مثلا 200*200)"}
-                                onChange={(e) => console.log(e)}
+                                onChange={(e) => {
+                                    const fileDetails = e.fileDetails;
+                                    setFileUrl(fileDetails.fileURL);
+                                    setFileName(fileDetails.fileName);
+                                    setFileSize(fileDetails.fileSize);
+                                    setFilePath(fileDetails.filePath)
+                                }}
                             />
+
+
                         </Grid>
                     </Grid>
                     <Grid container>
                         {
                             region !== "" && (
                                 <Grid xs={6} sm={3} md={3}>
-                                    <Button variant="contained" color="primary" onClick={handleSubmit} style={{ marginTop: '20px' }}>
+                                    <Button variant="contained" color="primary"
+                                        // onClick={handleSubmit}
+                                        onClick={() => console.log(imageData, ' size:', fileSize, ' filename: ', fileName, ' url: ', fileUrl, ' path: ', filePath)}
+                                        style={{ marginTop: '20px' }}>
                                         افزودن ویژگی
                                     </Button>
                                 </Grid>

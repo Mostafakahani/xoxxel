@@ -1,8 +1,7 @@
+import React, { useRef, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import React, { useState } from "react";
 import StatusButton from "../StatusButton";
 import styles from "./styles";
-import { useRef } from "react";
 
 function UploadFile({
   label = null,
@@ -13,8 +12,77 @@ function UploadFile({
   fileName = null,
   srcImage = null,
 }) {
-  const [fileUrl, setFileUrl] = useState(null);
+  const [fileUrl, setFileUrl] = useState(srcImage || null);
+  const [fileSize, setFileSize] = useState(null);
   const file = useRef();
+
+  // const handleFileChange = (e) => {
+  //   if (e?.target?.files[0]) {
+  //     let fileURL = URL.createObjectURL(e?.target?.files[0]);
+  //     const fileDetails = {
+  //       fileURL: fileURL,
+  //       fileName: e?.target?.files[0]?.name,
+  //       fileSize: e?.target?.files[0]?.size,
+  //       filePath: e?.target?.files[0]?.path,
+  //     };
+  //     setFileUrl(fileDetails.fileURL);
+  //     setFileSize(fileDetails.fileSize);
+  //     setFilePath(fileDetails.filePath)
+  //     onChange({ fileDetails });
+  //     handleFileUpload(fileDetails.fileURL, fileDetails.fileSize);
+  //   } else {
+  //     setFileUrl("");
+  //     setFilePath('')
+  //     setFileSize(0);
+  //     const emptyFileDetails = {
+  //       fileURL: "",
+  //       fileName: "",
+  //       fileSize: 0,
+  //     };
+  //     onChange({ fileDetails: emptyFileDetails });
+  //   }
+  // };
+  const handleFileChange = (e) => {
+    if (e?.target?.files) {
+      const selectedFiles = e.target.files;
+      let fileURLs = [];
+      let fileDetailsArray = [];
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        let fileURL = URL.createObjectURL(selectedFiles[i]);
+        fileURLs.push(fileURL);
+
+        const fileDetails = {
+          fileURL: fileURL,
+          fileName: selectedFiles[i].name,
+          fileSize: selectedFiles[i].size,
+          // اینجا نمی‌توانید مسیر محلی فایل را دریافت کنید به دلیل محدودیت‌های امنیتی
+        };
+
+        fileDetailsArray.push(fileDetails);
+      }
+
+      setFileUrl(fileURLs);
+      onChange({ fileDetails: fileDetailsArray });
+      handleFileUpload(fileURLs, fileDetailsArray);
+    } else {
+      setFileUrl([]);
+      const emptyFileDetails = {
+        fileURL: "",
+        fileName: "",
+        fileSize: 0,
+      };
+      onChange({ fileDetails: [emptyFileDetails] });
+    }
+  };
+
+  // تابع دریافت کننده اطلاعات فایل و URL
+  function handleFileUpload(fileUrl, fileSize) {
+    // اینجا می‌توانید از اطلاعات فایل و URL برای کارهای خاصی استفاده کنید
+    // مثلاً ارسال اطلاعات به کامپوننت دیگر یا انجام کارهای دیگر...
+    console.log("URL فایل:", fileUrl);
+    console.log("حجم فایل:", fileSize);
+  }
 
   return (
     <Box sx={{ ...styles.box, width: '100%', my: '15px' }} className="box-upload input-box">
@@ -29,23 +97,7 @@ function UploadFile({
           hidden
           ref={file}
           id={id}
-          onChange={(e) => {
-            if (e?.target?.files[0]) {
-              let fileURL = URL.createObjectURL(e?.target?.files[0]);
-              setFileUrl(fileURL);
-
-              onChange(e);
-            } else {
-              setFileUrl("");
-              onChange({
-                ...e,
-                target: {
-                  ...e.target.fileURL,
-                  files: [0],
-                },
-              });
-            }
-          }}
+          onChange={handleFileChange}
         />
         <Typography component={"h6"}>
           {fileName

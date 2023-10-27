@@ -6,6 +6,7 @@ import axios from "axios";
 import ServerURL from "../../Layout/config";
 import CategoryEdit from "./categoryEdit";
 import TypeEdit from "./TypeEdit";
+import RegonEdit from "./RegonEdit";
 
 const EditOptionsDes = () => {
     const [open, setOpen] = useState(false);
@@ -172,7 +173,7 @@ const EditOptionsDes = () => {
                             {
                                 selectedButton === "region" && (
                                     <>
-                                        <TypeEdit />
+                                        <RegonEdit />
                                     </>
                                 )
                             }
