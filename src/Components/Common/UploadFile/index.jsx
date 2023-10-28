@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 import StatusButton from "../StatusButton";
 import styles from "./styles";
 import ServerURL from "../Layout/config";
+import axios from "axios";
 
 function UploadFile({
   label = null,
@@ -20,18 +21,20 @@ function UploadFile({
 
     if (selectedFile) {
       try {
-        const response = await fetch(`${ServerURL.url}/admin/storage/create-key-upload`, {
-          method: "POST",
-          body: JSON.stringify({
-            size: selectedFile.size,
-            type: selectedFile.type,
-            name: selectedFile.name,
-          }),
+        const config = {
           headers: {
-            Authorization: `${ServerURL.Bear}`,
-            "Content-Type": "application/json",
-          },
-        });
+            Authorization: `${ServerURL.Bear}`
+          }
+        };
+        const data = {
+
+          size: selectedFile.size,
+          type: selectedFile.type,
+          name: selectedFile.name,
+
+        };
+
+        const response = await axios.post(`${ServerURL.url}/admin/storage/create-key-upload`, data, config);
 
         if (response.ok) {
           const data = await response.json();
