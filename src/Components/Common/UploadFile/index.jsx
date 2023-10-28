@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Box, Typography } from "@mui/material";
 import StatusButton from "../StatusButton";
 import styles from "./styles";
+import ServerURL from "../Layout/config";
 
 function UploadFile({
   label = null,
@@ -12,98 +13,100 @@ function UploadFile({
   fileName = null,
   srcImage = null,
 }) {
-  const [fileUrl, setFileUrl] = useState(srcImage || null);
-  const [fileSize, setFileSize] = useState(null);
-  const file = useRef();
+  const fileInputRef = useRef();
 
-  // const handleFileChange = (e) => {
-  //   if (e?.target?.files[0]) {
-  //     let fileURL = URL.createObjectURL(e?.target?.files[0]);
-  //     const fileDetails = {
-  //       fileURL: fileURL,
-  //       fileName: e?.target?.files[0]?.name,
-  //       fileSize: e?.target?.files[0]?.size,
-  //       filePath: e?.target?.files[0]?.path,
-  //     };
-  //     setFileUrl(fileDetails.fileURL);
-  //     setFileSize(fileDetails.fileSize);
-  //     setFilePath(fileDetails.filePath)
-  //     onChange({ fileDetails });
-  //     handleFileUpload(fileDetails.fileURL, fileDetails.fileSize);
-  //   } else {
-  //     setFileUrl("");
-  //     setFilePath('')
-  //     setFileSize(0);
-  //     const emptyFileDetails = {
-  //       fileURL: "",
-  //       fileName: "",
-  //       fileSize: 0,
-  //     };
-  //     onChange({ fileDetails: emptyFileDetails });
-  //   }
-  // };
-// در کامپوننت UploadFile
-const handleFileChange = (e) => {
-  if (e?.target?.files) {
-      const selectedFiles = e.target.files;
-      let fileDetailsArray = [];
+  const handleFileUpload = async () => {
+    const selectedFile = fileInputRef.current.files[0];
 
-      for (let i = 0; i < selectedFiles.length; i++) {
-          let fileURL = URL.createObjectURL(selectedFiles[i]);
-          const fileDetails = {
-              fileURL: fileURL,
-              fileName: selectedFiles[i].name,
-              fileSize: selectedFiles[i].size,
-              fileType: selectedFiles[i].type
-          };
-          fileDetailsArray.push(fileDetails);
+    if (selectedFile) {
+      try {
+        const response = await fetch(`${ServerURL.url}/admin/storage/create-key-upload`, {
+          method: "POST",
+          body: JSON.stringify({
+            size: selectedFile.size,
+            type: selectedFile.type,
+            name: selectedFile.name,
+          }),
+          headers: {
+            Authorization: `${ServerURL.Bear}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data) {
+            onChange({ selectedFile: selectedFile });
+            onChange({ fileResDetails: data });
+
+            console.log('data hast')
+          } else {
+            console.error("خطا در دریافت اطلاعات ریسپاس!");
+          }
+        }
+
+        // if (uploadResponse.ok) {
+        //   const data = await response.json();
+
+        //   const fileResDetails = {
+        //     fileURL: `${data.url}${data.fields.key}`,
+        //     fields: data.fields,
+        //     dataStorage: data.dataStorage,
+        //   };
+        //   onChange({ fileResDetails });
+        // } else {
+        //   console.error("خطا در آپلود فایل!");
+        // }
+
+
+        // if (uploadResponse.ok) {
+        //   console.log("فایل با موفقیت آپلود شد!");
+        //   const fileDetails = {
+        //     fileURL: `${data.url}${data.fields.key}`, // آدرس کامل فایل برای نمایش یا ذخیره
+        //     fileName: selectedFile.name,
+        //     fileSize: selectedFile.size,
+        //     fileType: selectedFile.type,
+        //   };
+
+        //   // ارسال اطلاعات به کامپوننت والد
+        //   onChange({ fileDetails });
+        // } else {
+        //   console.error("خطا در آپلود فایل!");
+        // }
+
+        // else {
+        //   console.error("خطا در درخواست به سرور!");
+        // }
+
+      } catch (error) {
+        console.error("خطایی رخ داده است: ", error);
       }
-
-      onChange({ fileDetails: fileDetailsArray });
-  } else {
-      // اگر هیچ فایلی انتخاب نشده باشد، یک آرایه خالی ارسال کنید
+    } else {
       onChange({ fileDetails: [] });
-  }
-};
-
-
-  // تابع دریافت کننده اطلاعات فایل و URL
-  // function handleFileUpload(fileUrl, fileSize) {
-  //   // اینجا می‌توانید از اطلاعات فایل و URL برای کارهای خاصی استفاده کنید
-  //   // مثلاً ارسال اطلاعات به کامپوننت دیگر یا انجام کارهای دیگر...
-  //   // console.log("URL فایل:", fileUrl);
-  //   console.log("حجم فایل:", fileSize);
-  // }
+    }
+  };
 
   return (
-    <Box sx={{ ...styles.box, width: '100%', my: '15px' }} className="box-upload input-box">
+    <Box sx={{ ...styles.box, width: "100%", my: "15px" }} className="box-upload input-box">
       {label && <label htmlFor={id}>{label}</label>}
-      <Box
-        className="box-input center-between"
-        onClick={() => !readOnly && file?.current?.click()}
-      >
-        <input
-          type="file"
-          accept={accept}
-          hidden
-          ref={file}
-          id={id}
-          onChange={handleFileChange}
-        />
+      <Box className="box-input center-between" onClick={() => !readOnly && fileInputRef.current.click()}>
+        <input type="file" accept={accept} hidden ref={fileInputRef} id={id} onChange={handleFileUpload} />
         <Typography component={"h6"}>
           {fileName
             ? fileName
             : srcImage
-              ? srcImage?.split("/")[srcImage?.split("/")?.length - 1]
+              ? srcImage.split("/")[srcImage.split("/").length - 1]
               : "فایل خود را انتخاب کنید"}
         </Typography>
         <StatusButton
           text="مشاهده"
           onClick={(e) => {
             e.stopPropagation();
-            if (fileUrl || srcImage) {
+            if (fileInputRef.current.files[0] || srcImage) {
               const newLink = document.createElement("a");
-              newLink.href = fileUrl ? fileUrl : srcImage;
+              newLink.href = fileInputRef.current.files[0]
+                ? URL.createObjectURL(fileInputRef.current.files[0])
+                : srcImage;
               newLink.setAttribute("target", "_blank");
               newLink.click();
             }

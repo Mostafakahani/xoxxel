@@ -2,6 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Gri
 import React, { useState } from "react";
 import UploadFile from "../UploadFile";
 import ServerURL from "../Layout/config";
+import axios from "axios";
 
 
 const CreateRegon = ({ tableId }) => {
@@ -11,32 +12,40 @@ const CreateRegon = ({ tableId }) => {
     const [requestError, setRequestError] = useState(null);
     const [imageData, setImageData] = useState('')
     const [imageName, setImageName] = useState('')
+    const [selectedFileItem, setSelectedFileItem] = useState(null);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
     const [fileOption, setFileOptions] = useState(null);
-
+    
     const handleSubmit = async () => {
-        if (fileOption && fileOption.length > 0) {
+        if (fileOption) {
             try {
-                // ایجاد شیء FormData برای ارسال اطلاعات به سرور
                 const formData = new FormData();
-                formData.append("file", fileOption[0].fileURL); // اضافه کردن فایل به FormData
+                formData.append("file", selectedFileItem); // اضافه کردن فایل به فرم دیتا
+                formData.append("region", region); // اضافه کردن فیلد region به فرم دیتا
+                formData.append("key", fileOption.fields.key);
+                formData.append("Policy", fileOption.fields.Policy);
+                formData.append("acl", fileOption.fields.acl);
+                formData.append("bucket", fileOption.fields.bucket);
+                formData.append("X-Amz-Algorithm", fileOption.fields["X-Amz-Algorithm"]);
+                formData.append("X-Amz-Credential", fileOption.fields["X-Amz-Credential"]);
+                formData.append("X-Amz-Date", fileOption.fields["X-Amz-Date"]);
+                formData.append("X-Amz-Signature", fileOption.fields["X-Amz-Signature"]);
 
                 // ارسال درخواست به سرور
-                const response = await axios.post(`${ServerURL.url}/admin/type-product/create`, formData, {
+                const response = await axios.post(`${fileOption.url}`, formData, {
                     headers: {
                         Authorization: `${ServerURL.Bear}`,
-                        'Content-Type': 'multipart/form-data', // تنظیم هدر Content-Type برای فرم دیتا
+                        'Content-Type': 'multipart/form-data',
                     }
                 });
-
 
                 if (response.status === 400) {
                     setRequestError("این دسته وجود دارد");
                 } else {
-                    setType("");
+                    setRegion("");
                     setOpen(false);
                     setRequestError(null);
                 }
@@ -45,7 +54,7 @@ const CreateRegon = ({ tableId }) => {
                 setRequestError("اطلاعات درست وارد کنید");
             }
         } else {
-            setRequestError("مشکلی در ارتباط با سرور وجود دارد");
+            setRequestError('fileOption نیست');
         }
     };
 
@@ -55,7 +64,6 @@ const CreateRegon = ({ tableId }) => {
         setRegions([]);
         setFileOptions(null)
     }
-    const [fileName, setFileName] = useState(null);
     const [fileSize, setFileSize] = useState(null);
     const [filePath, setFilePath] = useState(null);
 
@@ -102,7 +110,9 @@ const CreateRegon = ({ tableId }) => {
                                 accept="image/png, image/jpg, image/jpeg"
                                 label={"ایکون ( با اندازه برابر مثلا 200*200)"}
                                 onChange={(e) => {
-                                    setFileOptions(e.fileDetails);
+                                    // setFileOptions(e.data);
+                                    setSelectedFileItem(e.selectedFile);
+                                    setFileOptions(e.fileResDetails)
                                 }}
                             />
 
@@ -116,7 +126,10 @@ const CreateRegon = ({ tableId }) => {
                                     <Button variant="contained" color="primary"
                                         // onClick={handleSubmit}
                                         onClick={
-                                            () => handleSubmit()
+                                            () => {
+                                                console.log(selectedFileItem);
+                                                handleSubmit();
+                                            }
                                         }
                                         style={{ marginTop: '20px' }}>
                                         افزودن ویژگی
