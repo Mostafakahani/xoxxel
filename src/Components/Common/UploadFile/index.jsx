@@ -62,7 +62,7 @@ function UploadFile({
         // if (uploadResponse.ok) {
         //   console.log("فایل با موفقیت آپلود شد!");
         //   const fileDetails = {
-        //     fileURL: `${data.url}${data.fields.key}`, // آدرس کامل فایل برای نمایش یا ذخیره
+        //     fileURL: `${data.url}${data.fields.key}`,
         //     fileName: selectedFile.name,
         //     fileSize: selectedFile.size,
         //     fileType: selectedFile.type,

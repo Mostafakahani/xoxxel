@@ -18,13 +18,13 @@ const CreateRegon = ({ tableId }) => {
         setOpen(true);
     };
     const [fileOption, setFileOptions] = useState(null);
-    
+
     const handleSubmit = async () => {
         if (fileOption) {
             try {
                 const formData = new FormData();
-                formData.append("file", selectedFileItem); // اضافه کردن فایل به فرم دیتا
-                formData.append("region", region); // اضافه کردن فیلد region به فرم دیتا
+                formData.append("file", selectedFileItem); 
+                formData.append("region", region); 
                 formData.append("key", fileOption.fields.key);
                 formData.append("Policy", fileOption.fields.Policy);
                 formData.append("acl", fileOption.fields.acl);
@@ -34,7 +34,6 @@ const CreateRegon = ({ tableId }) => {
                 formData.append("X-Amz-Date", fileOption.fields["X-Amz-Date"]);
                 formData.append("X-Amz-Signature", fileOption.fields["X-Amz-Signature"]);
 
-                // ارسال درخواست به سرور
                 const response = await axios.post(`${fileOption.url}`, formData, {
                     headers: {
                         Authorization: `${ServerURL.Bear}`,
