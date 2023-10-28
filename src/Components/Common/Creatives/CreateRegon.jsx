@@ -1,6 +1,7 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem, Select, SvgIcon, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import UploadFile from "../UploadFile";
+import ServerURL from "../Layout/config";
 
 
 const CreateRegon = ({ tableId }) => {
@@ -10,35 +11,27 @@ const CreateRegon = ({ tableId }) => {
     const [requestError, setRequestError] = useState(null);
     const [imageData, setImageData] = useState('')
     const [imageName, setImageName] = useState('')
-    const ErrorList = ['نام محصول نمیتواند خالی باشد.', 'قیمت محصول نمی تواند خالی باشد.', 'نمی تواند تکراری باشد.']
-    const [regionError, setRegionError] = useState(false)
-
-    const menuItems = [
-        { id: 1, value: 'North America', icon: '/images/Flags.png' },
-        { id: 2, value: 'Europe', icon: '/images/Flags.png' },
-        { id: 3, value: 'Asia', icon: '/images/Flags.png' },
-    ]
 
     const handleClickOpen = () => {
         setOpen(true);
     };
+    const [fileOption, setFileOptions] = useState(null);
 
     const handleSubmit = async () => {
-        if (type !== "") {
+        if (fileOption && fileOption.length > 0) {
             try {
-                const config = {
+                // ایجاد شیء FormData برای ارسال اطلاعات به سرور
+                const formData = new FormData();
+                formData.append("file", fileOption[0].fileURL); // اضافه کردن فایل به FormData
+
+                // ارسال درخواست به سرور
+                const response = await axios.post(`${ServerURL.url}/admin/type-product/create`, formData, {
                     headers: {
-                        Authorization: `${ServerURL.Bear}`
+                        Authorization: `${ServerURL.Bear}`,
+                        'Content-Type': 'multipart/form-data', // تنظیم هدر Content-Type برای فرم دیتا
                     }
-                };
-                const data = {
-                    body: {
-                        title: type
+                });
 
-                    }
-                };
-
-                const response = await axios.post(`${ServerURL.url}/admin/type-product/create`, data, config);
 
                 if (response.status === 400) {
                     setRequestError("این دسته وجود دارد");
@@ -48,7 +41,7 @@ const CreateRegon = ({ tableId }) => {
                     setRequestError(null);
                 }
             } catch (error) {
-                console.error(error);
+                console.error(error, 'errr');
                 setRequestError("اطلاعات درست وارد کنید");
             }
         } else {
@@ -60,8 +53,8 @@ const CreateRegon = ({ tableId }) => {
         setOpen(false);
         setRegion("");
         setRegions([]);
+        setFileOptions(null)
     }
-    const [fileUrl, setFileUrl] = useState(null);
     const [fileName, setFileName] = useState(null);
     const [fileSize, setFileSize] = useState(null);
     const [filePath, setFilePath] = useState(null);
@@ -109,11 +102,7 @@ const CreateRegon = ({ tableId }) => {
                                 accept="image/png, image/jpg, image/jpeg"
                                 label={"ایکون ( با اندازه برابر مثلا 200*200)"}
                                 onChange={(e) => {
-                                    const fileDetails = e.fileDetails;
-                                    setFileUrl(fileDetails.fileURL);
-                                    setFileName(fileDetails.fileName);
-                                    setFileSize(fileDetails.fileSize);
-                                    setFilePath(fileDetails.filePath)
+                                    setFileOptions(e.fileDetails);
                                 }}
                             />
 
@@ -126,7 +115,9 @@ const CreateRegon = ({ tableId }) => {
                                 <Grid xs={6} sm={3} md={3}>
                                     <Button variant="contained" color="primary"
                                         // onClick={handleSubmit}
-                                        onClick={() => console.log(imageData, ' size:', fileSize, ' filename: ', fileName, ' url: ', fileUrl, ' path: ', filePath)}
+                                        onClick={
+                                            () => handleSubmit()
+                                        }
                                         style={{ marginTop: '20px' }}>
                                         افزودن ویژگی
                                     </Button>

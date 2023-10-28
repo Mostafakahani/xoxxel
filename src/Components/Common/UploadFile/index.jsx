@@ -42,47 +42,38 @@ function UploadFile({
   //     onChange({ fileDetails: emptyFileDetails });
   //   }
   // };
-  const handleFileChange = (e) => {
-    if (e?.target?.files) {
+// در کامپوننت UploadFile
+const handleFileChange = (e) => {
+  if (e?.target?.files) {
       const selectedFiles = e.target.files;
-      let fileURLs = [];
       let fileDetailsArray = [];
 
       for (let i = 0; i < selectedFiles.length; i++) {
-        let fileURL = URL.createObjectURL(selectedFiles[i]);
-        fileURLs.push(fileURL);
-
-        const fileDetails = {
-          fileURL: fileURL,
-          fileName: selectedFiles[i].name,
-          fileSize: selectedFiles[i].size,
-          // اینجا نمی‌توانید مسیر محلی فایل را دریافت کنید به دلیل محدودیت‌های امنیتی
-        };
-
-        fileDetailsArray.push(fileDetails);
+          let fileURL = URL.createObjectURL(selectedFiles[i]);
+          const fileDetails = {
+              fileURL: fileURL,
+              fileName: selectedFiles[i].name,
+              fileSize: selectedFiles[i].size,
+              fileType: selectedFiles[i].type
+          };
+          fileDetailsArray.push(fileDetails);
       }
 
-      setFileUrl(fileURLs);
       onChange({ fileDetails: fileDetailsArray });
-      handleFileUpload(fileURLs, fileDetailsArray);
-    } else {
-      setFileUrl([]);
-      const emptyFileDetails = {
-        fileURL: "",
-        fileName: "",
-        fileSize: 0,
-      };
-      onChange({ fileDetails: [emptyFileDetails] });
-    }
-  };
+  } else {
+      // اگر هیچ فایلی انتخاب نشده باشد، یک آرایه خالی ارسال کنید
+      onChange({ fileDetails: [] });
+  }
+};
+
 
   // تابع دریافت کننده اطلاعات فایل و URL
-  function handleFileUpload(fileUrl, fileSize) {
-    // اینجا می‌توانید از اطلاعات فایل و URL برای کارهای خاصی استفاده کنید
-    // مثلاً ارسال اطلاعات به کامپوننت دیگر یا انجام کارهای دیگر...
-    console.log("URL فایل:", fileUrl);
-    console.log("حجم فایل:", fileSize);
-  }
+  // function handleFileUpload(fileUrl, fileSize) {
+  //   // اینجا می‌توانید از اطلاعات فایل و URL برای کارهای خاصی استفاده کنید
+  //   // مثلاً ارسال اطلاعات به کامپوننت دیگر یا انجام کارهای دیگر...
+  //   // console.log("URL فایل:", fileUrl);
+  //   console.log("حجم فایل:", fileSize);
+  // }
 
   return (
     <Box sx={{ ...styles.box, width: '100%', my: '15px' }} className="box-upload input-box">
