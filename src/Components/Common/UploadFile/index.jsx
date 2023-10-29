@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import StatusButton from "../StatusButton";
 import styles from "./styles";
@@ -15,9 +15,10 @@ function UploadFile({
   srcImage = null,
 }) {
   const fileInputRef = useRef();
-
+  const [resItems, setResItems] = useState([])
   const handleFileUpload = async () => {
     const selectedFile = fileInputRef.current.files[0];
+    console.log(selectedFile)
 
     if (selectedFile) {
       try {
@@ -27,60 +28,27 @@ function UploadFile({
           }
         };
         const data = {
-
           size: selectedFile.size,
           type: selectedFile.type,
           name: selectedFile.name,
-
         };
+
+        // const formData = new FormData();
+        // formData.append("file", selectedFile);
 
         const response = await axios.post(`${ServerURL.url}/admin/storage/create-key-upload`, data, config);
 
-        if (response.ok) {
-          const data = await response.json();
-          if (data) {
-            onChange({ selectedFile: selectedFile });
-            onChange({ fileResDetails: data });
+        if (response.data) {
+          // const fieldsData = response.data.map((x) => x);
+          setResItems(response.data)
+          console.log('fieldsData: ', resItems.fields)
+          const imageURL = URL.createObjectURL(selectedFile);
 
-            console.log('data hast')
-          } else {
-            console.error("خطا در دریافت اطلاعات ریسپاس!");
-          }
+          onChange({ fileResDetails: resItems, imageURL: imageURL });
+          console.log('عکس انتخاب شده: ', imageURL);
+        } else {
+          console.error("خطا در دریافت اطلاعات ریسپانس!");
         }
-
-        // if (uploadResponse.ok) {
-        //   const data = await response.json();
-
-        //   const fileResDetails = {
-        //     fileURL: `${data.url}${data.fields.key}`,
-        //     fields: data.fields,
-        //     dataStorage: data.dataStorage,
-        //   };
-        //   onChange({ fileResDetails });
-        // } else {
-        //   console.error("خطا در آپلود فایل!");
-        // }
-
-
-        // if (uploadResponse.ok) {
-        //   console.log("فایل با موفقیت آپلود شد!");
-        //   const fileDetails = {
-        //     fileURL: `${data.url}${data.fields.key}`,
-        //     fileName: selectedFile.name,
-        //     fileSize: selectedFile.size,
-        //     fileType: selectedFile.type,
-        //   };
-
-        //   // ارسال اطلاعات به کامپوننت والد
-        //   onChange({ fileDetails });
-        // } else {
-        //   console.error("خطا در آپلود فایل!");
-        // }
-
-        // else {
-        //   console.error("خطا در درخواست به سرور!");
-        // }
-
       } catch (error) {
         console.error("خطایی رخ داده است: ", error);
       }
@@ -88,6 +56,7 @@ function UploadFile({
       onChange({ fileDetails: [] });
     }
   };
+
 
   return (
     <Box sx={{ ...styles.box, width: "100%", my: "15px" }} className="box-upload input-box">

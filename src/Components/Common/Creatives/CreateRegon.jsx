@@ -18,27 +18,24 @@ const CreateRegon = ({ tableId }) => {
         setOpen(true);
     };
     const [fileOption, setFileOptions] = useState(null);
+    // items = selectedFileItem.map((x) => x.fields)
+    // console.log(first)
 
     const handleSubmit = async () => {
-        if (fileOption) {
+        if (selectedFileItem && fileOption) {
             try {
                 const formData = new FormData();
-                formData.append("file", selectedFileItem); 
-                formData.append("region", region); 
-                formData.append("key", fileOption.fields.key);
-                formData.append("Policy", fileOption.fields.Policy);
-                formData.append("acl", fileOption.fields.acl);
-                formData.append("bucket", fileOption.fields.bucket);
+                formData.append('acl', fileOption.fields.acl);
+                formData.append('bucket', fileOption.fields.bucket);
                 formData.append("X-Amz-Algorithm", fileOption.fields["X-Amz-Algorithm"]);
                 formData.append("X-Amz-Credential", fileOption.fields["X-Amz-Credential"]);
                 formData.append("X-Amz-Date", fileOption.fields["X-Amz-Date"]);
                 formData.append("X-Amz-Signature", fileOption.fields["X-Amz-Signature"]);
-
+                formData.append('key', fileOption.fields.key);
+                formData.append("Policy", fileOption.fields.Policy);
+                formData.append("file", selectedFileItem);
                 const response = await axios.post(`${fileOption.url}`, formData, {
-                    headers: {
-                        Authorization: `${ServerURL.Bear}`,
-                        'Content-Type': 'multipart/form-data',
-                    }
+                    headers: { "Content-Type": "multipart/form-data" },
                 });
 
                 if (response.status === 400) {
@@ -109,11 +106,11 @@ const CreateRegon = ({ tableId }) => {
                                 accept="image/png, image/jpg, image/jpeg"
                                 label={"ایکون ( با اندازه برابر مثلا 200*200)"}
                                 onChange={(e) => {
-                                    // setFileOptions(e.data);
-                                    setSelectedFileItem(e.selectedFile);
-                                    setFileOptions(e.fileResDetails)
+                                    setSelectedFileItem(e.imageURL);
+                                    setFileOptions(e.fileResDetails);
                                 }}
                             />
+
 
 
                         </Grid>
