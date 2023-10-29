@@ -10,22 +10,21 @@ function UploadFile({
   accept = "image/*",
   id,
   readOnly = false,
-  onChange = () => { },
+  onChange = () => {},
   fileName = null,
   srcImage = null,
 }) {
   const fileInputRef = useRef();
-  const [resItems, setResItems] = useState([])
+  const [resItems, setResItems] = useState([]);
   const handleFileUpload = async () => {
     const selectedFile = fileInputRef.current.files[0];
-    console.log(selectedFile)
 
     if (selectedFile) {
       try {
         const config = {
           headers: {
-            Authorization: `${ServerURL.Bear}`
-          }
+            Authorization: `${ServerURL.Bear}`,
+          },
         };
         const data = {
           size: selectedFile.size,
@@ -36,16 +35,23 @@ function UploadFile({
         // const formData = new FormData();
         // formData.append("file", selectedFile);
 
-        const response = await axios.post(`${ServerURL.url}/admin/storage/create-key-upload`, data, config);
+        const response = await axios.post(
+          `${ServerURL.url}/admin/storage/create-key-upload`,
+          data,
+          config
+        );
 
         if (response.data) {
           // const fieldsData = response.data.map((x) => x);
-          setResItems(response.data)
-          console.log('fieldsData: ', resItems.fields)
+          setResItems(response.data);
+          console.log("fieldsData: ", resItems.fields);
           const imageURL = URL.createObjectURL(selectedFile);
 
-          onChange({ fileResDetails: resItems, imageURL: imageURL });
-          console.log('عکس انتخاب شده: ', imageURL);
+          onChange({
+            fileResDetails: resItems,
+            file: selectedFile,
+          });
+          console.log("عکس انتخاب شده: ", imageURL);
         } else {
           console.error("خطا در دریافت اطلاعات ریسپانس!");
         }
@@ -57,18 +63,30 @@ function UploadFile({
     }
   };
 
-
   return (
-    <Box sx={{ ...styles.box, width: "100%", my: "15px" }} className="box-upload input-box">
+    <Box
+      sx={{ ...styles.box, width: "100%", my: "15px" }}
+      className="box-upload input-box"
+    >
       {label && <label htmlFor={id}>{label}</label>}
-      <Box className="box-input center-between" onClick={() => !readOnly && fileInputRef.current.click()}>
-        <input type="file" accept={accept} hidden ref={fileInputRef} id={id} onChange={handleFileUpload} />
+      <Box
+        className="box-input center-between"
+        onClick={() => !readOnly && fileInputRef.current.click()}
+      >
+        <input
+          type="file"
+          accept={accept}
+          hidden
+          ref={fileInputRef}
+          id={id}
+          onChange={handleFileUpload}
+        />
         <Typography component={"h6"}>
           {fileName
             ? fileName
             : srcImage
-              ? srcImage.split("/")[srcImage.split("/").length - 1]
-              : "فایل خود را انتخاب کنید"}
+            ? srcImage.split("/")[srcImage.split("/").length - 1]
+            : "فایل خود را انتخاب کنید"}
         </Typography>
         <StatusButton
           text="مشاهده"
