@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import StatusButton from "../StatusButton";
 import styles from "./styles";
 import ServerURL from "../Layout/config";
@@ -10,17 +10,21 @@ function UploadFile({
   accept = "image/*",
   id,
   readOnly = false,
-  onChange = () => {},
+  onChange = () => { },
   fileName = null,
   srcImage = null,
 }) {
   const fileInputRef = useRef();
   const [resItems, setResItems] = useState([]);
+  const [loading, setLoading] = useState(false); 
+
   const handleFileUpload = async () => {
     const selectedFile = fileInputRef.current.files[0];
 
     if (selectedFile) {
+      setLoading(true); 
       try {
+
         const config = {
           headers: {
             Authorization: `${ServerURL.Bear}`,
@@ -32,9 +36,6 @@ function UploadFile({
           name: selectedFile.name,
         };
 
-        // const formData = new FormData();
-        // formData.append("file", selectedFile);
-
         const response = await axios.post(
           `${ServerURL.url}/admin/storage/create-key-upload`,
           data,
@@ -42,21 +43,18 @@ function UploadFile({
         );
 
         if (response.data) {
-          // const fieldsData = response.data.map((x) => x);
           setResItems(response.data);
-          console.log("fieldsData: ", resItems.fields);
-          const imageURL = URL.createObjectURL(selectedFile);
-
           onChange({
             fileResDetails: resItems,
             file: selectedFile,
           });
-          console.log("عکس انتخاب شده: ", imageURL);
         } else {
           console.error("خطا در دریافت اطلاعات ریسپانس!");
         }
       } catch (error) {
         console.error("خطایی رخ داده است: ", error);
+      } finally {
+        setLoading(false); 
       }
     } else {
       onChange({ fileDetails: [] });
@@ -85,23 +83,27 @@ function UploadFile({
           {fileName
             ? fileName
             : srcImage
-            ? srcImage.split("/")[srcImage.split("/").length - 1]
-            : "فایل خود را انتخاب کنید"}
+              ? srcImage.split("/")[srcImage.split("/").length - 1]
+              : "فایل خود را انتخاب کنید"}
         </Typography>
-        <StatusButton
-          text="مشاهده"
-          onClick={(e) => {
-            e.stopPropagation();
-            if (fileInputRef.current.files[0] || srcImage) {
-              const newLink = document.createElement("a");
-              newLink.href = fileInputRef.current.files[0]
-                ? URL.createObjectURL(fileInputRef.current.files[0])
-                : srcImage;
-              newLink.setAttribute("target", "_blank");
-              newLink.click();
-            }
-          }}
-        />
+        {loading ? (
+          <CircularProgress size={24} /> 
+        ) : (
+          <StatusButton
+            text="مشاهده"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (fileInputRef.current.files[0] || srcImage) {
+                const newLink = document.createElement("a");
+                newLink.href = fileInputRef.current.files[0]
+                  ? URL.createObjectURL(fileInputRef.current.files[0])
+                  : srcImage;
+                newLink.setAttribute("target", "_blank");
+                newLink.click();
+              }
+            }}
+          />
+        )}
       </Box>
     </Box>
   );
