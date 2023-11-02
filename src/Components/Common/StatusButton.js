@@ -17,9 +17,9 @@ function StatusButton(props) {
         color={color}
         disabled={text ? false : true}
         sx={{
-          backgroundColor: text === "مشاهده" && !isUploaded ? theme?.palette[color]?.light : 'green', // تغییرات اینجا
+          backgroundColor: text === "مشاهده" && !isUploaded ? theme?.palette[color]?.light : '#00ff0030', // تغییرات اینجا
           boxShadow: "none",
-          color: theme?.palette[color]?.main,
+          color: text === "مشاهده" && !isUploaded ? theme?.palette[color]?.main : '#1cf14c',
           fontSize: "12.04px",
           fontWeight: 600,
           minWidth: "max-content",
@@ -33,7 +33,7 @@ function StatusButton(props) {
         disableElevation
         {...copyProps}
       >
-        {isUploaded && <CheckCircleIcon style={{ marginRight: '8px' }} />} {/* نمایش تیک اگر isUploaded برابر با true باشد */}
+        {isUploaded && <CheckCircleIcon style={{ marginLeft: '5px' }} />} {/* نمایش تیک اگر isUploaded برابر با true باشد */}
 
         {text}
       </Button>

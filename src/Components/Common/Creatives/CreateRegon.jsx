@@ -122,11 +122,13 @@ const CreateRegion = () => {
                 open={open}
                 onClose={handleClosePanel}
             >
-                <DialogContent sx={{ px: "50px", py: "30px" }}>
+                <DialogContent
+                // sx={{ px: { lg: "50px" }, py: { lg: "30px" } }}
+                >
+                    <Typography align="left" sx={{ my: "15px" }}>
+                        ایجاد ریجن
+                    </Typography>
                     <Grid container>
-                        <Typography align="left" sx={{ my: "15px" }}>
-                            ایجاد ریجن
-                        </Typography>
                         <Grid xs={12} md={6}>
                             <TextField
                                 error={!!requestError}
@@ -152,6 +154,7 @@ const CreateRegion = () => {
                                 onChange={(e) => {
                                     setSelectedFileItem(e);
                                 }}
+                                selectedFileItem={selectedFileItem}
                             />
                         </Grid>
                     </Grid>
@@ -168,7 +171,7 @@ const CreateRegion = () => {
                                             setAddingFeature(false);
                                         });
                                     }}
-                                    style={{ marginTop: "20px" }}
+                                    sx={{ fontSize: { xs: '14px' }, marginTop: "20px" }}
                                     disabled={addingFeature}
                                 >
                                     {addingFeature ? <CircularProgress size={24} /> : "افزودن ویژگی"}

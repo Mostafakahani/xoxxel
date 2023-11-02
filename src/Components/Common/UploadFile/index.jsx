@@ -13,6 +13,7 @@ function UploadFile({
   onChange = () => { },
   fileName = null,
   srcImage = null,
+  selectedFileItem
 }) {
   const fileInputRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -25,6 +26,7 @@ function UploadFile({
       setLoading(true);
       try {
 
+        console.log(selectedFileItem)
         const config = {
           headers: {
             Authorization: `${ServerURL.Bear}`,
@@ -44,6 +46,8 @@ function UploadFile({
 
         if (response.data) {
           // setResItems(response.data);
+
+
           onChange({
             fileResDetails: response.data,
             file: selectedFile,
@@ -86,9 +90,7 @@ function UploadFile({
               ? srcImage.split("/")[srcImage.split("/").length - 1]
               : "فایل خود را انتخاب کنید"}
         </Typography>
-        {/* {loading ? (
-          <CircularProgress size={24} />
-        ) : ( */}
+
         <StatusButton
           text={file ? "مشاهده" : loading ? <CircularProgress size={24} /> : 'مشاهده'} // تغییرات اینجا
           isUploaded={Boolean(file)} // ارسال وضعیت آپلود به عنوان isUploaded
@@ -104,7 +106,6 @@ function UploadFile({
             }
           }}
         />
-        {/* // )} */}
       </Box>
     </Box>
   );

@@ -74,7 +74,7 @@ const CreateCategory = () => {
                 }}
             >
                 <DialogContent
-                    sx={{ px: "50px", py: "30px" }}
+                    // sx={{ px: "50px", py: "30px" }}
                 >
                     <Grid container>
                         <Typography align="left" sx={{ my: ' 15px' }}>ایجاد دسته</Typography>
