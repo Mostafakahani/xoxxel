@@ -43,9 +43,9 @@ function UploadFile({
         );
 
         if (response.data) {
-          setResItems(response.data);
+          // setResItems(response.data);
           onChange({
-            fileResDetails: resItems,
+            fileResDetails: response.data,
             file: selectedFile,
           });
         } else {

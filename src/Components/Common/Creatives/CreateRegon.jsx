@@ -13,13 +13,14 @@ import React, { useState } from "react";
 import UploadFile from "../UploadFile";
 import axios from "axios";
 import ServerURL from "../Layout/config";
+import { useEffect } from "react";
 
 const CreateRegon = () => {
     const [open, setOpen] = useState(false);
     const [region, setRegion] = useState("");
     const [regions, setRegions] = useState([]);
     const [requestError, setRequestError] = useState(null);
-    const [selectedFileItem, setSelectedFileItem] = useState(null);
+    const [selectedFileItem, setSelectedFileItem] = useState({});
     const [addingFeature, setAddingFeature] = useState(false);
     const [alert, setAlert] = useState(false);
 
@@ -29,14 +30,16 @@ const CreateRegon = () => {
     const [fileOption, setFileOptions] = useState(null);
 
     const handleSubmit = async () => {
-        setAddingFeature(true)
-        if (selectedFileItem && fileOption) {
+        setAddingFeature(true);
+
+        if (selectedFileItem) {
             try {
                 const formData = new FormData();
                 Object.keys(selectedFileItem?.fileResDetails?.fields || {}).map((x) => {
                     formData.append(x, selectedFileItem?.fileResDetails?.fields[x]);
                 });
                 formData.append("file", selectedFileItem.file);
+
                 const response = await axios.post(
                     `${selectedFileItem?.fileResDetails?.url ? selectedFileItem?.fileResDetails?.url : 'https://xoxxel.storage.iran.liara.space/'}`,
                     formData,
@@ -44,6 +47,7 @@ const CreateRegon = () => {
                         headers: { "Content-Type": "multipart/form-data" },
                     }
                 );
+
                 if (response.status === 204) {
                     const config = {
                         headers: {
@@ -55,11 +59,22 @@ const CreateRegon = () => {
                     };
                     const response = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, deleteData, config);
                     console.log('res: ', response)
-                } else {
-                    window.alert('error')
-                }
-                // console.log('id: ', selectedFileItem?.fileResDetails?.dataStorage?.id)
 
+                    if (response.status === 201) {
+                        const config = {
+                            headers: {
+                                Authorization: `${ServerURL.Bear}`
+                            }
+                        };
+                        const deleteData = {
+                            name: region,
+                            id_storage: selectedFileItem?.fileResDetails?.dataStorage?.id
+                        };
+                        const response = await axios.post(`${ServerURL.url}/admin/country/create`, deleteData, config);
+                    }
+                } else {
+                    window.alert('error');
+                }
 
                 if (response.status === 400) {
                     setRequestError("این دسته وجود دارد");
@@ -67,29 +82,26 @@ const CreateRegon = () => {
                     setRegion("");
                     setOpen(false);
                     setRequestError(null);
-                    setAddingFeature(false)
-
                 }
             } catch (error) {
                 console.error("errr:  ", error);
                 setRequestError("اطلاعات درست وارد کنید");
-                setAddingFeature(false)
-
+            } finally {
+                setAddingFeature(false);
             }
         } else {
             setRequestError("یک فایل انتخاب کنید");
-            setAlert(true)
-
-            setAddingFeature(false)
-
+            setAlert(true);
+            setAddingFeature(false);
         }
     };
+
 
     const handleClosePanel = () => {
         setOpen(false);
         setRegion("");
         setRegions([]);
-        setFileOptions(null);
+        // setFileOptions(null);
     };
 
     return (
@@ -150,7 +162,7 @@ const CreateRegon = () => {
                                 label={"ایکون ( با اندازه برابر مثلا 200*200)"}
                                 onChange={(e) => {
                                     setSelectedFileItem(e);
-                                    setFileOptions(e.file);
+                                    // setFileOptions(e.file);
                                 }}
                             />
                         </Grid>
