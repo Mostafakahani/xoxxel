@@ -16,13 +16,13 @@ function UploadFile({
 }) {
   const fileInputRef = useRef();
   const [resItems, setResItems] = useState([]);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   const handleFileUpload = async () => {
     const selectedFile = fileInputRef.current.files[0];
 
     if (selectedFile) {
-      setLoading(true); 
+      setLoading(true);
       try {
 
         const config = {
@@ -54,7 +54,7 @@ function UploadFile({
       } catch (error) {
         console.error("خطایی رخ داده است: ", error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     } else {
       onChange({ fileDetails: [] });
@@ -86,11 +86,11 @@ function UploadFile({
               ? srcImage.split("/")[srcImage.split("/").length - 1]
               : "فایل خود را انتخاب کنید"}
         </Typography>
-        {loading ? (
-          <CircularProgress size={24} /> 
-        ) : (
+        {/* {loading ? (
+          <CircularProgress size={24} />
+        ) : ( */}
           <StatusButton
-            text="مشاهده"
+            text={loading ? <CircularProgress size={24} /> : "مشاهده"}
             onClick={(e) => {
               e.stopPropagation();
               if (fileInputRef.current.files[0] || srcImage) {
@@ -103,7 +103,7 @@ function UploadFile({
               }
             }}
           />
-        )}
+        {/* // )} */}
       </Box>
     </Box>
   );

@@ -12,6 +12,7 @@ import {
 import React, { useState } from "react";
 import UploadFile from "../UploadFile";
 import axios from "axios";
+import ServerURL from "../Layout/config";
 
 const CreateRegon = () => {
     const [open, setOpen] = useState(false);
@@ -43,6 +44,22 @@ const CreateRegon = () => {
                         headers: { "Content-Type": "multipart/form-data" },
                     }
                 );
+                if (response.status === 204) {
+                    const config = {
+                        headers: {
+                            Authorization: `${ServerURL.Bear}`
+                        }
+                    };
+                    const deleteData = {
+                        id: selectedFileItem?.fileResDetails?.dataStorage?.id
+                    };
+                    const response = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, deleteData, config);
+                    console.log('res: ', response)
+                } else {
+                    window.alert('error')
+                }
+                // console.log('id: ', selectedFileItem?.fileResDetails?.dataStorage?.id)
+
 
                 if (response.status === 400) {
                     setRequestError("این دسته وجود دارد");
@@ -89,7 +106,6 @@ const CreateRegon = () => {
                 }}
                 onClick={() => {
                     handleClickOpen();
-                    console.log(open);
                 }}
             >
                 ایجاد ریجن
