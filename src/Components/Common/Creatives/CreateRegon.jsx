@@ -33,16 +33,14 @@ const CreateRegion = () => {
                 Authorization: `${ServerURL.Bear}`
             }
         };
-        if (selectedFileItem && selectedFileItem.file) { // بررسی وجود فایل معتبر
+        if (selectedFileItem && selectedFileItem.file) {
             try {
-                // ایجاد فرم داده‌ای برای ارسال به سرور
                 const formData = new FormData();
                 Object.keys(selectedFileItem?.fileResDetails?.fields || {}).map((x) => {
                     formData.append(x, selectedFileItem?.fileResDetails?.fields[x]);
                 });
                 formData.append("file", selectedFileItem.file);
 
-                // آپلود فایل به سرور
                 const uploadResponse = await axios.post(
                     `${selectedFileItem?.fileResDetails?.url ? selectedFileItem?.fileResDetails?.url : 'https://xoxxel.storage.iran.liara.space/'}`,
                     formData,
@@ -51,29 +49,25 @@ const CreateRegion = () => {
                     }
                 );
 
-                // بررسی وضعیت آپلود فایل
                 if (uploadResponse.status === 204) {
-                    // درخواست حذف فایل قبلی از سرور
-                    const deleteData = {
+                    const verifyData = {
                         id: selectedFileItem?.fileResDetails?.dataStorage?.id
                     };
-                    const deleteResponse = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, deleteData, config);
+                    const verifyResponse = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, verifyData, config);
 
-                    // اگر حذف فایل با موفقیت انجام شود
-                    if (deleteResponse.status === 201) {
-                        // ایجاد داده‌های جدید برای ارسال به سرور
+                    if (verifyResponse.status === 201) {
                         const createData = {
                             name: region,
                             id_storage: selectedFileItem?.fileResDetails?.dataStorage?.id
                         };
 
-                        // ارسال درخواست به سرور برای ایجاد کشور جدید
                         const createResponse = await axios.post(`${ServerURL.url}/admin/country/create`, createData, config);
 
-                        // بررسی وضعیت درخواست ایجاد کشور
                         if (createResponse.status === 201) {
-                            console.log('کشور با موفقیت ایجاد شد');
                             setOpen(false);
+                            setRegion("");
+                            setRequestError("");
+                            setSelectedFileItem({});
                         } else if (createResponse.status === 400 && createResponse.data.message === 'The country has already been created') {
                             setRequestError("این کشور از قبل وجود دارد");
                         } else {
@@ -102,7 +96,7 @@ const CreateRegion = () => {
         setOpen(false);
         setRegion("");
         setRequestError("");
-        setSelectedFileItem({}); // تنظیم مقدار selectedFileItem به خالی
+        setSelectedFileItem({});
     };
 
 

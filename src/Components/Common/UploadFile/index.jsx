@@ -16,10 +16,11 @@ function UploadFile({
 }) {
   const fileInputRef = useRef();
   const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState(false);
 
   const handleFileUpload = async () => {
     const selectedFile = fileInputRef.current.files[0];
-
+    setFile(selectedFile)
     if (selectedFile) {
       setLoading(true);
       try {
@@ -88,20 +89,21 @@ function UploadFile({
         {/* {loading ? (
           <CircularProgress size={24} />
         ) : ( */}
-          <StatusButton
-            text={loading ? <CircularProgress size={24} /> : "مشاهده"}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (fileInputRef.current.files[0] || srcImage) {
-                const newLink = document.createElement("a");
-                newLink.href = fileInputRef.current.files[0]
-                  ? URL.createObjectURL(fileInputRef.current.files[0])
-                  : srcImage;
-                newLink.setAttribute("target", "_blank");
-                newLink.click();
-              }
-            }}
-          />
+        <StatusButton
+          text={file ? "مشاهده" : loading ? <CircularProgress size={24} /> : 'مشاهده'} // تغییرات اینجا
+          isUploaded={Boolean(file)} // ارسال وضعیت آپلود به عنوان isUploaded
+          onClick={(e) => {
+            e.stopPropagation();
+            if (fileInputRef.current.files[0] || srcImage) {
+              const newLink = document.createElement("a");
+              newLink.href = fileInputRef.current.files[0]
+                ? URL.createObjectURL(fileInputRef.current.files[0])
+                : srcImage;
+              newLink.setAttribute("target", "_blank");
+              newLink.click();
+            }
+          }}
+        />
         {/* // )} */}
       </Box>
     </Box>
