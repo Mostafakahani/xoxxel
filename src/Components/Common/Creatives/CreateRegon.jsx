@@ -15,32 +15,35 @@ import axios from "axios";
 import ServerURL from "../Layout/config";
 import { useEffect } from "react";
 
-const CreateRegon = () => {
+const CreateRegion = () => {
     const [open, setOpen] = useState(false);
     const [region, setRegion] = useState("");
-    const [regions, setRegions] = useState([]);
     const [requestError, setRequestError] = useState(null);
     const [selectedFileItem, setSelectedFileItem] = useState({});
     const [addingFeature, setAddingFeature] = useState(false);
-    const [alert, setAlert] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
-    const [fileOption, setFileOptions] = useState(null);
 
     const handleSubmit = async () => {
         setAddingFeature(true);
-
-        if (selectedFileItem) {
+        const config = {
+            headers: {
+                Authorization: `${ServerURL.Bear}`
+            }
+        };
+        if (selectedFileItem && selectedFileItem.file) { // بررسی وجود فایل معتبر
             try {
+                // ایجاد فرم داده‌ای برای ارسال به سرور
                 const formData = new FormData();
                 Object.keys(selectedFileItem?.fileResDetails?.fields || {}).map((x) => {
                     formData.append(x, selectedFileItem?.fileResDetails?.fields[x]);
                 });
                 formData.append("file", selectedFileItem.file);
 
-                const response = await axios.post(
+                // آپلود فایل به سرور
+                const uploadResponse = await axios.post(
                     `${selectedFileItem?.fileResDetails?.url ? selectedFileItem?.fileResDetails?.url : 'https://xoxxel.storage.iran.liara.space/'}`,
                     formData,
                     {
@@ -48,50 +51,48 @@ const CreateRegon = () => {
                     }
                 );
 
-                if (response.status === 204) {
-                    const config = {
-                        headers: {
-                            Authorization: `${ServerURL.Bear}`
-                        }
-                    };
+                // بررسی وضعیت آپلود فایل
+                if (uploadResponse.status === 204) {
+                    // درخواست حذف فایل قبلی از سرور
                     const deleteData = {
                         id: selectedFileItem?.fileResDetails?.dataStorage?.id
                     };
-                    const response = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, deleteData, config);
-                    console.log('res: ', response)
+                    const deleteResponse = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, deleteData, config);
 
-                    if (response.status === 201) {
-                        const config = {
-                            headers: {
-                                Authorization: `${ServerURL.Bear}`
-                            }
-                        };
-                        const deleteData = {
+                    // اگر حذف فایل با موفقیت انجام شود
+                    if (deleteResponse.status === 201) {
+                        // ایجاد داده‌های جدید برای ارسال به سرور
+                        const createData = {
                             name: region,
                             id_storage: selectedFileItem?.fileResDetails?.dataStorage?.id
                         };
-                        const response = await axios.post(`${ServerURL.url}/admin/country/create`, deleteData, config);
+
+                        // ارسال درخواست به سرور برای ایجاد کشور جدید
+                        const createResponse = await axios.post(`${ServerURL.url}/admin/country/create`, createData, config);
+
+                        // بررسی وضعیت درخواست ایجاد کشور
+                        if (createResponse.status === 201) {
+                            console.log('کشور با موفقیت ایجاد شد');
+                            setOpen(false);
+                        } else if (createResponse.status === 400 && createResponse.data.message === 'The country has already been created') {
+                            setRequestError("این کشور از قبل وجود دارد");
+                        } else {
+                            setRequestError("خطا در ایجاد کشور");
+                        }
+                    } else {
+                        setRequestError("خطا در حذف فایل قبلی");
                     }
                 } else {
-                    window.alert('error');
-                }
-
-                if (response.status === 400) {
-                    setRequestError("این دسته وجود دارد");
-                } else {
-                    setRegion("");
-                    setOpen(false);
-                    setRequestError(null);
+                    setRequestError("خطا در آپلود فایل");
                 }
             } catch (error) {
-                console.error("errr:  ", error);
-                setRequestError("اطلاعات درست وارد کنید");
+                console.error("خطا: ", error);
+                setRequestError("خطا در ارسال درخواست به سرور");
             } finally {
                 setAddingFeature(false);
             }
         } else {
             setRequestError("یک فایل انتخاب کنید");
-            setAlert(true);
             setAddingFeature(false);
         }
     };
@@ -100,9 +101,10 @@ const CreateRegon = () => {
     const handleClosePanel = () => {
         setOpen(false);
         setRegion("");
-        setRegions([]);
-        // setFileOptions(null);
+        setRequestError("");
+        setSelectedFileItem({}); // تنظیم مقدار selectedFileItem به خالی
     };
+
 
     return (
         <Grid>
@@ -116,9 +118,7 @@ const CreateRegon = () => {
                     color: "#525252",
                     borderRadius: "5px",
                 }}
-                onClick={() => {
-                    handleClickOpen();
-                }}
+                onClick={handleClickOpen}
             >
                 ایجاد ریجن
             </Button>
@@ -126,34 +126,29 @@ const CreateRegon = () => {
                 fullWidth
                 maxWidth={"sm"}
                 open={open}
-                onClose={() => {
-                    setOpen(false);
-                    setRegion("");
-                }}
+                onClose={handleClosePanel}
             >
                 <DialogContent sx={{ px: "50px", py: "30px" }}>
                     <Grid container>
-                        <Typography align="left" sx={{ my: " 15px" }}>
+                        <Typography align="left" sx={{ my: "15px" }}>
                             ایجاد ریجن
                         </Typography>
-                        <Grid xs={12} md={12}>
-                            <Grid xs={12} md={6}>
-                                <TextField
-                                    error={!!requestError} // تغییر اینجا
-                                    helperText={requestError}
-                                    onChange={(e) => {
-                                        setRegion(e.target.value);
-                                        setRequestError("");
-                                    }}
-                                    value={region}
-                                    label="نام ریجن "
-                                    variant="outlined"
-                                    sx={{
-                                        width: { xs: "100%", sm: "100%", md: "100%" },
-                                        my: "10px",
-                                    }}
-                                />
-                            </Grid>
+                        <Grid xs={12} md={6}>
+                            <TextField
+                                error={!!requestError}
+                                helperText={requestError}
+                                onChange={(e) => {
+                                    setRegion(e.target.value);
+                                    setRequestError("");
+                                }}
+                                value={region}
+                                label="نام ریجن "
+                                variant="outlined"
+                                sx={{
+                                    width: { xs: "100%", sm: "100%", md: "100%" },
+                                    my: "10px",
+                                }}
+                            />
                         </Grid>
                         <Grid xs={12} md={12}>
                             <UploadFile
@@ -162,23 +157,11 @@ const CreateRegon = () => {
                                 label={"ایکون ( با اندازه برابر مثلا 200*200)"}
                                 onChange={(e) => {
                                     setSelectedFileItem(e);
-                                    // setFileOptions(e.file);
                                 }}
                             />
                         </Grid>
                     </Grid>
-                    <Grid container>
-                        {
-                            alert ? (
-                                <Alert severity={'info'} onClose={() => { }}>
-                                    <AlertTitle>هشدار</AlertTitle>
-                                    This is a warning alert — <strong>check it out!</strong>
-                                </Alert>) : (
-                                ''
-                            )
-                        }
 
-                    </Grid>
                     <Grid container>
                         {region !== "" && (
                             <Grid xs={6} sm={3} md={3}>
@@ -186,18 +169,17 @@ const CreateRegon = () => {
                                     variant="contained"
                                     color="primary"
                                     onClick={() => {
-                                        setAddingFeature(true); // نمایش لودینگ
+                                        setAddingFeature(true);
                                         handleSubmit().finally(() => {
-                                            setAddingFeature(false); // پنهان کردن لودینگ بعد از دریافت پاسخ
+                                            setAddingFeature(false);
                                         });
                                     }}
                                     style={{ marginTop: "20px" }}
-                                    disabled={addingFeature} // غیرفعال کردن دکمه در حالت لودینگ
+                                    disabled={addingFeature}
                                 >
                                     {addingFeature ? <CircularProgress size={24} /> : "افزودن ویژگی"}
                                 </Button>
                             </Grid>
-
                         )}
                         <Grid xs={6} sm={3} md={3}>
                             <Button
@@ -216,8 +198,8 @@ const CreateRegon = () => {
                     </Grid>
                 </DialogContent>
             </Dialog>
-        </Grid >
+        </Grid>
     );
 };
 
-export default CreateRegon;
+export default CreateRegion;

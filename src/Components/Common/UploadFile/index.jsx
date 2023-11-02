@@ -15,7 +15,6 @@ function UploadFile({
   srcImage = null,
 }) {
   const fileInputRef = useRef();
-  const [resItems, setResItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const handleFileUpload = async () => {
