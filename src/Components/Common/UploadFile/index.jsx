@@ -25,8 +25,6 @@ function UploadFile({
     if (selectedFile) {
       setLoading(true);
       try {
-
-        console.log(selectedFileItem)
         const config = {
           headers: {
             Authorization: `${ServerURL.Bear}`,
@@ -56,6 +54,9 @@ function UploadFile({
           console.error("خطا در دریافت اطلاعات ریسپانس!");
         }
       } catch (error) {
+        if (error.code === "ERR_NETWORK") {
+          window.alert("ERR_NETWORK")
+        }
         console.error("خطایی رخ داده است: ", error);
       } finally {
         setLoading(false);

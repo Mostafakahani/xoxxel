@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import ServerURL from "../Layout/config";
 import axios from "axios";
@@ -7,10 +7,9 @@ import axios from "axios";
 const CreateType = ({ tableId }) => {
     const [open, setOpen] = useState(false);
     const [type, setType] = useState("");
-    const [requestError, setRequestError] = useState(null); // برای نمایش پیام خطا در TextField
+    const [requestError, setRequestError] = useState(null);
+    const [addingFeature, setAddingFeature] = useState(false);
 
-    const ErrorList = ['نام محصول نمیتواند خالی باشد.', 'قیمت محصول نمی تواند خالی باشد.', 'نمی تواند تکراری باشد.']
-    // const [regionError, setRegionError] = useState(false)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -18,6 +17,7 @@ const CreateType = ({ tableId }) => {
 
     const handleSubmit = async () => {
         if (type !== "") {
+            setAddingFeature(true);
             try {
                 const config = {
                     headers: {
@@ -32,22 +32,47 @@ const CreateType = ({ tableId }) => {
 
                 if (response.status === 400) {
                     setRequestError("این دسته وجود دارد");
+                    setAddingFeature(false);
+
                 } else {
                     setType("");
                     setOpen(false);
                     setRequestError(null);
+                    setAddingFeature(false);
+
                 }
+
             } catch (error) {
+                // console.log(error.response.data.message)
+                if (error.response.data.message[0] === "title must be longer than or equal to 3 characters") {
+                    setRequestError("نام نوع انتخابی نمیتواند کمتر از 3 کاراکتر باشد");
+                    setAddingFeature(false);
+                }
+                if (error.response.data.message === "There is a type product name") {
+                    setRequestError("نام نوع انتخابی از قبل وجود دارد");
+                    setAddingFeature(false);
+                }
+                if (error.code === "ERR_NETWORK") {
+                    setRequestError("خطا در ارسال درخواست به سرور");
+                    setAddingFeature(true);
+                }
                 console.error(error);
-                setRequestError("اطلاعات درست وارد کنید");
+                setAddingFeature(false);
+
+            } finally {
+                setAddingFeature(false);
             }
         } else {
             setRequestError("مشکلی در ارتباط با سرور وجود دارد");
+            setAddingFeature(false);
+
         }
     };
     const handleClosePanel = () => {
         setOpen(false);
         setType("");
+        setAddingFeature(false);
+
     }
 
     return (
@@ -68,7 +93,7 @@ const CreateType = ({ tableId }) => {
                 }}
             >
                 <DialogContent
-                    // sx={{ px: "50px", py: "30px" }}
+                // sx={{ px: "50px", py: "30px" }}
                 >
                     <Grid container>
                         <Typography align="left" sx={{ my: ' 15px' }}>ایجاد نوع</Typography>
@@ -89,12 +114,24 @@ const CreateType = ({ tableId }) => {
                         {
                             type !== "" && (
                                 <Grid xs={6} sm={3} md={3}>
-                                    <Button variant="contained" color="primary" onClick={handleSubmit} style={{ marginTop: '20px' }}>
-                                        افزودن ویژگی
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                            setAddingFeature(true);
+                                            handleSubmit().finally(() => {
+                                                setAddingFeature(false);
+                                            });
+                                        }}
+                                        sx={{ fontSize: { xs: '14px' }, marginTop: "20px" }}
+                                        disabled={addingFeature}
+                                    >
+                                        {addingFeature ? <CircularProgress size={24} /> : "افزودن ویژگی"}
                                     </Button>
                                 </Grid>
                             )
                         }
+
                         <Grid xs={6} sm={3} md={3}>
                             <Button variant="outlined" color="primary" onClick={handleClosePanel} style={{ border: '1px solid #989898', color: '#222', marginTop: '20px' }}>
                                 انصراف

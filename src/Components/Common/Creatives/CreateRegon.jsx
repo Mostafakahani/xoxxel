@@ -86,6 +86,7 @@ const CreateRegion = () => {
                 setAddingFeature(false);
             }
         } else {
+            
             setRequestError("یک فایل انتخاب کنید");
             setAddingFeature(false);
         }
