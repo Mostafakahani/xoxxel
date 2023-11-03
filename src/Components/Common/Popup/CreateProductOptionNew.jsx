@@ -1,10 +1,22 @@
 import { Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem, Select, SvgIcon, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
+import ServerURL from "../Layout/config";
+import axios from "axios";
+import { useEffect } from "react";
 
+const btnStyle = {
+    backgroundColor: '#1C49F1',
+    color: '#F4F4F4',
+    "&:hover": {
+        backgroundColor: '#4066f3'
+    },
+    borderRadius: '5px',
+    py: '6px',
+    mt: '30px'
 
+}
 const AddProductFeatureNew = ({ tableId }) => {
     const [open, setOpen] = useState(false);
-    const [region, setRegion] = useState(null);
     const [category, setCategory] = useState("ندارد");
     const [rows, setRows] = useState([]);
     const [name, setName] = useState("");
@@ -15,6 +27,11 @@ const AddProductFeatureNew = ({ tableId }) => {
     const [priceError, setPriceError] = useState(false)
     const [step, setStep] = useState(true)
 
+    const [region, setRegion] = useState([]);
+    const [menuItems, setMenuItems] = useState([]);
+    const [updateData, setUpdateData] = useState(false);
+    const [addingFeature, setAddingFeature] = useState(false);
+    const [requestError, setRequestError] = useState(null);
 
     const handleAddRow = () => {
         if (name.trim() === "" || price.trim() === "") {
@@ -28,7 +45,6 @@ const AddProductFeatureNew = ({ tableId }) => {
                 setRows([...rows, { id: Date.now(), name: name, price: price, isPopular: isPopular }]);
                 setName("");
                 setPrice("");
-                console.log("Ok");
                 setNameError(false)
                 setPriceError(false)
 
@@ -64,29 +80,45 @@ const AddProductFeatureNew = ({ tableId }) => {
     const handlePriceChange = (e) => {
         setPrice(e.target.value);
     };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `${ServerURL.Bear}`
+                    }
+                };
+                setUpdateData(false);
 
+                const response = await axios.get(`${ServerURL.url}/admin/country/get-all-country`, config);
+                const apiData = response.data;
+                console.log(apiData)
+                const updatedRegionData = apiData.data.map(item => {
+                    return {
+                        id: item.id, value: item.title, icon: '/images/Flags.png'
+                    };
+                });
+                setRegion(updatedRegionData);
+                setMenuItems(updatedRegionData);
+            } catch (error) {
+                console.error("Error fetching data from the server:", error);
+            }
+        };
 
-    const menuItems = [
-        { id: 1, value: 'North America', icon: '/images/Flags.png' },
-        { id: 2, value: 'Europe', icon: '/images/Flags.png' },
-        { id: 3, value: 'Asia', icon: '/images/Flags.png' },
-    ]
+        fetchData();
+    }, [updateData]);
+
+    // const menuItems = [
+    //     { id: 1, value: 'North America', icon: '/images/Flags.png' },
+    //     { id: 2, value: 'Europe', icon: '/images/Flags.png' },
+    //     { id: 3, value: 'Asia', icon: '/images/Flags.png' },
+    // ]
     const menuCats = [
         { id: 1, value: 'ندارد' },
         { id: 2, value: 'دسته دوم' },
         { id: 3, value: 'دسته سوم' },
     ]
-    const btnStyle = {
-        backgroundColor: '#1C49F1',
-        color: '#F4F4F4',
-        "&:hover": {
-            backgroundColor: '#4066f3'
-        },
-        borderRadius: '5px',
-        py: '6px',
-        mt: '30px'
 
-    }
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -113,18 +145,30 @@ const AddProductFeatureNew = ({ tableId }) => {
         setOpen(false);
         setName("");
         setPrice("");
-        setRegion(null);
+        // setRegion(0);
         setCategory("ندارد");
         setStep(true);
         setRows([]);
     };
+    const handleClosePanel = () => {
+        setName("");
+        setPrice("");
+        setRegion('');
+        setCategory("ندارد");
+        setStep(true);
+        setRows([]);
+        setAddingFeature(false);
+        setRequestError(null);
+        setOpen(false);
 
+
+        // setCategorys([]);
+    }
     return (
         <Grid>
             <Button sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}
                 onClick={() => {
                     handleClickOpen()
-                    console.log(open)
                 }}>
                 افزودن ویژگی
             </Button>
@@ -133,12 +177,8 @@ const AddProductFeatureNew = ({ tableId }) => {
                 maxWidth={step ? 'sm' : 'lg'}
                 open={open}
                 onClose={() => {
-                    setOpen(false)
-                    setName("");
-                    setPrice("");
-                    setRegion(null)
-                    setCategory("ندارد")
-                    setStep(true)
+                    handleClosePanel()
+
                 }}
             >
                 <DialogContent
@@ -295,7 +335,7 @@ const AddProductFeatureNew = ({ tableId }) => {
                         )
                     }
                     {
-                        step && region !== null && (
+                        step && region !== '' &&  (
                             <Button sx={btnStyle} onClick={handleNext} >
                                 رفتن به مرحله بعد
                             </Button>

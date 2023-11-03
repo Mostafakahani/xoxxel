@@ -51,10 +51,6 @@ const CreateCategory = () => {
                 if (error.code === "ERR_NETWORK") {
                     setRequestError("خطا در ارسال درخواست به سرور");
                     setAddingFeature(true);
-                } else {
-                    setRequestError("خطا در ارسال درخواست به سرور");
-                    setAddingFeature(true);
-
                 }
                 console.error(error);
                 setAddingFeature(false);
@@ -74,6 +70,9 @@ const CreateCategory = () => {
     const handleClosePanel = () => {
         setOpen(false);
         setCategory("");
+        setAddingFeature(false);
+        setRequestError(null);
+
         // setCategorys([]);
     }
 
@@ -90,8 +89,8 @@ const CreateCategory = () => {
                 maxWidth={'sm'}
                 open={open}
                 onClose={() => {
-                    setOpen(false)
-                    setCategory("")
+                    handleClosePanel()
+
                 }}
             >
                 <DialogContent

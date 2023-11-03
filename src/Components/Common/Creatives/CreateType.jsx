@@ -72,7 +72,7 @@ const CreateType = ({ tableId }) => {
         setOpen(false);
         setType("");
         setAddingFeature(false);
-
+        setRequestError("");
     }
 
     return (
@@ -88,8 +88,7 @@ const CreateType = ({ tableId }) => {
                 maxWidth={'sm'}
                 open={open}
                 onClose={() => {
-                    setOpen(false)
-                    setType("")
+                    handleClosePanel()
                 }}
             >
                 <DialogContent

@@ -24,7 +24,7 @@ const RegonEdit = () => {
                     }
                 };
                 setUpdateData(false);
-
+ 
                 const response = await axios.get(`${ServerURL.url}/admin/country/get-all-country`, config);
                 const apiData = response.data;
                 const updatedRegionData = apiData.data.map(item => {

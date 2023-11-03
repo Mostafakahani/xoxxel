@@ -13,13 +13,81 @@ const CreateProduct = () => {
 
     const [allData, setAllData] = useState([]);
 
-    const handleSubmit = () => {
-        setAllData([...allData, {
-            id: Date.now(), productName: productName, productPrice: productPrice, starRating: starRating, labelInput: labelInput,
-            placeholder: placeholder, textArea: textArea
-        }])
-        console.log(allData)
-    }
+    // const handleSubmit = () => {
+    //     setAllData([...allData, {
+    //         id: Date.now(), productName: productName, productPrice: productPrice, starRating: starRating, labelInput: labelInput,
+    //         placeholder: placeholder, textArea: textArea
+    //     }])
+    //     console.log(allData)
+    // }
+
+    
+    const handleSubmit = async () => {
+        setAddingFeature(true);
+        const config = {
+            headers: {
+                Authorization: `${ServerURL.Bear}`
+            }
+        };
+        if (selectedFileItem && selectedFileItem.file) {
+            try {
+                const formData = new FormData();
+                Object.keys(selectedFileItem?.fileResDetails?.fields || {}).map((x) => {
+                    formData.append(x, selectedFileItem?.fileResDetails?.fields[x]);
+                });
+                formData.append("file", selectedFileItem.file);
+
+                const uploadResponse = await axios.post(
+                    `${selectedFileItem?.fileResDetails?.url ? selectedFileItem?.fileResDetails?.url : 'https://xoxxel.storage.iran.liara.space/'}`,
+                    formData,
+                    {
+                        headers: { "Content-Type": "multipart/form-data" },
+                    }
+                );
+
+                if (uploadResponse.status === 204) {
+                    const verifyData = {
+                        id: selectedFileItem?.fileResDetails?.dataStorage?.id
+                    };
+                    const verifyResponse = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, verifyData, config);
+
+                    if (verifyResponse.status === 201) {
+                        const createData = {
+                            name: region,
+                            id_storage: selectedFileItem?.fileResDetails?.dataStorage?.id
+                        };
+
+                        const createResponse = await axios.post(`${ServerURL.url}/admin/country/create`, createData, config);
+
+                        if (createResponse.status === 201) {
+                            setOpen(false);
+                            setRegion("");
+                            setRequestError("");
+                            setSelectedFileItem({});
+                        } else if (createResponse.status === 400 && createResponse.data.message === 'The country has already been created') {
+                            setRequestError("این کشور از قبل وجود دارد");
+                        } else {
+                            setRequestError("خطا در ایجاد کشور");
+                        }
+                    } else {
+                        setRequestError("خطا در حذف فایل قبلی");
+                    }
+                } else {
+                    setRequestError("خطا در آپلود فایل");
+                }
+            } catch (error) {
+                console.error("خطا: ", error);
+                setRequestError("خطا در ارسال درخواست به سرور");
+            } finally {
+                setAddingFeature(false);
+            }
+        } else {
+
+            setRequestError("یک فایل انتخاب کنید");
+            setAddingFeature(false);
+        }
+    };
+
 
 
 
