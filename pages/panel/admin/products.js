@@ -8,6 +8,7 @@ import CreateRegon from "Components/Common/Creatives/CreateRegon";
 import CreateCategory from "Components/Common/Creatives/CreateCategory";
 import CreateType from "Components/Common/Creatives/CreateType";
 import EditOptionsDes from "Components/Common/Creatives/EditOptions/EditOptionsDes";
+import CreateOption from "Components/Common/Creatives/CreateOption";
 const Products = () => {
     const ButtonData = [
         { text: 'حذف دسته , ریجن , نوع' },
@@ -100,6 +101,7 @@ const Products = () => {
                             whiteSpace: { xs: "nowrap", md: 'unset' },
                             justifyContent: { xs: 'flex-start', md: 'flex-end' }
                         }}>
+                            <CreateOption />
                             <CreateRegon />
                             <CreateCategory />
                             <CreateType />
