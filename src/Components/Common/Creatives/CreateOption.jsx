@@ -19,30 +19,63 @@ const CreateOption = () => {
     const [open, setOpen] = useState(false);
     const [selectedCountry, setSelectedCountry] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedType, setSelectedType] = useState('');
     const [rows, setRows] = useState([]);
     const [name, setName] = useState("");
-    const [price, setPrice] = useState("");
+    const [price, setPrice] = useState(0);
+    const [count, setCount] = useState(0);
     const [isPopular, setIsPopular] = useState(false);
     const [addingFeature, setAddingFeature] = useState(false);
     const [data, setData] = useState([]);
     const [dataCategory, setDataCategory] = useState([]);
+    const [dataType, setDataType] = useState([]);
+    const [countOne, setCountOne] = useState(0);
+    const [countTwo, setCountTwo] = useState(0);
+    const [countThree, setCountThree] = useState(0);
 
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         const config = {
+    //             headers: {
+    //                 Authorization: `${ServerURL.Bear}`
+    //             }
+    //         };
+    //         const responseCountry = await axios.get(`${ServerURL.url}/admin/country/get-all-country`, config);
+    //         const responseCategory = await axios.get(`${ServerURL.url}/admin/storage/get-all-cat`, config);
+    //         const responseType = await axios.get(`${ServerURL.url}/admin/storage/get-all-type-product`, config);
+
+    //         setData(responseCountry.data.data);
+    //         setDataCategory(responseCategory.data.data);
+    //         setDataType(responseType.data.data);
+    //     }
+
+    //     fetchData();
+    // }, [countOne, countTwo, countThree]);
     useEffect(() => {
         async function fetchData() {
-            const config = {
-                headers: {
-                    Authorization: `${ServerURL.Bear}`
-                }
-            };
+            const config = { headers: { Authorization: `${ServerURL.Bear}` } };
             const responseCountry = await axios.get(`${ServerURL.url}/admin/country/get-all-country`, config);
-            const responseCategory = await axios.get(`${ServerURL.url}/admin/storage/get-all-cat`, config);
-
             setData(responseCountry.data.data);
+        }
+        fetchData();
+    }, [countOne]);
+    useEffect(() => {
+        async function fetchData() {
+            const config = { headers: { Authorization: `${ServerURL.Bear}` } };
+            const responseCategory = await axios.get(`${ServerURL.url}/admin/storage/get-all-cat`, config);
             setDataCategory(responseCategory.data.data);
         }
-
         fetchData();
-    }, []);
+    }, [countTwo]);
+    useEffect(() => {
+        async function fetchData() {
+            const config = { headers: { Authorization: `${ServerURL.Bear}` } };
+            const responseType = await axios.get(`${ServerURL.url}/admin/storage/get-all-type-product`, config);
+            setDataType(responseType.data.data);
+        }
+        fetchData();
+    }, [countThree]);
+
 
     const handleSelectChange = (event) => {
         setSelectedCountry(event.target.value);
@@ -51,24 +84,49 @@ const CreateOption = () => {
     const handleSelectChangeCategory = (event) => {
         setSelectedCategory(event.target.value);
     };
+    const handleSelectChangeType = (event) => {
+        setSelectedType(event.target.value);
+    };
 
     const handleAddRow = () => {
         // Validation
-        if (name.trim() === "" || price.trim() === "") {
+        if (name.trim() === "") {
             console.log("نام و قیمت نمی‌تواند خالی باشد.");
             return;
         }
 
-        const isDuplicate = rows.some((row) => row.name === name && row.price === price);
+        const isDuplicate = rows.some((row) => {
+            row.name === name
+            // &&
+            // row.price === price
+        });
         if (!isDuplicate) {
             // با افزودن یک ویژگی جدید، وضعیت محبوبیت به حالت اولیه تنظیم می‌شود
+            setRows([...rows,
+            {
+                id: Date.now(),
+                country_id: selectedCountry,
+                type_id: selectedType,
+                cat_id: selectedCategory,
+                name_feature: name,
+                price: price,
+                count: count,
+                popular: isPopular
+            }]);
             setIsPopular(false);
-            setRows([...rows, { id: Date.now(), name: name, price: price, isPopular: isPopular }]);
             setName("");
             setPrice("");
-            setIsPopular(false);
-            setSelectedCategory(null)
-            setSelectedCountry(null)
+            setCount(0)
+            setCountOne(0)
+            setCountTwo(0)
+            setCountThree(0)
+            setData('')
+            setDataCategory('')
+            setDataType('')
+            setSelectedCategory('')
+            setSelectedCountry('')
+            setSelectedType('')
+            setIsPopular(false)
 
         } else {
             console.log("این نام و قیمت قبلاً وارد شده است.");
@@ -102,9 +160,13 @@ const CreateOption = () => {
                     Authorization: `${ServerURL.Bear}`
                 }
             };
+            // const dataBody = {
+            //     rows
+            // }
 
             // ارسال rows به API
-            // await axios.post('API_ENDPOINT', { data: rows }, config);
+            const response = await axios.post(`${ServerURL.url}/admin/feature/create`, rows, config);
+            console.log(response)
 
             setOpen(false);
             setName("");
@@ -121,7 +183,17 @@ const CreateOption = () => {
         setOpen(false);
         setName("");
         setPrice("");
-        setRows([]);
+        // setRows([]);
+        setCount(0)
+        setCountOne(0)
+        setCountTwo(0)
+        setCountThree(0)
+        setData('')
+        setDataCategory('')
+        setDataType('')
+        setSelectedCategory('')
+        setSelectedCountry('')
+        setSelectedType('')
     };
 
     return (
@@ -130,8 +202,9 @@ const CreateOption = () => {
                 variant="outlined"
                 color="primary"
                 onClick={() => setOpen(true)}
-                style={{
+                sx={{
                     fontSize: "12px", marginRight: "5px", padding: "5px 12px", borderRadius: "5px", border: "1px solid #B6B6B6",
+                    mr: { md: "5px", xs: "2px" },
                     color: "#525252",
                 }}
             >
@@ -149,12 +222,13 @@ const CreateOption = () => {
                     </Typography>
                     <Grid container>
                         <Grid container sx={{ my: '15px' }}>
-                            <Grid xs={12} sm={6} md={6}>
+                            <Grid xs={12} sm={6} md={4}>
                                 <Typography>ریجن</Typography>
                                 <Select
                                     value={selectedCountry}
                                     onChange={handleSelectChange}
                                     sx={{ width: { xs: '100%', sm: "80%" } }}
+                                    onOpen={() => setCountOne(countOne + 1)}
                                 >
                                     {Array.isArray(data) ? (
                                         data.map((data) => (
@@ -173,12 +247,13 @@ const CreateOption = () => {
                                     )}
                                 </Select>
                             </Grid>
-                            <Grid xs={12} sm={6} md={6}>
+                            <Grid xs={12} sm={6} md={4}>
                                 <Typography>دسته</Typography>
                                 <Select
                                     value={selectedCategory}
                                     onChange={handleSelectChangeCategory}
                                     sx={{ width: { xs: '100%', sm: "80%" } }}
+                                    onOpen={() => setCountTwo(countTwo + 1)}
                                 >
                                     {Array.isArray(dataCategory) ? (
                                         dataCategory.map((data) => (
@@ -193,9 +268,30 @@ const CreateOption = () => {
                                     )}
                                 </Select>
                             </Grid>
+                            <Grid xs={12} sm={6} md={4}>
+                                <Typography>نوع</Typography>
+                                <Select
+                                    value={selectedType}
+                                    onChange={handleSelectChangeType}
+                                    sx={{ width: { xs: '100%', sm: "80%" } }}
+                                    onOpen={() => setCountThree(countThree + 1)}
+                                >
+                                    {Array.isArray(dataType) ? (
+                                        dataType.map((data) => (
+                                            <MenuItem key={data.id} value={data.id}>
+                                                {data.title}
+                                            </MenuItem>
+                                        ))
+                                    ) : (
+                                        <MenuItem value={null}>
+                                            Loading...
+                                        </MenuItem>
+                                    )}
+                                </Select>
+                            </Grid>
                         </Grid>
                         <Grid container sx={{ my: '15px' }}>
-                            <Grid xs={12} sm={6} md={6}>
+                            <Grid xs={12} sm={6} md={4}>
                                 <Typography>نام ویژگی</Typography>
                                 <TextField
                                     variant="outlined"
@@ -205,15 +301,26 @@ const CreateOption = () => {
                                     sx={{ width: { xs: '100%', sm: '80%' }, marginBottom: "10px" }}
                                 />
                             </Grid>
-                            <Grid xs={12} sm={6} md={3}>
+                            <Grid xs={6} sm={6} md={2}>
+                                <Typography>تعداد</Typography>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    type="number"
+                                    value={count}
+                                    onChange={(e) => setCount(parseInt(e.target.value))}
+                                    sx={{ width: { xs: '80%', sm: '80%' }, marginBottom: "10px" }}
+                                />
+                            </Grid>
+                            <Grid xs={6} sm={6} md={3}>
                                 <Typography>قیمت</Typography>
                                 <TextField
                                     variant="outlined"
                                     fullWidth
                                     type="number"
                                     value={price}
-                                    onChange={(e) => setPrice(e.target.value)}
-                                    sx={{ width: { xs: '100%', sm: '80%' }, marginBottom: "10px" }}
+                                    onChange={(e) => setPrice(parseInt(e.target.value))}
+                                    sx={{ width: { xs: '80%', sm: '80%' }, marginBottom: "10px" }}
                                 />
                             </Grid>
                             <Grid xs={12} sm={6} md={3}>
@@ -268,13 +375,17 @@ const CreateOption = () => {
                                     <Grid container key={row.id} sx={{ my: '10px' }}>
                                         <Grid container alignItems="center" marginTop={2}>
                                             <Grid container xs={12} md={7}>
-                                                <Grid xs={12} md={8}>
+                                                <Grid xs={12} md={6}>
                                                     <TextField value={row.name} label="نام" disabled
                                                         sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '10px' }} />
                                                 </Grid>
-                                                <Grid xs={12} md={4}>
+                                                <Grid xs={12} md={3}>
                                                     <TextField value={row.price} label="قیمت (تومان)" disabled
-                                                        sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }} />
+                                                        sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '10px' }} />
+                                                </Grid>
+                                                <Grid xs={12} md={3}>
+                                                    <TextField value={row.count} label="تعداد" disabled
+                                                        sx={{ width: { xs: '100%', sm: '100%', md: '90%' }, my: '10px' }} />
                                                 </Grid>
                                             </Grid>
                                             <Grid container xs={12} md={5} alignItems={'center'} >
