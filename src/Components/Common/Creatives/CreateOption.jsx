@@ -27,11 +27,14 @@ const CreateOption = () => {
     const [isPopular, setIsPopular] = useState(false);
     const [addingFeature, setAddingFeature] = useState(false);
     const [data, setData] = useState([]);
+    const [listData, setListData] = useState([]);
     const [dataCategory, setDataCategory] = useState([]);
     const [dataType, setDataType] = useState([]);
     const [countOne, setCountOne] = useState(0);
     const [countTwo, setCountTwo] = useState(0);
     const [countThree, setCountThree] = useState(0);
+    const [countList, setCountList] = useState(0);
+    const [delRow, setDelRow] = useState('');
 
     // useEffect(() => {
     //     async function fetchData() {
@@ -51,6 +54,17 @@ const CreateOption = () => {
 
     //     fetchData();
     // }, [countOne, countTwo, countThree]);
+    useEffect(() => {
+        async function fetchData() {
+            const config = { headers: { Authorization: `${ServerURL.Bear}` } };
+            const responseList = await axios.get(`${ServerURL.url}/admin/feature/get-all-feature`, config);
+            setListData(responseList.data.data);
+            console.log(listData)
+        }
+        fetchData();
+    }, [countList]);
+
+
     useEffect(() => {
         async function fetchData() {
             const config = { headers: { Authorization: `${ServerURL.Bear}` } };
@@ -133,8 +147,34 @@ const CreateOption = () => {
         }
     };
 
-    const handleDeleteRow = (id) => {
-        setRows(rows.filter((row) => row.id !== id));
+    const handleDeleteRow = async (id) => {
+        setDelRow(rows.filter((row) => row.id !== id));
+        console.log(delRow)
+        // const del = rows.filter((row) => row.id !== id)
+        try {
+            setAddingFeature(true);
+            const config = {
+                headers: {
+                    Authorization: `${ServerURL.Bear}`
+                }
+            };
+            const dataBody = {
+                // ids: delRow
+            }
+
+            // ارسال rows به API
+            const response = await axios.post(`${ServerURL.url}/admin/feature/create`, dataBody, config);
+            console.log(response)
+
+            setOpen(false);
+            setName("");
+            setPrice("");
+            setRows([]);
+        } catch (error) {
+            console.error("خطا در ارسال درخواست به سرور", error);
+        } finally {
+            setAddingFeature(false);
+        }
     };
 
     const handleTogglePopular = (id) => {
@@ -215,6 +255,7 @@ const CreateOption = () => {
                 maxWidth={"lg"}
                 open={open}
                 onClose={handleClosePanel}
+                onOpen={() => setCountList(countList + 1)}
             >
                 <DialogContent>
                     <Typography align="left" style={{ marginTop: "15px" }}>
@@ -234,7 +275,7 @@ const CreateOption = () => {
                                         data.map((data) => (
                                             <MenuItem key={data.id} value={data.id}>
                                                 <Grid sx={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Box component={'img'} src={`https://xoxxel.storage.iran.liara.space/${data.id_storage.name}`} sx={{ mr: "10px", width: '30px', height: 'auto' }} alt={data.title} />
+                                                    {/* <Box component={'img'} src={`https://xoxxel.storage.iran.liara.space/${data.id_storage.name}`} sx={{ mr: "10px", width: '30px', height: 'auto' }} alt={data.title} /> */}
                                                     {/* <Avatar alt={data.title} src={`https://xoxxel.storage.iran.liara.space/${data.id_storage.name}`} /> */}
                                                     {data.title}
                                                 </Grid>
@@ -367,12 +408,13 @@ const CreateOption = () => {
                         <Typography variant="h6" style={{ marginTop: "15px" }}>
                             لیست ویژگی‌ها
                         </Typography>
-                        {rows.length === 0 ? (
+                        {listData.length === 0 ? (
                             <Typography>هیچ ویژگی‌ای اضافه نشده است.</Typography>
                         ) : (
                             <div>
-                                {rows.map((row) => (
+                                {listData.map((row) => (
                                     <Grid container key={row.id} sx={{ my: '10px' }}>
+                                        <Typography>{row.selectedCategory}</Typography>
                                         <Grid container alignItems="center" marginTop={2}>
                                             <Grid container xs={12} md={7}>
                                                 <Grid xs={12} md={6}>
@@ -396,7 +438,7 @@ const CreateOption = () => {
                                                         disabled
                                                     >
                                                         Popular
-                                                        {!row.isPopular ? (
+                                                        {!row.vip ? (
                                                             <SvgIcon sx={{ ml: '35px' }}>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
                                                                     <path d="M9.65325 7.59868C10.6785 5.75946 11.1911 4.83984 11.9576 4.83984C12.724 4.83984 13.2366 5.75945 14.2619 7.59868L14.5271 8.07451C14.8185 8.59716 14.9641 8.85848 15.1913 9.0309C15.4184 9.20333 15.7013 9.26733 16.267 9.39534L16.7821 9.51188C18.7731 9.96235 19.7685 10.1876 20.0054 10.9492C20.2422 11.7108 19.5636 12.5044 18.2063 14.0915L17.8551 14.5022C17.4694 14.9532 17.2766 15.1787 17.1898 15.4577C17.1031 15.7367 17.1322 16.0376 17.1905 16.6393L17.2436 17.1872C17.4488 19.3048 17.5514 20.3636 16.9314 20.8343C16.3113 21.305 15.3793 20.8759 13.5152 20.0176L13.0329 19.7955C12.5032 19.5516 12.2383 19.4297 11.9576 19.4297C11.6768 19.4297 11.4119 19.5516 10.8822 19.7955L10.4 20.0176C8.53585 20.8759 7.60379 21.305 6.98375 20.8343C6.3637 20.3636 6.4663 19.3048 6.67151 17.1872L6.7246 16.6393C6.78291 16.0376 6.81206 15.7367 6.72531 15.4577C6.63855 15.1787 6.4457 14.9532 6.06 14.5022L5.70886 14.0915C4.35157 12.5044 3.67292 11.7108 3.90976 10.9492C4.1466 10.1876 5.14206 9.96235 7.13299 9.51188L7.64807 9.39534C8.21384 9.26733 8.49672 9.20333 8.72385 9.0309C8.95098 8.85848 9.09666 8.59716 9.388 8.07451L9.65325 7.59868Z" stroke="#2C7EFA" stroke-width="1.4284" />
