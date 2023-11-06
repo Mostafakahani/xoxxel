@@ -1,6 +1,6 @@
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import { Button, Dialog, Typography, IconButton, Grid } from '@mui/material';
+import { Button, Dialog, Typography, IconButton, Grid, CircularProgress } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
 import { useState, useEffect } from 'react';
@@ -63,12 +63,16 @@ export default function StandardImageList({ onChange = () => { }, }) {
                         id: selectedFileItem?.fileResDetails?.dataStorage?.id
                     };
                     const verifyResponse = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, verifyData, config);
+                    if (verifyResponse) {
+                        setOpenAddPhoto(false)
+                        setAddingFeature(false)
+                    }
                 } else {
                     setRequestError("خطا در آپلود فایل");
                 }
             } catch (error) {
                 console.error("خطا: ", error);
-                setRequestError("خطا در ارسال درخواست به سرور");
+                setRequestError("خطا در ارسال درخواست به سرور. دوباره امتحان کنید");
             } finally {
                 setAddingFeature(false);
             }
@@ -146,30 +150,45 @@ export default function StandardImageList({ onChange = () => { }, }) {
                     </Grid>
                 </Grid>
                 <Dialog open={openAddPhoto} fullWidth maxWidth={'sm'} onClose={() => setOpenAddPhoto(false)}>
-                    <Typography>Select a photo to add</Typography>
-                    <Button
-                        onClick={() => {
-                            handleSubmit()
-                        }}
-                        color="primary"
-                        autoFocus
-                    >
-                        Add
-                    </Button>
-                    <Typography>{requestError ? requestError : ' '}</Typography>
-                    <UploadFile
-                        id={"file1"}
-                        accept="image/png, image/jpg, image/jpeg"
-                        label={"ایکون ( با اندازه برابر مثلا 200*200)"}
-                        onChange={(e) => {
-                            setSelectedFileItem(e);
-                            setRequestError('')
-                        }}
-                        selectedFileItem={selectedFileItem}
-                    />
-                    <Button onClick={() => setOpenAddPhoto(false)} color="primary">
-                        Cancel
-                    </Button>
+                    <Grid container sx={{ p: '15px' }}>
+                        <Grid>
+                            <Typography variant='body2' sx={{ fontSize: { xs: '14px', md: '16px' } }}>عکس مورد نظر خود را اپلود کنید</Typography>
+                        </Grid>
+                        <UploadFile
+                            id={"file1"}
+                            accept="image/png, image/jpg, image/jpeg"
+                            // label={"ایکون ( با اندازه برابر مثلا 200*200)"}
+                            onChange={(e) => {
+                                setSelectedFileItem(e);
+                                setRequestError('')
+                            }}
+                            selectedFileItem={selectedFileItem}
+                        />
+                        <Typography variant='body2' sx={{ my: 1, color: "red", fontSize: '10px' }}>{requestError ? requestError : ' '}</Typography>
+
+                        <Grid container>
+                            <Grid xs={6} md={2}>
+                                <Button
+                                    onClick={() => {
+                                        handleSubmit()
+                                    }}
+                                    color="primary"
+                                    autoFocus
+                                >
+                                    {
+                                        addingFeature ? (
+                                            <CircularProgress size={24} />
+                                        ) : 'آپلود عکس'
+                                    }
+                                </Button>
+                            </Grid>
+                            <Grid xs={6} md={2}>
+                                <Button onClick={() => setOpenAddPhoto(false)} color="primary">
+                                    برگشت
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
                 </Dialog>
             </Dialog>
         </>
