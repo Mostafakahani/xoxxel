@@ -26,6 +26,7 @@ export default function StandardImageList({ onChange = () => { }, }) {
     const [count, setCount] = useState(0);
     const [requestError, setRequestError] = useState(null);
     const [imageId, setImageId] = useState(null);
+    const [item, setItem] = useState(false);
 
 
     const matchDownMd = useMediaQuery(theme.breakpoints.down('sm'));
@@ -102,7 +103,14 @@ export default function StandardImageList({ onChange = () => { }, }) {
     };
     return (
         <>
-            <Button startIcon={<AddPhotoAlternateOutlinedIcon />} onClick={() => { setOpen(true); setCount(count + 1) }}>انتخاب فایل</Button>
+            <Grid sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <label>تصویر اصلی ( 297*147)</label>
+                <Button sx={{ mt: 1 }} startIcon={<AddPhotoAlternateOutlinedIcon />} onClick={() => { setOpen(true); setCount(count + 1) }}>
+                    {item ? 'فایل انتخاب شده' : 'انتخاب فایل'}
+                </Button>
+
+
+            </Grid>
             <Dialog open={open} onClose={handleClosePanel} fullWidth maxWidth="lg">
                 <Grid sx={{ p: '15px', }}>
                     <ImageList sx={{ width: '100%', height: 'auto' }} cols={matchDownMd ? 3 : matchDownLg ? 6 : 8} gap={8} rowHeight={'auto'} variant='quilted'>
@@ -161,6 +169,7 @@ export default function StandardImageList({ onChange = () => { }, }) {
                             onChange={(e) => {
                                 setSelectedFileItem(e);
                                 setRequestError('')
+                                setItem(true)
                             }}
                             selectedFileItem={selectedFileItem}
                         />
