@@ -174,15 +174,23 @@ const CreateOption = () => {
             )
         );
     };
+    const formattedData = rows.map(({ country_id, cat_id, type_id, name_feature, price, count, popular }) => ({
+        country_id,
+        cat_id,
+        type_id,
+        name_feature,
+        price,
+        count,
+        popular
+    }));
 
     const handleSubmit = async () => {
         // Validation
-        const isValidData = rows.every((data) => data.name !== '' && data.price !== '' && data.isPopular !== '');
+        const isValidData = rows.every((data) => data.name_feature !== '' && data.price !== '' && data.count !== '' && data.popular !== '');
         if (!isValidData) {
             console.log('Error: همه فیلدها باید پر شوند.');
             return;
         }
-        console.log(rows)
 
         try {
             setAddingFeature(true);
@@ -191,29 +199,20 @@ const CreateOption = () => {
                     Authorization: `${ServerURL.Bear}`
                 }
             };
-            const rowData = rows.map((x) => ({
+
+            const dataBody = rows.map((x) => ({
                 country_id: x.country_id,
                 cat_id: x.cat_id,
                 type_id: x.type_id,
                 name_feature: x.name_feature,
                 price: x.price,
-                id: x.id,
                 count: x.count,
                 popular: x.popular
             }));
-            const dataBody = {
-                country_id: rowData.country_id,
-                cat_id: rowData.cat_id,
-                type_id: rowData.type_id,
-                name_feature: rowData.name_feature,
-                price: rowData.price,
-                count: rowData.count,
-                popular: rowData.popular,
-            }
-            console.log(rowData)
+
             // ارسال rows به API
-            const response = await axios.post(`${ServerURL.url}/admin/feature/create`, dataBody, config);
-            console.log(response)
+            const response = await axios.post(`${ServerURL.url}/admin/feature/create`, formattedData, config);
+            console.log(response);
 
             // setOpen(false);
             setName("");
@@ -225,6 +224,7 @@ const CreateOption = () => {
             setAddingFeature(false);
         }
     };
+
 
     const handleClosePanel = () => {
         setOpen(false);
