@@ -2,13 +2,18 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { Button, Dialog, Typography, IconButton, Grid } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
 import { useState, useEffect } from 'react';
 import UploadFile from '../UploadFile';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import theme from 'theme';
 import ServerURL from '../Layout/config';
 import axios from 'axios';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
+
+
+
 
 export default function StandardImageList({ onChange = () => { }, }) {
     const [open, setOpen] = useState(false);
@@ -89,18 +94,19 @@ export default function StandardImageList({ onChange = () => { }, }) {
     const handleClosePanel = () => {
         setOpen(false);
         setSelectedFileItem({});
+        setSelectedImageId(null)
     };
     return (
         <>
-            <Button onClick={() => { setOpen(true); setCount(count + 1) }}>Open Storage</Button>
+            <Button startIcon={<AddPhotoAlternateOutlinedIcon />} onClick={() => { setOpen(true); setCount(count + 1) }}>انتخاب فایل</Button>
             <Dialog open={open} onClose={handleClosePanel} fullWidth maxWidth="lg">
                 <Grid sx={{ p: '15px', }}>
                     <ImageList sx={{ width: '100%', height: 'auto' }} cols={matchDownMd ? 3 : matchDownLg ? 6 : 8} gap={8} rowHeight={'auto'} variant='quilted'>
                         {data.map((x) => (
                             <ImageListItem key={x.id}>
                                 <img
-                                    srcSet={`${x.url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                    src={`${x.url}?w=164&h=164&fit=crop&auto=format`}
+                                    srcSet={`${x.url}?h=auto&fit=crop&auto=format&dpr=2 2x`}
+                                    src={`${x.url}?h=auto&fit=crop&auto=format`}
                                     alt={x.id}
                                     loading="lazy"
                                     style={{
@@ -115,34 +121,34 @@ export default function StandardImageList({ onChange = () => { }, }) {
                         ))}
                     </ImageList>
                     <Grid container>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            startIcon={<AddPhotoAlternateIcon />}
-                            onClick={() => { onChange(imageId) }}
-                            sx={{ mt: 2 }}
-                        >
-                            انتخاب عکس
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            startIcon={<AddPhotoAlternateIcon />}
-                            onClick={() => setOpenAddPhoto(true)}
-                            sx={{ mt: 2 }}
-                        >
-                            اپلود عکس
-                        </Button>
+                        <Grid xs={6} md={2}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                startIcon={<AddToPhotosOutlinedIcon />}
+                                onClick={() => { onChange(imageId); handleClosePanel() }}
+                                sx={{ mt: 2, fontSize: { xs: '12px', md: '13px' } }}
+                            >
+                                انتخاب عکس
+                            </Button>
+                        </Grid>
+                        <Grid xs={6} md={2}>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                startIcon={<FileUploadOutlinedIcon />}
+                                onClick={() => setOpenAddPhoto(true)}
+                                sx={{ mt: 2, fontSize: { xs: '12px', md: '13px' } }}
+                            >
+                                اپلود عکس
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Dialog open={openAddPhoto} fullWidth maxWidth={'sm'} onClose={() => setOpenAddPhoto(false)}>
                     <Typography>Select a photo to add</Typography>
                     <Button
                         onClick={() => {
-                            // handleAddPhoto({
-                            //     img: 'URL_OF_YOUR_NEW_IMAGE',
-                            //     title: 'New Photo',
-                            // })
                             handleSubmit()
                         }}
                         color="primary"
