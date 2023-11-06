@@ -3,6 +3,7 @@ import { useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import UploadFile from "Components/Common/UploadFile";
 import ProductOption from "Components/Common/ProductOption/ProductOption";
+import StandardImageList from "Components/Common/Images";
 const CreateProduct = () => {
     const [productName, setProductName] = useState("");
     const [productPrice, setProductPrice] = useState("");
@@ -10,6 +11,7 @@ const CreateProduct = () => {
     const [labelInput, setLabelInput] = useState("");
     const [placeholder, setPlaceholder] = useState("");
     const [textArea, setTextArea] = useState("");
+    const [selectedFileItem, setSelectedFileItem] = useState({});
 
     const [allData, setAllData] = useState([]);
 
@@ -21,7 +23,7 @@ const CreateProduct = () => {
     //     console.log(allData)
     // }
 
-    
+
     const handleSubmit = async () => {
         setAddingFeature(true);
         const config = {
@@ -138,12 +140,18 @@ const CreateProduct = () => {
                 </Grid >
 
                 <Grid container>
-                    <UploadFile
+                    <StandardImageList
+                        onChange={(e) => {
+                            setSelectedFileItem(e);
+                            console.log(e)
+                        }}
+                    />
+                    {/* <UploadFile
                         id={"file1"}
                         accept="video/*"
                         label={"تصویر اصلی ( 297*147)"}
                         onChange={(e) => console.log(e)}
-                    />
+                    /> */}
                     <UploadFile
                         id={"file1"}
                         accept="video/*"
