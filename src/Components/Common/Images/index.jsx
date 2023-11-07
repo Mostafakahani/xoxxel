@@ -3,7 +3,7 @@ import ImageListItem from '@mui/material/ImageListItem';
 import { Button, Dialog, Typography, IconButton, Grid, CircularProgress } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import UploadFile from '../UploadFile';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import theme from 'theme';
@@ -27,6 +27,9 @@ export default function StandardImageList({ onChange = () => { }, }) {
     const [requestError, setRequestError] = useState(null);
     const [imageId, setImageId] = useState(null);
     const [item, setItem] = useState(false);
+    const [scrollStatus, setScrollStatus] = useState(false);
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(15);
 
 
     const matchDownMd = useMediaQuery(theme.breakpoints.down('sm'));
@@ -65,7 +68,7 @@ export default function StandardImageList({ onChange = () => { }, }) {
                     };
                     const verifyResponse = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, verifyData, config);
                     if (verifyResponse) {
-                        setOpenAddPhoto(false)
+                        handleClosePanel2()
                         setAddingFeature(false)
                     }
                 } else {
@@ -84,14 +87,31 @@ export default function StandardImageList({ onChange = () => { }, }) {
     };
 
 
+
+    const scrollContainerRef = useRef(null);
+
+    const handleScroll = () => {
+        const scrollContainer = scrollContainerRef.current;
+        if (scrollContainer.scrollTop + scrollContainer.clientHeight >= scrollContainer.scrollHeight) {
+            // console.log('اسکرول به ته رسیده است!');
+            setScrollStatus(true)
+            setPage(page + 1)
+            setCount(count + 1)
+
+        }
+    };
+
     useEffect(() => {
         async function fetchData() {
             const config = { headers: { Authorization: `${ServerURL.Bear}` } };
-            const response = await axios.get(`${ServerURL.url}/admin/storage/get-all-files`, config);
-            setData(response.data.data);
+            const response = await axios.get(`${ServerURL.url}/admin/storage/get-all-files?page=${page}&perPage=${perPage}`, config);
+            // setData(response.data.data);
+            setData((prevData) => [...prevData, ...response.data.data]);
+            setScrollStatus(false);
         }
         fetchData();
-    }, [count]);
+
+    }, [scrollStatus, page, perPage, count]);
     const handleDelete = (title) => {
         const updatedGallery = gallery.filter((item) => item.title !== title);
         setGallery(updatedGallery);
@@ -100,6 +120,12 @@ export default function StandardImageList({ onChange = () => { }, }) {
         setOpen(false);
         setSelectedFileItem({});
         setSelectedImageId(null)
+    };
+    const handleClosePanel2 = () => {
+        console.log(count)
+        setCount(count + 1)
+        console.log(count)
+        setOpenAddPhoto(false);
     };
     return (
         <>
@@ -113,7 +139,7 @@ export default function StandardImageList({ onChange = () => { }, }) {
             </Grid>
             <Dialog open={open} onClose={handleClosePanel} fullWidth maxWidth="lg">
                 <Grid sx={{ p: '15px', }}>
-                    <ImageList sx={{ width: '100%', height: 'auto' }} cols={matchDownMd ? 3 : matchDownLg ? 6 : 8} gap={8} rowHeight={'auto'} variant='quilted'>
+                    <ImageList ref={scrollContainerRef} onScroll={handleScroll} sx={{ width: '100%', height: '400px' }} cols={matchDownMd ? 3 : matchDownLg ? 6 : 8} gap={8} rowHeight={'auto'} variant='quilted'>
                         {data.map((x) => (
                             <ImageListItem key={x.id}>
                                 <img
@@ -131,6 +157,11 @@ export default function StandardImageList({ onChange = () => { }, }) {
                                 />
                             </ImageListItem>
                         ))}
+                        {
+                            scrollStatus ? (
+                                <CircularProgress size={24} />
+                            ) : ''
+                        }
                     </ImageList>
                     <Grid container>
                         <Grid xs={6} md={2}>
@@ -157,7 +188,7 @@ export default function StandardImageList({ onChange = () => { }, }) {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Dialog open={openAddPhoto} fullWidth maxWidth={'sm'} onClose={() => setOpenAddPhoto(false)}>
+                <Dialog open={openAddPhoto} fullWidth maxWidth={'sm'} onClose={handleClosePanel2}>
                     <Grid container sx={{ p: '15px' }}>
                         <Grid>
                             <Typography variant='body2' sx={{ fontSize: { xs: '14px', md: '16px' } }}>عکس مورد نظر خود را اپلود کنید</Typography>
