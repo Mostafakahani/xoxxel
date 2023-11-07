@@ -105,13 +105,13 @@ export default function StandardImageList({ onChange = () => { }, }) {
         async function fetchData() {
             const config = { headers: { Authorization: `${ServerURL.Bear}` } };
             const response = await axios.get(`${ServerURL.url}/admin/storage/get-all-files?page=${page}&perPage=${perPage}`, config);
-            // setData(response.data.data);
-            setData((prevData) => [...prevData, ...response.data.data]);
+            const filteredItems = response.data.data.filter(item => !data.some(existingItem => existingItem.id === item.id));
+            setData((prevData) => [...prevData, ...filteredItems]);
             setScrollStatus(false);
         }
         fetchData();
-
     }, [scrollStatus, page, perPage, count]);
+
     const handleDelete = (title) => {
         const updatedGallery = gallery.filter((item) => item.title !== title);
         setGallery(updatedGallery);
@@ -140,15 +140,17 @@ export default function StandardImageList({ onChange = () => { }, }) {
             <Dialog open={open} onClose={handleClosePanel} fullWidth maxWidth="lg">
                 <Grid sx={{ p: '15px', }}>
                     <ImageList ref={scrollContainerRef} onScroll={handleScroll} sx={{ width: '100%', height: '400px' }} cols={matchDownMd ? 3 : matchDownLg ? 6 : 8} gap={8} rowHeight={'auto'} variant='quilted'>
-                        {data.map((x, index) => (
-                            <ImageListItem key={index}>
+                        {data.map((x) => (
+                            <ImageListItem key={x.id}>
                                 <img
                                     srcSet={`${x.url}?h=auto&fit=crop&auto=format&dpr=2 2x`}
                                     src={`${x.url}?h=auto&fit=crop&auto=format`}
                                     alt={x.id}
                                     loading="lazy"
                                     style={{
-                                        cursor: 'pointer', border: selectedImageId === x.id ? '2px solid #1c49f1' : 'none', borderRadius: '5px'
+                                        cursor: 'pointer',
+                                        border: selectedImageId === x.id ? '2px solid #1c49f1' : 'none',
+                                        borderRadius: '5px'
                                     }}
                                     onClick={() => {
                                         handleImageClick(x.id);
@@ -157,6 +159,7 @@ export default function StandardImageList({ onChange = () => { }, }) {
                                 />
                             </ImageListItem>
                         ))}
+
                         {
                             scrollStatus ? (
                                 <CircularProgress size={24} />
