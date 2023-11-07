@@ -140,8 +140,8 @@ export default function StandardImageList({ onChange = () => { }, }) {
             <Dialog open={open} onClose={handleClosePanel} fullWidth maxWidth="lg">
                 <Grid sx={{ p: '15px', }}>
                     <ImageList ref={scrollContainerRef} onScroll={handleScroll} sx={{ width: '100%', height: '400px' }} cols={matchDownMd ? 3 : matchDownLg ? 6 : 8} gap={8} rowHeight={'auto'} variant='quilted'>
-                        {data.map((x) => (
-                            <ImageListItem key={x.id}>
+                        {data.map((x, index) => (
+                            <ImageListItem key={index}>
                                 <img
                                     srcSet={`${x.url}?h=auto&fit=crop&auto=format&dpr=2 2x`}
                                     src={`${x.url}?h=auto&fit=crop&auto=format`}
