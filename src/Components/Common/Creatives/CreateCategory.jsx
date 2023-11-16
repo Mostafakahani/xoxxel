@@ -1,7 +1,9 @@
-import { Button, CircularProgress, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, Popover, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import ServerURL from "../Layout/config";
+import Alert from "../AlertPopup/AlertPopup";
+import { useEffect } from "react";
 
 
 const CreateCategory = () => {
@@ -9,6 +11,7 @@ const CreateCategory = () => {
     const [category, setCategory] = useState("");
     const [requestError, setRequestError] = useState(null);
     const [addingFeature, setAddingFeature] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -33,10 +36,13 @@ const CreateCategory = () => {
 
                 if (response.status === 401) {
                     setRequestError("این دسته وجود دارد");
+                    setErrorMessage("این دسته وجود دارد");
+
                 } else {
                     setCategory("");
                     setOpen(false);
                     setRequestError(null);
+                    setErrorMessage("با موفقیت ساخته شد");
                 }
             } catch (error) {
                 // console.log(error.response.data.message)
@@ -57,6 +63,7 @@ const CreateCategory = () => {
 
             } finally {
                 setAddingFeature(false);
+                setErrorMessage("با موفقیت ساخته شد");
             }
         } else {
             setRequestError("اطلاعات درست وارد کنید");
@@ -73,8 +80,10 @@ const CreateCategory = () => {
         setAddingFeature(false);
         setRequestError(null);
 
+
         // setCategorys([]);
     }
+
 
     return (
         <Grid>
@@ -109,7 +118,6 @@ const CreateCategory = () => {
                                 sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
                             />
                         </Grid>
-
                     </Grid>
                     <Grid container>
                         {
@@ -136,6 +144,7 @@ const CreateCategory = () => {
                             <Button variant="outlined" color="primary" onClick={handleClosePanel} style={{ border: '1px solid #989898', color: '#222', marginTop: '20px' }}>
                                 انصراف
                             </Button>
+
                         </Grid>
                     </Grid>
 
@@ -143,6 +152,7 @@ const CreateCategory = () => {
 
                 </DialogContent>
             </Dialog>
+            <Alert message={errorMessage} setOpen={setErrorMessage} />
         </Grid >
     );
 };
