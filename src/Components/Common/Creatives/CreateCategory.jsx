@@ -1,7 +1,9 @@
-import { Button, CircularProgress, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, Popover, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import ServerURL from "../Layout/config";
+import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 
 const CreateCategory = () => {
@@ -33,10 +35,10 @@ const CreateCategory = () => {
 
                 if (response.status === 401) {
                     setRequestError("این دسته وجود دارد");
+
                 } else {
-                    setCategory("");
-                    setOpen(false);
-                    setRequestError(null);
+                    handleClosePanel()
+                    toast.success("با موفقیت ساخته شد.")
                 }
             } catch (error) {
                 // console.log(error.response.data.message)
@@ -73,8 +75,10 @@ const CreateCategory = () => {
         setAddingFeature(false);
         setRequestError(null);
 
+
         // setCategorys([]);
     }
+
 
     return (
         <Grid>
@@ -84,6 +88,19 @@ const CreateCategory = () => {
                 }}>
                 ایجاد دسته
             </Button>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                limit={5}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <Dialog
                 fullWidth
                 maxWidth={'sm'}
@@ -109,7 +126,6 @@ const CreateCategory = () => {
                                 sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
                             />
                         </Grid>
-
                     </Grid>
                     <Grid container>
                         {
@@ -136,6 +152,7 @@ const CreateCategory = () => {
                             <Button variant="outlined" color="primary" onClick={handleClosePanel} style={{ border: '1px solid #989898', color: '#222', marginTop: '20px' }}>
                                 انصراف
                             </Button>
+
                         </Grid>
                     </Grid>
 

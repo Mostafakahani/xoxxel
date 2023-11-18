@@ -1,6 +1,6 @@
 import { Button, Grid, Typography } from "@mui/material";
 import NewT from "Components/Common/TableItems/NewT";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { AddProductIcon, IconProduct, IconTickets } from "Icons/icons";
 import Link from "next/link";
@@ -9,6 +9,9 @@ import CreateCategory from "Components/Common/Creatives/CreateCategory";
 import CreateType from "Components/Common/Creatives/CreateType";
 import EditOptionsDes from "Components/Common/Creatives/EditOptions/EditOptionsDes";
 import CreateOption from "Components/Common/Creatives/CreateOption";
+import axios from "axios";
+import ServerURL from "Components/Common/Layout/config";
+import moment from "moment-jalaali";
 const Products = () => {
     const ButtonData = [
         { text: 'حذف دسته , ریجن , نوع' },
@@ -18,10 +21,62 @@ const Products = () => {
     ]
 
     const [itemsForDel, setItemsForDel] = useState([]);
+    const [page, setPage] = useState(1);
+    const [dataBody, setDataBody] = useState([]);
+    const date = moment('2023-10-22T22:04:03.003Z')
+    const persianDate = date.format('jYYYY/jM/jD')
+    useEffect(() => {
+        const config = {
+            headers: {
+                Authorization: `${ServerURL.Bear}` // YourBearerToken را با مقدار مورد نظر جایگزین کنید
+            }
+        };
+
+        axios.get(`https://xoxxel.dicato.net/admin/feature/get-all-products?page=${page}`, config)
+            .then(response => {
+                const apiData = response.data; // داده‌های دریافتی از سرور
+                const updatedRegionData = apiData.data.map(item => {
+                    return {
+                        id: item.id,
+                        data: [
+                            `#${item.id}`, // مقدار `#` به همراه شناسه از سرور
+                            {
+                                type: "avatar",
+                                text: 'مدیریت',
+
+                            },
+                            {
+                                type: "textBold",
+                                text: item.title,
+
+                            },
+                            {
+                                type: "text",
+                                text: item.input_lable,
+
+                            },
+                            {
+                                type: 'text',
+                                text: moment(item.created_at).format('jYYYY/jM/jD یا YYYY/M/D'), //'jYYYY/jM/jD : just 1402 ...
+
+                            },
+                            {
+                                type: 'btn'
+                            }
+                        ],
+
+                    };
+                });
+                setDataBody(updatedRegionData);
+            })
+            .catch(error => {
+                console.error("Error fetching data from the server:", error);
+            });
+    }, []); // useEffect فقط یکبار در زمان رندر اولیه اجرا می‌شود
 
     const [selected, setSelected] = useState([]);
     const dataHead = ["کد محصول", "ایجاد کننده", "نام محصول", "نوع", "تاریخ ایجاد", "اقدامات"]
-    const dataBody = [
+    const dataBody1 = [
         {
             id: 1,
             data: [

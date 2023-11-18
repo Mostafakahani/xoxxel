@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import ServerURL from "../Layout/config";
+import Alert from "../AlertPopup/AlertPopup";
+import { ToastContainer, toast } from "react-toastify";
 
 const CreateOption = () => {
     const [open, setOpen] = useState(false);
@@ -35,6 +37,7 @@ const CreateOption = () => {
     const [countThree, setCountThree] = useState(0);
     const [countList, setCountList] = useState(0);
     const [delRow, setDelRow] = useState('');
+    const [errorMessage, setErrorMessage] = useState(null);
 
     // useEffect(() => {
     //     async function fetchData() {
@@ -54,15 +57,14 @@ const CreateOption = () => {
 
     //     fetchData();
     // }, [countOne, countTwo, countThree]);
-    useEffect(() => {
-        async function fetchData() {
-            const config = { headers: { Authorization: `${ServerURL.Bear}` } };
-            const responseList = await axios.get(`${ServerURL.url}/admin/feature/get-all-feature`, config);
-            setListData(responseList.data.data);
-            console.log(listData)
-        }
-        fetchData();
-    }, [countList]);
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         const config = { headers: { Authorization: `${ServerURL.Bear}` } };
+    //         const responseList = await axios.get(`${ServerURL.url}/admin/feature/get-all-feature`, config);
+    //         setListData(responseList.data.data);
+    //     }
+    //     fetchData();
+    // }, [countList]);
 
 
     useEffect(() => {
@@ -102,87 +104,87 @@ const CreateOption = () => {
         setSelectedType(event.target.value);
     };
 
-    const handleAddRow = () => {
-        // Validation
-        if (name.trim() === "") {
-            console.log("نام و قیمت نمی‌تواند خالی باشد.");
-            return;
-        }
+    // const handleAddRow = () => {
+    //     // Validation
+    //     if (name.trim() === "") {
+    //         console.log("نام و قیمت نمی‌تواند خالی باشد.");
+    //         return;
+    //     }
 
-        const isDuplicate = rows.some((row) => {
-            row.name === name
-            // &&
-            // row.price === price
-        });
-        if (!isDuplicate) {
-            // با افزودن یک ویژگی جدید، وضعیت محبوبیت به حالت اولیه تنظیم می‌شود
-            setRows([...rows,
-            {
-                id: Date.now(),
-                country_id: selectedCountry,
-                type_id: selectedType,
-                cat_id: selectedCategory,
-                name_feature: name,
-                price: price,
-                count: count,
-                popular: isPopular
-            }]);
-            setIsPopular(false);
-            setName("");
-            setPrice("");
-            setCount(0)
-            setCountOne(0)
-            setCountTwo(0)
-            setCountThree(0)
-            setData('')
-            setDataCategory('')
-            setDataType('')
-            setSelectedCategory('')
-            setSelectedCountry('')
-            setSelectedType('')
-            setIsPopular(false)
+    //     const isDuplicate = rows.some((row) => {
+    //         row.name === name
+    //         // &&
+    //         // row.price === price
+    //     });
+    //     if (!isDuplicate) {
+    //         // با افزودن یک ویژگی جدید، وضعیت محبوبیت به حالت اولیه تنظیم می‌شود
+    //         setRows([...rows,
+    //         {
+    //             id: Date.now(),
+    //             country_id: selectedCountry,
+    //             type_id: selectedType,
+    //             cat_id: selectedCategory,
+    //             name_feature: name,
+    //             price: price,
+    //             count: count,
+    //             popular: isPopular
+    //         }]);
+    //         setIsPopular(false);
+    //         setName("");
+    //         setPrice("");
+    //         setCount(0)
+    //         setCountOne(0)
+    //         setCountTwo(0)
+    //         setCountThree(0)
+    //         setData('')
+    //         setDataCategory('')
+    //         setDataType('')
+    //         setSelectedCategory('')
+    //         setSelectedCountry('')
+    //         setSelectedType('')
+    //         setIsPopular(false)
 
-        } else {
-            console.log("این نام و قیمت قبلاً وارد شده است.");
-        }
-    };
+    //     } else {
+    //         console.log("این نام و قیمت قبلاً وارد شده است.");
+    //     }
+    // };
 
-    const handleDeleteRow = async (id) => {
-        setRows(rows.filter((row) => row.id !== id));
-        setDelRow(id)
-        try {
-            setAddingFeature(true);
-            const config = { headers: { Authorization: `${ServerURL.Bear}` } };
-            const dataBody = {
-                ids: [id]
-            };
-            const response = await axios.post(`${ServerURL.url}/admin/feature/delete`, dataBody, config);
-            console.log(response);
-            setCountList(countList + 1)
-        } catch (error) {
-            console.error("خطا در ارسال درخواست به سرور", error);
-        } finally {
-            setAddingFeature(false);
-        }
-    };
+    // const handleDeleteRow = async (id) => {
+    //     setRows(rows.filter((row) => row.id !== id));
+    //     setDelRow(id)
+    //     try {
+    //         setAddingFeature(true);
+    //         const config = { headers: { Authorization: `${ServerURL.Bear}` } };
+    //         const dataBody = {
+    //             ids: [id]
+    //         };
+    //         const response = await axios.post(`${ServerURL.url}/admin/feature/delete`, dataBody, config);
+    //         console.log(response);
+    //         setCountList(countList + 1)
+    //     } catch (error) {
+    //         console.error("خطا در ارسال درخواست به سرور", error);
+    //     } finally {
+    //         setAddingFeature(false);
+    //     }
+    // };
 
 
-    const handleTogglePopular = (id) => {
-        setRows(
-            rows.map((row) =>
-                row.id === id ? { ...row, isPopular: !row.isPopular } : row
-            )
-        );
-    };
-    const formattedData = rows.map(({ country_id, cat_id, type_id, name_feature, price, count, popular }) => ({
-        country_id,
-        cat_id,
-        type_id,
-        name_feature,
-        price,
-        count,
-        popular
-    }));
+    // const handleTogglePopular = (id) => {
+    //     setRows(
+    //         rows.map((row) =>
+    //             row.id === id ? { ...row, isPopular: !row.isPopular } : row
+    //         )
+    //     );
+    // };
+    // const formattedData = rows.map(({ country_id, cat_id, type_id, name_feature, price, count, popular }) => ({
+    //     country_id,
+    //     cat_id,
+    //     type_id,
+    //     name_feature,
+    //     price,
+    //     count,
+    //     popular
+    // }));
 
     const handleSubmit = async () => {
         // Validation
@@ -200,24 +202,37 @@ const CreateOption = () => {
                 }
             };
 
-            const dataBody = rows.map((x) => ({
-                country_id: x.country_id,
-                cat_id: x.cat_id,
-                type_id: x.type_id,
-                name_feature: x.name_feature,
-                price: x.price,
-                count: x.count,
-                popular: x.popular
-            }));
-
+            // const dataBody = rows.map((x) => ({
+            //     country_id: x.country_id,
+            //     cat_id: x.cat_id,
+            //     type_id: x.type_id,
+            //     name_feature: x.name_feature,
+            //     price: x.price,
+            //     count: x.count,
+            //     popular: x.popular
+            // }));
+            const dataBody = {
+                // id: Date.now(),
+                country_id: selectedCountry,
+                type_id: selectedType,
+                cat_id: selectedCategory,
+                name_feature: name,
+                price: price,
+                count: count,
+                popular: isPopular
+            };
             // ارسال rows به API
-            const response = await axios.post(`${ServerURL.url}/admin/feature/create`, formattedData, config);
+            const response = await axios.post(`${ServerURL.url}/admin/feature/create`, dataBody, config);
             console.log(response);
+            setErrorMessage("با موفقیت ساخته شد");
+            toast.success("با موفقیت ساخته شد.")
+            handleClosePanel();
 
             // setOpen(false);
-            setName("");
-            setPrice("");
-            setRows([]);
+            // setName("");
+            // setPrice("");
+            // setRows([]);
+
         } catch (error) {
             console.error("خطا در ارسال درخواست به سرور", error);
         } finally {
@@ -229,7 +244,7 @@ const CreateOption = () => {
     const handleClosePanel = () => {
         setOpen(false);
         setName("");
-        setPrice("");
+        setPrice(0);
         // setRows([]);
         setCount(0)
         setCountOne(0)
@@ -241,8 +256,33 @@ const CreateOption = () => {
         setSelectedCategory('')
         setSelectedCountry('')
         setSelectedType('')
+        setIsPopular(false)
     };
 
+    const notify = () => {
+        toast.success("Default Notification !");
+
+        // toast.success("Success Notification !", {
+        //     position: toast.POSITION.TOP_CENTER
+        // });
+
+        // toast.error("Error Notification !", {
+        //     position: toast.POSITION.TOP_LEFT
+        // });
+
+        // toast.warn("Warning Notification !", {
+        //     position: toast.POSITION.BOTTOM_LEFT
+        // });
+
+        // toast.info("Info Notification !", {
+        //     position: toast.POSITION.BOTTOM_CENTER
+        // });
+
+        // toast("Custom Style Notification with css class!", {
+        //     position: toast.POSITION.BOTTOM_RIGHT,
+        //     className: 'foo-bar'
+        // });
+    };
     return (
         <Grid>
             <Button
@@ -253,10 +293,26 @@ const CreateOption = () => {
                     fontSize: "12px", marginRight: "5px", padding: "5px 12px", borderRadius: "5px", border: "1px solid #B6B6B6",
                     mr: { md: "5px", xs: "2px" },
                     color: "#525252",
+                    '&:hover': {
+                        border: "1px solid #B6B6B6"
+                    }
                 }}
             >
                 ایجاد ویژگی
             </Button>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                limit={5}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <Dialog
                 fullWidth
                 maxWidth={"lg"}
@@ -295,6 +351,7 @@ const CreateOption = () => {
                                     )}
                                 </Select>
                             </Grid>
+                            {/* <Button onClick={() => toast.success("با موفقیت ساخته شد.")}>notify</Button> */}
                             <Grid xs={12} sm={6} md={4}>
                                 <Typography>دسته</Typography>
                                 <Select
@@ -367,7 +424,7 @@ const CreateOption = () => {
                                     fullWidth
                                     type="number"
                                     value={price}
-                                    onChange={(e) => setPrice(parseInt(e.target.value))}
+                                    onChange={(e) => setPrice(e.target.value)}
                                     sx={{ width: { xs: '80%', sm: '80%' }, marginBottom: "10px" }}
                                 />
                             </Grid>
@@ -402,16 +459,18 @@ const CreateOption = () => {
                         </Grid>
                     </Grid>
                     <Button
-                        variant="text"
+                        variant="contained"
                         color="primary"
-                        onClick={handleAddRow}
-                        style={{ color: selectedCountry !== null && selectedCategory !== null && name !== '' && price !== '' ? '#362FD9' : '', fontSize: "13px", margin: "10px 0", padding: "5px 12px", borderRadius: "5px" }}
-                        disabled={selectedCountry !== null && selectedCategory !== null && name !== '' && price !== '' ? false : true}
+                        onClick={handleSubmit}
+                        sx={{ fontSize: "12px", margin: "10px 0", padding: "5px 12px", borderRadius: "5px" }}
+
+                        style={{ color: selectedCountry !== null && selectedCategory !== null && name !== '' && price !== null || 0 ? '#fff' : '', fontSize: "12px", margin: "10px 0", padding: "5px 12px", borderRadius: "5px", padding: "5px 12px", }}
+                        disabled={selectedCountry === '' || selectedCategory === '' || name === '' || price === 0 || price === ''}
                     >
-                        افزودن ردیف +
+                        افزودن ویژگی
                     </Button>
 
-                    <div>
+                    {/* <div>
                         <Typography variant="h6" style={{ marginTop: "15px" }}>
                             لیست ویژگی‌ها
                         </Typography>
@@ -480,9 +539,9 @@ const CreateOption = () => {
                                     </Grid>
                                 ))}
                             </div>
-                        )}
-                        <Typography>لیست ویژگی های جدید:</Typography>
-                        {rows.length === 0 ? (
+                        )} */}
+                    {/* <Typography>لیست ویژگی های جدید:</Typography> */}
+                    {/* {rows.length === 0 ? (
                             <Typography>هیچ ویژگی‌ای اضافه نشده است.</Typography>
                         ) : (
                             <div>
@@ -546,9 +605,9 @@ const CreateOption = () => {
                                     </Grid>
                                 ))}
                             </div>
-                        )}
-                    </div>
-                    <Button
+                        )} */}
+                    {/* </div> */}
+                    {/* <Button
                         variant="contained"
                         color="primary"
                         onClick={handleSubmit}
@@ -556,7 +615,7 @@ const CreateOption = () => {
                         disabled={rows.length === 0 ? true : false}
                     >
                         ارسال و ثبت
-                    </Button>
+                    </Button> */}
                     {addingFeature && (
                         <div style={{ marginTop: "10px", textAlign: "center" }}>
                             <CircularProgress size={24} />
@@ -564,7 +623,7 @@ const CreateOption = () => {
                     )}
                 </DialogContent>
             </Dialog>
-        </Grid>
+        </Grid >
     );
 };
 

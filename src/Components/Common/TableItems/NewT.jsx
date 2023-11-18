@@ -277,15 +277,20 @@ export default function TableItems({
                         {e?.type === "btn" && (
                           <>
                             <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-                              <AddProductFeatureNew tableId={row.data[0]} />
-                              {/* <Button
+                              {/* <AddProductFeatureNew tableId={row.data[0]} />
+                              <Button
                                 onClick={(x) => console.log(row.data[0])}
                                 // onClick={() => props.show(row["id"])}
 
                                 sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
 
-                              </Button> */}
+                              </Button>
                               <Button startIcon={<EyesIcon />} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
+                                <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
+                                  مشاهده و ویرایش
+                                </Link>
+                              </Button> */}
+                              <Button disabled startIcon={<EyesIcon />} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
                                 <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
                                   مشاهده و ویرایش
                                 </Link>
