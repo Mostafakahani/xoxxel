@@ -8,6 +8,7 @@ import CheckboxesTags from "Components/Common/CheckBoxList";
 import ServerURL from "Components/Common/Layout/config";
 import { useEffect } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 const CreateProduct = () => {
     const [productName, setProductName] = useState("");
     // const [productPrice, setProductPrice] = useState("");
@@ -66,7 +67,13 @@ const CreateProduct = () => {
                 ids_feature: checkBoxList.map((x) => x),
             }
             const uploadResponse = await axios.post(`${ServerURL.url}/admin/product/create`, dataBody, config);
-            console.log(uploadResponse.response)
+            if (uploadResponse.status === 201) {
+                toast.success("با موفقیت ساخته شد.")
+                window.location.href = 'panel/admin/products'
+
+            } else {
+                toast.error("لطفا دوباره امتحان کنید")
+            }
         } catch (error) {
             console.error("خطا: ", error);
             setRequestError("خطا در ارسال درخواست به سرور");
@@ -82,6 +89,19 @@ const CreateProduct = () => {
         <>
             <AccountLayout>
                 <Grid container>
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={3000}
+                        limit={5}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                    />
                     <Typography>ایجاد محصول </Typography>
                     <Grid container xs={12} md={12} spacing={2}>
                         <Grid item container xs={12} sm={12} md={12} sx={{ my: '15px', display: 'flex', flexDirection: "column" }}>
