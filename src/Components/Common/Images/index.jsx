@@ -15,7 +15,7 @@ import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternate
 
 
 
-export default function StandardImageList({ onChange = () => { }, }) {
+export default function StandardImageList({ onChange = () => { }, label }) {
     const [open, setOpen] = useState(false);
     const [data, setData] = useState([]);
     const [gallery, setGallery] = useState(data);
@@ -130,7 +130,7 @@ export default function StandardImageList({ onChange = () => { }, }) {
     return (
         <>
             <Grid sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <label>تصویر اصلی ( 297*147)</label>
+                <label>{label}</label>
                 <Button sx={{ mt: 1 }} startIcon={<AddPhotoAlternateOutlinedIcon />} onClick={() => { setOpen(true); setCount(count + 1) }}>
                     {item ? 'فایل انتخاب شده' : 'انتخاب فایل'}
                 </Button>
