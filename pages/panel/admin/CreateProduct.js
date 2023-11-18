@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Grid, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, Grid, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import UploadFile from "Components/Common/UploadFile";
@@ -6,10 +6,12 @@ import ProductOption from "Components/Common/ProductOption/ProductOption";
 import StandardImageList from "Components/Common/Images";
 import CheckboxesTags from "Components/Common/CheckBoxList";
 import ServerURL from "Components/Common/Layout/config";
+import { useEffect } from "react";
+import axios from "axios";
 const CreateProduct = () => {
     const [productName, setProductName] = useState("");
-    const [productPrice, setProductPrice] = useState("");
-    const [starRating, setStarRating] = useState("");
+    // const [productPrice, setProductPrice] = useState("");
+    // const [starRating, setStarRating] = useState("");
     const [labelInput, setLabelInput] = useState("");
     const [placeholder, setPlaceholder] = useState("");
     const [textArea, setTextArea] = useState("");
@@ -20,6 +22,9 @@ const CreateProduct = () => {
     const [addingFeature, setAddingFeature] = useState(false);
 
     const [allData, setAllData] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [countTwo, setCountTwo] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState('');
 
     // const handleSubmit = () => {
     //     setAllData([...allData, {
@@ -28,7 +33,18 @@ const CreateProduct = () => {
     //     }])
     //     console.log(allData)
     // }
+    useEffect(() => {
+        async function fetchData() {
+            const config = { headers: { Authorization: `${ServerURL.Bear}` } };
+            const responseCategory = await axios.get(`${ServerURL.url}/admin/storage/get-all-cat`, config);
+            setCategory(responseCategory.data.data);
+        }
+        fetchData();
+    }, [countTwo]);
 
+    const handleSelectChangeCategory = (event) => {
+        setSelectedCategory(event.target.value);
+    };
 
     const handleSubmit = async () => {
         setAddingFeature(true);
@@ -37,61 +53,24 @@ const CreateProduct = () => {
                 Authorization: `${ServerURL.Bear}`
             }
         };
-        if (selectedFileItem && selectedFileItem.file) {
-            try {
-                //     const formData = new FormData();
-                //     Object.keys(selectedFileItem?.fileResDetails?.fields || {}).map((x) => {
-                //         formData.append(x, selectedFileItem?.fileResDetails?.fields[x]);
-                //     });
-                //     formData.append("file", selectedFileItem.file);
-
-                //     const uploadResponse = await axios.post(
-                //         `${selectedFileItem?.fileResDetails?.url ? selectedFileItem?.fileResDetails?.url : 'https://xoxxel.storage.iran.liara.space/'}`,
-                //         formData,
-                //         {
-                //             headers: { "Content-Type": "multipart/form-data" },
-                //         }
-                //     );
-
-                //     if (uploadResponse.status === 204) {
-                //         const verifyData = {
-                //             id: selectedFileItem?.fileResDetails?.dataStorage?.id
-                //         };
-                //         const verifyResponse = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, verifyData, config);
-
-                //         if (verifyResponse.status === 201) {
-                //             const createData = {
-                //                 name: region,
-                //                 id_storage: selectedFileItem?.fileResDetails?.dataStorage?.id
-                //             };
-
-                //             const createResponse = await axios.post(`${ServerURL.url}/admin/country/create`, createData, config);
-
-                //             if (createResponse.status === 201) {
-                //                 setOpen(false);
-                //                 setRegion("");
-                //                 setRequestError("");
-                //                 setSelectedFileItem({});
-                //             } else if (createResponse.status === 400 && createResponse.data.message === 'The country has already been created') {
-                //                 setRequestError("این کشور از قبل وجود دارد");
-                //             } else {
-                //                 setRequestError("خطا در ایجاد کشور");
-                //             }
-                //         } else {
-                //             setRequestError("خطا در حذف فایل قبلی");
-                //         }
-                //     } else {
-                //         setRequestError("خطا در آپلود فایل");
-                //     }
-            } catch (error) {
-                console.error("خطا: ", error);
-                setRequestError("خطا در ارسال درخواست به سرور");
-            } finally {
-                setAddingFeature(false);
+        try {
+            const dataBody = {
+                name: productName,
+                id_type: selectedCategory,
+                id_image_main: selectedFileItem,
+                id_image_trends: selectedFileItem2,
+                id_image_square: selectedFileItem3,
+                placeholder: placeholder,
+                lable_input: labelInput,
+                description_input: textArea,
+                ids_feature: checkBoxList.map((x) => x),
             }
-        } else {
-
-            setRequestError("یک فایل انتخاب کنید");
+            const uploadResponse = await axios.post(`${ServerURL.url}/admin/product/create`, dataBody, config);
+            console.log(uploadResponse.response)
+        } catch (error) {
+            console.error("خطا: ", error);
+            setRequestError("خطا در ارسال درخواست به سرور");
+        } finally {
             setAddingFeature(false);
         }
     };
@@ -103,23 +82,20 @@ const CreateProduct = () => {
         <>
             <AccountLayout>
                 <Grid container>
-                    <Grid container xs={12} md={12}>
-                        <Grid sm={9} md={12}>
-                            <Typography>ایجاد محصول </Typography>
-                        </Grid>
-                        <Grid container xs={12} sm={12} md={12} sx={{ my: '15px' }}>
-                            <Grid xs={12} sm={6} md={3}>
+                    <Typography>ایجاد محصول </Typography>
+                    <Grid container xs={12} md={12} spacing={2}>
+                        <Grid item container xs={12} sm={12} md={12} sx={{ my: '15px', display: 'flex', flexDirection: "column" }}>
+                            <Grid xs={12} sm={6} md={8}>
                                 <TextField
-                                    // error={!nameError ? false : true}
-                                    // helperText={!nameError ? '' : ErrorList[0]}
                                     onChange={(e) => setProductName(e.target.value)}
                                     value={productName}
                                     label="نام محصول"
                                     variant="outlined"
-                                    sx={{ my: '5px', width: { xs: '100%', sm: '90%', md: '80%' } }}
+                                    sx={{ my: '5px', width: { xs: '100%', sm: '100%', md: '100%' } }}
                                 />
                             </Grid>
-                            <Grid xs={12} sm={3} md={3}>
+
+                            {/* <Grid xs={12} sm={3} md={3}>
                                 <TextField
                                     // error={!priceError ? false : true}
                                     // helperText={!priceError ? '' : ErrorList[1]}
@@ -129,8 +105,8 @@ const CreateProduct = () => {
                                     variant="outlined"
                                     sx={{ my: '5px', width: { xs: '100%', sm: '90%', md: '80%' } }}
                                 />
-                            </Grid>
-                            <Grid xs={12} sm={3} md={3}>
+                            </Grid> */}
+                            {/* <Grid xs={12} sm={3} md={3}>
                                 <TextField
                                     // error={!priceError ? false : true}
                                     // helperText={!priceError ? '' : ErrorList[1]}
@@ -140,7 +116,29 @@ const CreateProduct = () => {
                                     variant="outlined"
                                     sx={{ my: '5px', width: { xs: '100%', sm: '100%', md: '80%' } }}
                                 />
-                            </Grid>
+                            </Grid> */}
+
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={4} sx={{ mb: "50px" }}>
+                            <Typography>دسته</Typography>
+                            <Select
+                                value={selectedCategory}
+                                onChange={handleSelectChangeCategory}
+                                sx={{ width: { xs: '100%', sm: "80%" } }}
+                                onOpen={() => setCountTwo(countTwo + 1)}
+                            >
+                                {Array.isArray(category) ? (
+                                    category.map((data) => (
+                                        <MenuItem key={data.id} value={data.id}>
+                                            {data.title}
+                                        </MenuItem>
+                                    ))
+                                ) : (
+                                    <MenuItem value={null}>
+                                        Loading...
+                                    </MenuItem>
+                                )}
+                            </Select>
                         </Grid>
                     </Grid>
                 </Grid >
@@ -222,6 +220,7 @@ const CreateProduct = () => {
                     <Grid xs={12} sm={4} md={12}>
                         <TextField
                             fullWidth
+                            multiline
                             // error={!priceError ? false : true}
                             // helperText={!priceError ? '' : ErrorList[1]}
                             onChange={(e) => setTextArea(e.target.value)}
@@ -247,19 +246,30 @@ const CreateProduct = () => {
                     />
                 </Grid>
 
-                <Grid sx={{ my: '25px' }}>
-                    <Button
-                        sx={{
-                            color: selectedFileItem.length !== 0 && selectedFileItem2.length !== 0 && selectedFileItem3.length !== 0 && productName !== '' && productPrice !== null && productPrice !== 0 && productPrice !== '' ? '' : '',
-                            fontSize: "12px", margin: "10px 0", padding: "5px 12px", borderRadius: "5px", padding: "5px 12px",
-                        }}
-                        disabled={selectedFileItem.length === 0 || selectedFileItem2.length === 0 || selectedFileItem3.length === 0 || productName === '' || productPrice === null || productPrice === 0 || productPrice === '' || checkBoxList.length === 0}
+                <Grid container sx={{ my: '25px' }}>
+                    <Grid item xs={12}>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                // color: selectedFileItem.length !== 0 && selectedFileItem2.length !== 0 && selectedFileItem3.length !== 0 && productName !== '' && productPrice !== null && productPrice !== 0 && productPrice !== '' ? '' : '',
+                                borderRadius: "5px",
+                                mr: '10px'
+                            }}
+                            disabled={selectedFileItem.length === 0 || selectedFileItem2.length === 0 || selectedFileItem3.length === 0 || productName === '' || selectedCategory === ''}
 
-                        onClick={handleSubmit}>
-                        {addingFeature ? <CircularProgress size={24} /> : 'ذخیره تغییرات'}
-                    </Button>
-                    <Button sx={{ color: '#B12640' }} onClick={() => { console.log(selectedFileItem, ' 2: ', selectedFileItem2, ' 3: ', selectedFileItem3, ' list: ', checkBoxList) }}>انصراف</Button>
-                    <Button sx={{ color: '#1D1E2D', borderRadius: '5px', border: '1px solid #807D7D' }}>اضافه کردن ویژگی جدید</Button>
+                            onClick={handleSubmit}>
+                            {addingFeature ? <CircularProgress size={24} /> : 'ذخیره تغییرات'}
+                        </Button>
+                        <Button variant="outlined" sx={{
+                            color: '#B12640', border: '1px solid #B12640', borderRadius: "5px",
+                            '&:hover': {
+                                border: '1px solid #B12640',
+                                backgroundColor: '#f11c1c0a'
+                            }
+                        }} onClick={() => { console.log(selectedFileItem, ' 2: ', selectedFileItem2, ' 3: ', selectedFileItem3, ' list: ', checkBoxList) }}>انصراف</Button>
+                    </Grid>
+
+                    {/* <Button sx={{ color: '#1D1E2D', borderRadius: '5px', border: '1px solid #807D7D' }}>اضافه کردن ویژگی جدید</Button> */}
                 </Grid>
             </AccountLayout >
         </>

@@ -9,17 +9,14 @@ import { useEffect } from 'react';
 import { Button } from '@mui/material';
 import { useState } from 'react';
 import ServerURL from '../Layout/config';
-
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
 export default function CheckboxesTags({ onChange = () => { } }) {
     const handleChange = (event, value) => {
         const selectedId = value.map(v => v.id);
         onChange(selectedId);
     };
     const [data, setData] = useState([]);
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -38,10 +35,8 @@ export default function CheckboxesTags({ onChange = () => { } }) {
                 console.error("Error fetching data from the server:", error);
             }
         };
-
         fetchData();
     }, []);
-
     return (
         <>
             {data.length > 0 && (
@@ -67,12 +62,11 @@ export default function CheckboxesTags({ onChange = () => { } }) {
                     )}
                     style={{ width: 500 }}
                     renderInput={(params) => (
-                        <TextField {...params} label="انتخاب ویژگی" placeholder="انتخاب کنید" />
+                        <TextField {...params} label="انتخاب ویژگی" placeholder="ویژگی ها" />
                     )}
                 />
             )
             }
-            <Button onClick={() => console.log(data)}> log</Button>
         </>
     );
 }
