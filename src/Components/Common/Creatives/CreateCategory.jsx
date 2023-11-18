@@ -2,8 +2,8 @@ import { Button, CircularProgress, Dialog, DialogContent, DialogContentText, Dia
 import axios from "axios";
 import React, { useState } from "react";
 import ServerURL from "../Layout/config";
-import Alert from "../AlertPopup/AlertPopup";
 import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 
 const CreateCategory = () => {
@@ -11,7 +11,6 @@ const CreateCategory = () => {
     const [category, setCategory] = useState("");
     const [requestError, setRequestError] = useState(null);
     const [addingFeature, setAddingFeature] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(null);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -36,13 +35,10 @@ const CreateCategory = () => {
 
                 if (response.status === 401) {
                     setRequestError("این دسته وجود دارد");
-                    setErrorMessage("این دسته وجود دارد");
 
                 } else {
-                    setCategory("");
-                    setOpen(false);
-                    setRequestError(null);
-                    setErrorMessage("با موفقیت ساخته شد");
+                    handleClosePanel()
+                    toast.success("با موفقیت ساخته شد.")
                 }
             } catch (error) {
                 // console.log(error.response.data.message)
@@ -63,7 +59,6 @@ const CreateCategory = () => {
 
             } finally {
                 setAddingFeature(false);
-                setErrorMessage("با موفقیت ساخته شد");
             }
         } else {
             setRequestError("اطلاعات درست وارد کنید");
@@ -93,6 +88,19 @@ const CreateCategory = () => {
                 }}>
                 ایجاد دسته
             </Button>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                limit={5}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <Dialog
                 fullWidth
                 maxWidth={'sm'}
@@ -152,7 +160,6 @@ const CreateCategory = () => {
 
                 </DialogContent>
             </Dialog>
-            <Alert message={errorMessage} setOpen={setErrorMessage} />
         </Grid >
     );
 };

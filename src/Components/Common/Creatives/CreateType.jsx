@@ -2,6 +2,7 @@ import { Button, CircularProgress, Dialog, DialogContent, DialogContentText, Dia
 import React, { useState } from "react";
 import ServerURL from "../Layout/config";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 
 const CreateType = ({ tableId }) => {
@@ -35,29 +36,26 @@ const CreateType = ({ tableId }) => {
                     setAddingFeature(false);
 
                 } else {
-                    setType("");
-                    setOpen(false);
-                    setRequestError(null);
-                    setAddingFeature(false);
-
+                    toast.success("با موفقیت ساخته شد.")
+                    handleClosePanel()
                 }
 
             } catch (error) {
-                // console.log(error.response.data.message)
-                if (error.response.data.message[0] === "title must be longer than or equal to 3 characters") {
+                if (error.response && error.response.data && error.response.data.message[0] === "title must be longer than or equal to 3 characters") {
                     setRequestError("نام نوع انتخابی نمیتواند کمتر از 3 کاراکتر باشد");
                     setAddingFeature(false);
                 }
-                if (error.response.data.message === "There is a type product name") {
+                else if (error.response && error.response.data && error.response.data.message === "There is a type product name") {
                     setRequestError("نام نوع انتخابی از قبل وجود دارد");
                     setAddingFeature(false);
                 }
-                if (error.code === "ERR_NETWORK") {
+                else if (error.code === "ERR_NETWORK") {
                     setRequestError("خطا در ارسال درخواست به سرور");
                     setAddingFeature(true);
+                } else {
+                    console.error(error);
+                    setAddingFeature(false);
                 }
-                console.error(error);
-                setAddingFeature(false);
 
             } finally {
                 setAddingFeature(false);
@@ -65,7 +63,6 @@ const CreateType = ({ tableId }) => {
         } else {
             setRequestError("مشکلی در ارتباط با سرور وجود دارد");
             setAddingFeature(false);
-
         }
     };
     const handleClosePanel = () => {
@@ -83,6 +80,19 @@ const CreateType = ({ tableId }) => {
                 }}>
                 ایجاد نوع
             </Button>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                limit={5}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <Dialog
                 fullWidth
                 maxWidth={'sm'}

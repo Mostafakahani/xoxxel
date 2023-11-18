@@ -225,11 +225,13 @@ const CreateOption = () => {
             const response = await axios.post(`${ServerURL.url}/admin/feature/create`, dataBody, config);
             console.log(response);
             setErrorMessage("با موفقیت ساخته شد");
+            toast.success("با موفقیت ساخته شد.")
+            handleClosePanel();
 
             // setOpen(false);
-            setName("");
-            setPrice("");
-            setRows([]);
+            // setName("");
+            // setPrice("");
+            // setRows([]);
 
         } catch (error) {
             console.error("خطا در ارسال درخواست به سرور", error);
@@ -291,13 +293,16 @@ const CreateOption = () => {
                     fontSize: "12px", marginRight: "5px", padding: "5px 12px", borderRadius: "5px", border: "1px solid #B6B6B6",
                     mr: { md: "5px", xs: "2px" },
                     color: "#525252",
+                    '&:hover': {
+                        border: "1px solid #B6B6B6"
+                    }
                 }}
             >
                 ایجاد ویژگی
             </Button>
             <ToastContainer
                 position="top-right"
-                autoClose={5000}
+                autoClose={3000}
                 limit={5}
                 hideProgressBar={false}
                 newestOnTop={false}
@@ -346,7 +351,7 @@ const CreateOption = () => {
                                     )}
                                 </Select>
                             </Grid>
-                            <Button onClick={() => toast.success("Default Notification !")}>notify</Button>
+                            {/* <Button onClick={() => toast.success("با موفقیت ساخته شد.")}>notify</Button> */}
                             <Grid xs={12} sm={6} md={4}>
                                 <Typography>دسته</Typography>
                                 <Select

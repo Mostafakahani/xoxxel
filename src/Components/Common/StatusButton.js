@@ -2,9 +2,9 @@ import { useTheme } from "@emotion/react";
 import { Button } from "@mui/material";
 import Link from "Link";
 import React from "react";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 function StatusButton(props) {
-  const { color = "primary", text, isUploaded } = props;
+  const { color = "primary", text } = props;
   const theme = useTheme();
 
   const BUTTON = () => {
@@ -15,11 +15,10 @@ function StatusButton(props) {
       <Button
         variant="contained"
         color={color}
-        disabled={text ? false : true}
         sx={{
-          backgroundColor: text === "مشاهده" && !isUploaded ? theme?.palette[color]?.light : '#00ff0030', // تغییرات اینجا
+          backgroundColor: theme?.palette[color]?.light,
           boxShadow: "none",
-          color: text === "مشاهده" && !isUploaded ? theme?.palette[color]?.main : '#1cf14c',
+          color: theme?.palette[color]?.main,
           fontSize: "12.04px",
           fontWeight: 600,
           minWidth: "max-content",
@@ -30,11 +29,8 @@ function StatusButton(props) {
             opacity: 0.8,
           },
         }}
-        disableElevation
         {...copyProps}
       >
-        {isUploaded && <CheckCircleIcon style={{ marginLeft: '5px' }} />} {/* نمایش تیک اگر isUploaded برابر با true باشد */}
-
         {text}
       </Button>
     );

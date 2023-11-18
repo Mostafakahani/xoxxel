@@ -14,6 +14,7 @@ import UploadFile from "../UploadFile";
 import axios from "axios";
 import ServerURL from "../Layout/config";
 import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const CreateRegion = () => {
     const [open, setOpen] = useState(false);
@@ -64,15 +65,17 @@ const CreateRegion = () => {
                         const createResponse = await axios.post(`${ServerURL.url}/admin/country/create`, createData, config);
 
                         if (createResponse.status === 201) {
-                            setOpen(false);
-                            setRegion("");
-                            setRequestError("");
-                            setSelectedFileItem({});
+                            toast.success("با موفقیت ساخته شد.")
+                            handleClosePanel();
                         } else if (createResponse.status === 400 && createResponse.data.message === 'The country has already been created') {
                             setRequestError("این کشور از قبل وجود دارد");
+                            setSelectedFileItem({});
+
                         } else {
                             setRequestError("خطا در ایجاد کشور");
+                            setSelectedFileItem({});
                         }
+
                     } else {
                         setRequestError("خطا در حذف فایل قبلی");
                     }
@@ -81,12 +84,18 @@ const CreateRegion = () => {
                 }
             } catch (error) {
                 console.error("خطا: ", error);
-                setRequestError("خطا در ارسال درخواست به سرور");
+                if (error.response.data.message === 'The country has already been created') {
+                    setRequestError('این کشور از قبل وجود دارد');
+                    setSelectedFileItem({});
+                } else {
+                    setRequestError("خطا در ارسال درخواست به سرور");
+                    setSelectedFileItem({});
+                }
             } finally {
                 setAddingFeature(false);
             }
         } else {
-            
+
             setRequestError("یک فایل انتخاب کنید");
             setAddingFeature(false);
         }
@@ -117,6 +126,19 @@ const CreateRegion = () => {
             >
                 ایجاد ریجن
             </Button>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                limit={5}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <Dialog
                 fullWidth
                 maxWidth={"sm"}
@@ -161,7 +183,7 @@ const CreateRegion = () => {
                     </Grid>
 
                     <Grid container>
-                        {region !== "" && (
+                        {region !== "" && Object.keys(selectedFileItem).length !== 0 && (
                             <Grid xs={6} sm={3} md={3}>
                                 <Button
                                     variant="contained"

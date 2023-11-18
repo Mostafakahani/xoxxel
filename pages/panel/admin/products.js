@@ -11,6 +11,7 @@ import EditOptionsDes from "Components/Common/Creatives/EditOptions/EditOptionsD
 import CreateOption from "Components/Common/Creatives/CreateOption";
 import axios from "axios";
 import ServerURL from "Components/Common/Layout/config";
+import moment from "moment-jalaali";
 const Products = () => {
     const ButtonData = [
         { text: 'حذف دسته , ریجن , نوع' },
@@ -22,6 +23,8 @@ const Products = () => {
     const [itemsForDel, setItemsForDel] = useState([]);
     const [page, setPage] = useState(1);
     const [dataBody, setDataBody] = useState([]);
+    const date = moment('2023-10-22T22:04:03.003Z')
+    const persianDate = date.format('jYYYY/jM/jD')
     useEffect(() => {
         const config = {
             headers: {
@@ -54,36 +57,14 @@ const Products = () => {
                             },
                             {
                                 type: 'text',
-                                text: item.created_at,
+                                text: moment(item.created_at).format('jYYYY/jM/jD یا YYYY/M/D'), //'jYYYY/jM/jD : just 1402 ...
+
                             },
                             {
                                 type: 'btn'
                             }
                         ],
-                        data1: [
-                            "#254",
-                            {
-                                type: "avatar",
-                                text: "مدیریت",
-                                url: '/images/avatar.png'
-                            },
-                            {
-                                type: "textBold",
-                                text: "Call of duty mobile",
-                            },
-                            {
-                                type: "text",
-                                text: "Gift card",
-                            },
-                            {
-                                type: "text",
-                                text: "1401/7/7",
-                            },
-                            {
-                                type: "btn",
-                                text: "1401/7/7",
-                            },
-                        ],
+
                     };
                 });
                 setDataBody(updatedRegionData);
