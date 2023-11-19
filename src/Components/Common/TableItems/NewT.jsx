@@ -9,7 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import { Avatar, Button, Grid } from "@mui/material";
+import { Avatar, Button, Grid, MenuItem, Pagination, Select, Stack } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import AddProductFeatureNew from "../Popup/CreateProductOptionNew";
@@ -89,9 +89,27 @@ export default function TableItems({
   dataBody,
   setSelected = false,
   selected = false,
-}) {
+  setPage = () => { },
+  setPerPage = () => { },
+  pageData, // اضافه کردن اطلاعات صفحه به props
+
+
+}, props) {
+  const { page, perPage } = props;
+
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
+  // const [perPage, setPerPage] = React.useState(15);
+
+
+  // New for pages:
+  const itemsPerPage = pageData.perPage;
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const listPerPage = [15, 25, 50, 100]
+
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -318,17 +336,72 @@ export default function TableItems({
           </TableBody>
         </Table>
       </TableContainer>
-      {/* {dataBody?.length === 0 && (
-        <Typography
-          component={"h6"}
-          sx={{
-            textAlign: "center",
-            color: "#fff",
-          }}
+      {
+        dataBody?.length === 0 && (
+          <Typography
+            component={"h6"}
+            sx={{
+              textAlign: "center",
+              color: "black",
+              my: 3
+            }}
+          >
+            موردی پیدا نشد!
+          </Typography>
+        )
+      }
+      {dataBody?.length !== 0 && (
+        <Grid
+          spacing={5}
+          display="flex"
+          alignItems="center"
+          sx={{ mt: 2, flexDirection: { xs: "row", sm: 'row', }, justifyContent: { xs: 'space-between', sm: 'center' } }}
         >
-          موردی پیدا نشد!
-        </Typography>
-      )} */}
-    </Box>
+          <Grid item>
+            <Stack spacing={2}>
+              <Pagination
+                shape="rounded"
+                count={pageData.totalPages}
+                page={page}
+                onChange={(event, value) => setPage(value)}
+                color="standard"
+              />
+            </Stack>
+          </Grid>
+          <Grid item container xs={3} sm={2} md={1}>
+            {/* <Typography
+              sx={{
+                fontSize: '11px',
+                textAlign: "center",
+                color: "black",
+              }}
+            >
+              تعداد نمایش
+            </Typography> */}
+            <Select
+              displayEmpty
+              size="small"
+              value={perPage}
+              onChange={(e) => setPerPage(e.target.value)}
+              sx={{ width: { xs: '100%', sm: "80%" } }}
+              defaultValue={15}
+            // onOpen={() => setCountTwo(countTwo + 1)}
+            >
+              {Array.isArray(listPerPage) ? (
+                listPerPage.map((data, index) => (
+                  <MenuItem key={index} value={data}>
+                    {data}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem value={null}>
+                  Loading...
+                </MenuItem>
+              )}
+            </Select>
+          </Grid>
+        </Grid>
+      )}
+    </Box >
   );
 }

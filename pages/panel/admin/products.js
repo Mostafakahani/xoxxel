@@ -13,126 +13,77 @@ import axios from "axios";
 import ServerURL from "Components/Common/Layout/config";
 import moment from "moment-jalaali";
 const Products = () => {
-    const ButtonData = [
-        { text: 'حذف دسته , ریجن , نوع' },
-        { text: 'ایجاد نوع' },
-        { text: 'ایجاد ریجن' },
-        { text: 'ایجاد دسته' }
-    ]
-
     const [itemsForDel, setItemsForDel] = useState([]);
     const [page, setPage] = useState(1);
     const [dataBody, setDataBody] = useState([]);
-    const date = moment('2023-10-22T22:04:03.003Z')
-    const persianDate = date.format('jYYYY/jM/jD')
-    useEffect(() => {
-        const config = {
-            headers: {
-                Authorization: `${ServerURL.Bear}` // YourBearerToken را با مقدار مورد نظر جایگزین کنید
-            }
-        };
+    const [pageDataAll, setPageDataAll] = useState({});
+    const [perPage, setPerPage] = useState(15);
 
-        axios.get(`https://xoxxel.dicato.net/admin/feature/get-all-products?page=${page}`, config)
-            .then(response => {
-                const apiData = response.data; // داده‌های دریافتی از سرور
-                const updatedRegionData = apiData.data.map(item => {
+    useEffect(() => {
+        const fetchData = async () => {
+            const config = {
+                headers: {
+                    Authorization: `${ServerURL.Bear}`,
+                },
+            };
+
+            try {
+                const response = await axios.get(
+                    `${ServerURL.url}/admin/feature/get-all-products?perPage=${perPage}&page=${page}`,
+                    config
+                );
+
+                const pageData = response.data;
+                const updatedPageData = {
+                    nowPage: pageData.page,
+                    totalPages: pageData.totalPages,
+                    perPage: pageData.perPage ? pageData.perPage : 15,
+                    totalItems: pageData.totalItems,
+                    pagesToDisplay: Array.from({ length: pageData.totalPages }, (_, i) => i + 1),
+                };
+
+                setPageDataAll(updatedPageData);
+
+                const apiData = response.data.data;
+                const updatedRegionData = apiData.map((item) => {
                     return {
                         id: item.id,
                         data: [
-                            `#${item.id}`, // مقدار `#` به همراه شناسه از سرور
+                            `#${item.id}`,
                             {
                                 type: "avatar",
-                                text: 'مدیریت',
-
+                                text: "مدیریت",
                             },
                             {
                                 type: "textBold",
                                 text: item.title,
-
                             },
                             {
                                 type: "text",
                                 text: item.input_lable,
-
                             },
                             {
-                                type: 'text',
-                                text: moment(item.created_at).format('jYYYY/jM/jD یا YYYY/M/D'), //'jYYYY/jM/jD : just 1402 ...
-
+                                type: "text",
+                                text: moment(item.created_at).format("jYYYY/jM/jD یا YYYY/M/D"),
                             },
                             {
-                                type: 'btn'
-                            }
+                                type: "btn",
+                            },
                         ],
-
                     };
                 });
+                setSelected([])
                 setDataBody(updatedRegionData);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error("Error fetching data from the server:", error);
-            });
-    }, []); // useEffect فقط یکبار در زمان رندر اولیه اجرا می‌شود
+            }
+        };
+
+        fetchData();
+    }, [page, perPage]);
 
     const [selected, setSelected] = useState([]);
     const dataHead = ["کد محصول", "ایجاد کننده", "نام محصول", "نوع", "تاریخ ایجاد", "اقدامات"]
-    const dataBody1 = [
-        {
-            id: 1,
-            data: [
-                "#254",
-                {
-                    type: "avatar",
-                    text: "مدیریت",
-                    url: '/images/avatar.png'
-                },
-                {
-                    type: "textBold",
-                    text: "Call of duty mobile",
-                },
-                {
-                    type: "text",
-                    text: "Gift card",
-                },
-                {
-                    type: "text",
-                    text: "1401/7/7",
-                },
-                {
-                    type: "btn",
-                    text: "1401/7/7",
-                },
-            ],
-        },
-        {
-            id: 3,
-            data: [
-                "#204",
-                {
-                    type: "avatar",
-                    text: "مدیریت",
-                    url: '/images/avatar.png'
-                },
-                {
-                    type: "textBold",
-                    text: "Call of duty mobile",
-                },
-                {
-                    type: "text",
-                    text: "Gift card",
-                },
-                {
-                    type: "text",
-                    text: "1401/7/7",
-                },
-                {
-                    type: "btn",
-                    text: "1401/7/7",
-                },
-
-            ],
-        },
-    ]
     const [selectedItemId, setSelectedItemId] = useState(null);
 
     return (
@@ -215,15 +166,13 @@ const Products = () => {
                         setSelected={setSelected}
                         dataHead={dataHead}
                         dataBody={dataBody}
-                        // show={(x) => console.log(dataBody.data[0])}
-                        selectedItemId={selectedItemId} />
-
-
-
+                        // selectedItemId={selectedItemId}
+                        pageData={pageDataAll}
+                        setPage={(e) => setPage(e)}
+                        setPerPage={(e) => setPerPage(e)}
+                        perPage={pageDataAll.perPage}
+                    />
                 </Grid>
-
-
-
             </AccountLayout >
         </>
     )
