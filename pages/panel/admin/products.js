@@ -12,12 +12,14 @@ import CreateOption from "Components/Common/Creatives/CreateOption";
 import axios from "axios";
 import ServerURL from "Components/Common/Layout/config";
 import moment from "moment-jalaali";
+import { ToastContainer, toast } from "react-toastify";
 const Products = () => {
     const [itemsForDel, setItemsForDel] = useState([]);
     const [page, setPage] = useState(1);
     const [dataBody, setDataBody] = useState([]);
     const [pageDataAll, setPageDataAll] = useState({});
     const [perPage, setPerPage] = useState(15);
+    const [count, setCount] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -80,11 +82,34 @@ const Products = () => {
         };
 
         fetchData();
-    }, [page, perPage]);
-
+    }, [page, perPage, count]);
     const [selected, setSelected] = useState([]);
+
+    const handleDelete = async () => {
+        try {
+            const config = {
+                headers: {
+                    Authorization: `${ServerURL.Bear}`
+                }
+            };
+
+            const deleteData = {
+                ids: selected
+            };
+
+            const response = await axios.post(`${ServerURL.url}/admin/product/delete`, deleteData, config);
+            if (response.data.status === 'success') {
+                toast.success("با موفقیت حذف شد.")
+                setCount(count + 1)
+            } else {
+                toast.error("لطفا دوباره امتحان کنید")
+            }
+        } catch (error) {
+            console.error("Error sending delete request:", error);
+        }
+    };
     const dataHead = ["کد محصول", "ایجاد کننده", "نام محصول", "نوع", "تاریخ ایجاد", "اقدامات"]
-    const [selectedItemId, setSelectedItemId] = useState(null);
+    // const [selectedItemId, setSelectedItemId] = useState(null);
 
     return (
         <>
@@ -129,23 +154,35 @@ const Products = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    limit={5}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
 
 
                 <Grid sx={{ mt: "20px" }}>
                     <Grid sx={{ display: 'flex', justifyContent: 'right' }}>
-                        {/* {
-                            itemsForDel.length > 0 && */}
-                        <Button variant="contained" disabled={itemsForDel.length > 0 ? false : true} disableElevation sx={{
-                            fontSize: "12px",
-                            textAlign: "right",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRadius: '8px',
-                            backgroundColor: '#D24093',
-                        }}>حذف</Button>
-                        {/* } */}
+                        {
+                            selected.length > 0 &&
+                            <Button onClick={handleDelete} variant="contained" disabled={selected.length > 0 ? false : true} disableElevation sx={{
+                                fontSize: "12px",
+                                textAlign: "right",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                borderRadius: '8px',
+                                backgroundColor: '#D24093',
+                            }}>حذف</Button>
+                        }
                     </Grid>
 
                     {/* <CustomTable

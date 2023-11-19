@@ -57,7 +57,7 @@ const CategoryEdit = () => {
                 ids: selected
             };
 
-            await axios.post("https://xoxxel.dicato.net/admin/cat/delete", deleteData, config);
+            await axios.post(`${ServerURL.url}/admin/cat/delete`, deleteData, config);
             setUpdateData(true);
         } catch (error) {
             console.error("Error sending delete request:", error);
@@ -77,7 +77,7 @@ const CategoryEdit = () => {
                         />
                         {
                             selected.length !== 0 && (
-                                <Button onClick={handleDelete} disableElevation sx={{ my: '10px', px: '10px',backgroundColor: '#D80027', color: '#fff' ,'&:hover': { color: '#000'}}}>حذف کردن</Button>
+                                <Button onClick={handleDelete} disableElevation sx={{ my: '10px', px: '10px', backgroundColor: '#D80027', color: '#fff', '&:hover': { color: '#000' } }}>حذف کردن</Button>
                             )
                         }
                     </>
