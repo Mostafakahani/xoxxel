@@ -15,6 +15,7 @@ import axios from "axios";
 import ServerURL from "../Layout/config";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import StandardImageList from "../Images";
 
 const CreateRegion = () => {
     const [open, setOpen] = useState(false);
@@ -34,54 +35,31 @@ const CreateRegion = () => {
                 Authorization: `${ServerURL.Bear}`
             }
         };
-        if (selectedFileItem && selectedFileItem.file) {
+        if (selectedFileItem) {
             try {
-                const formData = new FormData();
-                Object.keys(selectedFileItem?.fileResDetails?.fields || {}).map((x) => {
-                    formData.append(x, selectedFileItem?.fileResDetails?.fields[x]);
-                });
-                formData.append("file", selectedFileItem.file);
 
-                const uploadResponse = await axios.post(
-                    `${selectedFileItem?.fileResDetails?.url ? selectedFileItem?.fileResDetails?.url : 'https://xoxxel.storage.iran.liara.space/'}`,
-                    formData,
-                    {
-                        headers: { "Content-Type": "multipart/form-data" },
-                    }
-                );
+                const createData = {
+                    name: region,
+                    id_storage: selectedFileItem
+                    // id_storage: selectedFileItem?.fileResDetails?.dataStorage?.id
+                };
 
-                if (uploadResponse.status === 204) {
-                    const verifyData = {
-                        id: selectedFileItem?.fileResDetails?.dataStorage?.id
-                    };
-                    const verifyResponse = await axios.post(`${ServerURL.url}/admin/storage/verify-upload`, verifyData, config);
+                const createResponse = await axios.post(`${ServerURL.url}/admin/country/create`, createData, config);
 
-                    if (verifyResponse.status === 201) {
-                        const createData = {
-                            name: region,
-                            id_storage: selectedFileItem?.fileResDetails?.dataStorage?.id
-                        };
+                if (createResponse.status === 201) {
+                    toast.success("با موفقیت ساخته شد.")
+                    handleClosePanel();
+                } else if (createResponse.status === 400 && createResponse.data.message === 'The country has already been created') {
+                    setRequestError("این کشور از قبل وجود دارد");
+                    setSelectedFileItem({});
 
-                        const createResponse = await axios.post(`${ServerURL.url}/admin/country/create`, createData, config);
-
-                        if (createResponse.status === 201) {
-                            toast.success("با موفقیت ساخته شد.")
-                            handleClosePanel();
-                        } else if (createResponse.status === 400 && createResponse.data.message === 'The country has already been created') {
-                            setRequestError("این کشور از قبل وجود دارد");
-                            setSelectedFileItem({});
-
-                        } else {
-                            setRequestError("خطا در ایجاد کشور");
-                            setSelectedFileItem({});
-                        }
-
-                    } else {
-                        setRequestError("خطا در حذف فایل قبلی");
-                    }
                 } else {
-                    setRequestError("خطا در آپلود فایل");
+                    setRequestError("خطا در ایجاد کشور");
+                    setSelectedFileItem({});
                 }
+
+
+
             } catch (error) {
                 console.error("خطا: ", error);
                 if (error.response.data.message === 'The country has already been created') {
@@ -170,7 +148,7 @@ const CreateRegion = () => {
                             />
                         </Grid>
                         <Grid xs={12} md={12}>
-                            <UploadFile
+                            {/* <UploadFile
                                 id={"file1"}
                                 accept="image/png, image/jpg, image/jpeg"
                                 label={"ایکون ( با اندازه برابر مثلا 200*200)"}
@@ -178,12 +156,19 @@ const CreateRegion = () => {
                                     setSelectedFileItem(e);
                                 }}
                                 selectedFileItem={selectedFileItem}
+                            /> */}
+                            <StandardImageList
+                                label={"تصویر اصلی (297*147)"}
+                                onChange={(e) => {
+                                    setSelectedFileItem(e);
+                                    console.log(e)
+                                }}
                             />
                         </Grid>
                     </Grid>
 
                     <Grid container>
-                        {region !== "" && Object.keys(selectedFileItem).length !== 0 && (
+                        {region !== "" && selectedFileItem.length !== 0 && (
                             <Grid xs={6} sm={3} md={3}>
                                 <Button
                                     variant="contained"
