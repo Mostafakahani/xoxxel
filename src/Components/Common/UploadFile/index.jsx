@@ -4,16 +4,17 @@ import StatusButton from "../StatusButton";
 import styles from "./styles";
 import ServerURL from "../Layout/config";
 import axios from "axios";
+import GetToken from "GetToken";
 
 function UploadFile({
   label = null,
   accept = "image/*",
   id,
   readOnly = false,
-  onChange = () => { },
+  onChange = () => {},
   fileName = null,
   srcImage = null,
-  selectedFileItem
+  selectedFileItem,
 }) {
   const fileInputRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -21,13 +22,13 @@ function UploadFile({
 
   const handleFileUpload = async () => {
     const selectedFile = fileInputRef.current.files[0];
-    setFile(selectedFile)
+    setFile(selectedFile);
     if (selectedFile) {
       setLoading(true);
       try {
         const config = {
           headers: {
-            Authorization: `${ServerURL.Bear}`,
+            Authorization: `${GetToken("user")}`,
           },
         };
         const data = {
@@ -45,7 +46,6 @@ function UploadFile({
         if (response.data) {
           // setResItems(response.data);
 
-
           onChange({
             fileResDetails: response.data,
             file: selectedFile,
@@ -55,7 +55,7 @@ function UploadFile({
         }
       } catch (error) {
         if (error.code === "ERR_NETWORK") {
-          window.alert("ERR_NETWORK")
+          window.alert("ERR_NETWORK");
         }
         console.error("خطایی رخ داده است: ", error);
       } finally {
@@ -88,12 +88,20 @@ function UploadFile({
           {fileName
             ? fileName
             : srcImage
-              ? srcImage.split("/")[srcImage.split("/").length - 1]
-              : "فایل خود را انتخاب کنید"}
+            ? srcImage.split("/")[srcImage.split("/").length - 1]
+            : "فایل خود را انتخاب کنید"}
         </Typography>
 
         <StatusButton
-          text={file ? "مشاهده" : loading ? <CircularProgress size={24} /> : 'مشاهده'} // تغییرات اینجا
+          text={
+            file ? (
+              "مشاهده"
+            ) : loading ? (
+              <CircularProgress size={24} />
+            ) : (
+              "مشاهده"
+            )
+          } // تغییرات اینجا
           isUploaded={Boolean(file)} // ارسال وضعیت آپلود به عنوان isUploaded
           onClick={(e) => {
             e.stopPropagation();
