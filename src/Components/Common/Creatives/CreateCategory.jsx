@@ -28,6 +28,7 @@ const CreateCategory = () => {
   };
 
   const handleSubmit = async () => {
+    console.log(category)
     if (category !== "") {
       setAddingFeature(true);
       try {
@@ -53,6 +54,7 @@ const CreateCategory = () => {
           toast.success("با موفقیت ساخته شد.");
         }
       } catch (error) {
+        console.log(error)
         // console.log(error.response.data.message)
         if (
           error.response.data.message[0] ===
