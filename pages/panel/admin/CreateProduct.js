@@ -17,6 +17,7 @@ import ServerURL from "Components/Common/Layout/config";
 import { useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import GetToken from "GetToken";
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
   // const [productPrice, setProductPrice] = useState("");
