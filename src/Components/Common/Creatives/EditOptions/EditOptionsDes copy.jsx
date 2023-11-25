@@ -37,7 +37,7 @@ const EditOptionsDes = () => {
   useEffect(() => {
     const config = {
       headers: {
-        Authorization: `${GetToken("user")}`, // YourBearerToken را با مقدار مورد نظر جایگزین کنید
+        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`, // YourBearerToken را با مقدار مورد نظر جایگزین کنید
       },
     };
 

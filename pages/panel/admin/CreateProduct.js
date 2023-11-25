@@ -45,7 +45,7 @@ const CreateProduct = () => {
   // }
   useEffect(() => {
     async function fetchData() {
-      const config = { headers: { Authorization: `${GetToken("user")}` } };
+      const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
       const responseCategory = await axios.get(
         `${ServerURL.url}/admin/storage/get-all-cat`,
         config
@@ -63,7 +63,7 @@ const CreateProduct = () => {
     setAddingFeature(true);
     const config = {
       headers: {
-        Authorization: `${GetToken("user")}`,
+        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
       },
     };
     try {
@@ -272,7 +272,7 @@ const CreateProduct = () => {
 
         <Grid
           container
-          // sx={{ borderRadius: '10px', border: '2px dashed #5A5A5A', p: '20px', my: '15px' }}
+        // sx={{ borderRadius: '10px', border: '2px dashed #5A5A5A', p: '20px', my: '15px' }}
         >
           {/* <ProductOption tableId={'tableId'} /> */}
           <CheckboxesTags

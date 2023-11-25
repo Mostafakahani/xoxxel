@@ -31,7 +31,7 @@ const CreateType = ({ tableId }) => {
       try {
         const config = {
           headers: {
-            Authorization: `${GetToken("user")}`,
+            Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
           },
         };
         const data = {

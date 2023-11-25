@@ -17,7 +17,7 @@ const CategoryEdit = () => {
       try {
         const config = {
           headers: {
-            Authorization: `${GetToken("user")}`,
+            Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
           },
         };
         const response = await axios.get(
@@ -50,7 +50,7 @@ const CategoryEdit = () => {
     try {
       const config = {
         headers: {
-          Authorization: `${GetToken("user")}`,
+          Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
         },
       };
 

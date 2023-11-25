@@ -26,7 +26,7 @@ const Products = () => {
     const fetchData = async () => {
       const config = {
         headers: {
-          Authorization: `${GetToken("user")}`,
+          Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
         },
       };
 
@@ -93,7 +93,7 @@ const Products = () => {
     try {
       const config = {
         headers: {
-          Authorization: `${GetToken("user")}`,
+          Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
         },
       };
 

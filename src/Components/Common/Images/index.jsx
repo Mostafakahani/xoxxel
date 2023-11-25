@@ -20,7 +20,7 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import GetToken from "GetToken";
 
-export default function StandardImageList({ onChange = () => {}, label }) {
+export default function StandardImageList({ onChange = () => { }, label }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [gallery, setGallery] = useState(data);
@@ -34,7 +34,7 @@ export default function StandardImageList({ onChange = () => {}, label }) {
   const [item, setItem] = useState(false);
   const [scrollStatus, setScrollStatus] = useState(false);
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(15);
+  const [perPage, setPerPage] = useState(30);
 
   const matchDownMd = useMediaQuery(theme.breakpoints.down("sm"));
   const matchDownLg = useMediaQuery(theme.breakpoints.down("md"));
@@ -50,7 +50,7 @@ export default function StandardImageList({ onChange = () => {}, label }) {
   const handleSubmit = async () => {
     setAddingFeature(true);
     setRequestError("");
-    const config = { headers: { Authorization: `${GetToken("user")}` } };
+    const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
     if (selectedFileItem && selectedFileItem.file) {
       try {
         const formData = new FormData();
@@ -60,10 +60,9 @@ export default function StandardImageList({ onChange = () => {}, label }) {
         formData.append("file", selectedFileItem.file);
 
         const uploadResponse = await axios.post(
-          `${
-            selectedFileItem?.fileResDetails?.url
-              ? selectedFileItem?.fileResDetails?.url
-              : "https://xoxxel.storage.iran.liara.space/"
+          `${selectedFileItem?.fileResDetails?.url
+            ? selectedFileItem?.fileResDetails?.url
+            : "https://xoxxel.storage.iran.liara.space/"
           }`,
           formData,
           {
@@ -98,36 +97,43 @@ export default function StandardImageList({ onChange = () => {}, label }) {
     }
   };
 
-  const scrollContainerRef = useRef(null);
-
-  const handleScroll = () => {
-    const scrollContainer = scrollContainerRef.current;
-    if (
-      scrollContainer.scrollTop + scrollContainer.clientHeight >=
-      scrollContainer.scrollHeight
-    ) {
-      // console.log('اسکرول به ته رسیده است!');
-      setScrollStatus(true);
-      setPage(page + 1);
-      setCount(count + 1);
+  const scrollContainerRef = useRef();
+  const handleScroll = async () => {
+    const { scrollTop, clientHeight, scrollHeight } = scrollContainerRef.current;
+    if (scrollTop + clientHeight >= scrollHeight) {
+      setPage((prevPage) => prevPage + 1); 
     }
   };
 
   useEffect(() => {
+    let isCancelled = false;
     async function fetchData() {
-      const config = { headers: { Authorization: `${GetToken("user")}` } };
-      const response = await axios.get(
-        `${ServerURL.url}/admin/storage/get-all-files?page=${page}&perPage=${perPage}`,
-        config
-      );
-      const filteredItems = response.data.data.filter(
-        (item) => !data.some((existingItem) => existingItem.id === item.id)
-      );
-      setData((prevData) => [...prevData, ...filteredItems]);
-      setScrollStatus(false);
+      try {
+        const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+        const response = await axios.get(`${ServerURL.url}/admin/storage/get-all-files?page=${page}&perPage=${perPage}`, config);
+
+        if (!isCancelled) {
+          setData((prevData) => {
+            const newData = response.data.data.filter(newItem => !prevData.some(item => item.id === newItem.id));
+            return [...prevData, ...newData];
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        if (!isCancelled) {
+          setRequestError("Error fetching data. Please try again.");
+        }
+      }
     }
+
     fetchData();
-  }, [scrollStatus, page, perPage, count]);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [page, perPage]); 
+
+
 
   const handleDelete = (title) => {
     const updatedGallery = gallery.filter((item) => item.title !== title);
@@ -159,7 +165,8 @@ export default function StandardImageList({ onChange = () => {}, label }) {
           startIcon={<AddPhotoAlternateOutlinedIcon />}
           onClick={() => {
             setOpen(true);
-            setCount(count + 1);
+            // setCount(count + 1);
+            // handleOpen()
           }}
         >
           {item ? "فایل انتخاب شده" : "انتخاب فایل"}

@@ -33,7 +33,7 @@ const CreateRegion = () => {
     setAddingFeature(true);
     const config = {
       headers: {
-        Authorization: `${GetToken("user")}`,
+        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
       },
     };
     if (selectedFileItem) {

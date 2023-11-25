@@ -69,7 +69,7 @@ const CreateOption = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const config = { headers: { Authorization: `${GetToken("user")}` } };
+      const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
       const responseCountry = await axios.get(
         `${ServerURL.url}/admin/country/get-all-country`,
         config
@@ -80,7 +80,7 @@ const CreateOption = () => {
   }, [countOne]);
   useEffect(() => {
     async function fetchData() {
-      const config = { headers: { Authorization: `${GetToken("user")}` } };
+      const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
       const responseCategory = await axios.get(
         `${ServerURL.url}/admin/storage/get-all-cat`,
         config
@@ -91,7 +91,7 @@ const CreateOption = () => {
   }, [countTwo]);
   useEffect(() => {
     async function fetchData() {
-      const config = { headers: { Authorization: `${GetToken("user")}` } };
+      const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
       const responseType = await axios.get(
         `${ServerURL.url}/admin/storage/get-all-type-product`,
         config
@@ -211,7 +211,7 @@ const CreateOption = () => {
       setAddingFeature(true);
       const config = {
         headers: {
-          Authorization: `${GetToken("user")}`,
+          Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
         },
       };
 
