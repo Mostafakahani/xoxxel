@@ -85,7 +85,7 @@ const CreateProduct = () => {
       );
       if (uploadResponse.status === 201) {
         toast.success("با موفقیت ساخته شد.");
-        window.location.href = "panel/admin/products";
+        window.location.href = "../admin/products";
       } else {
         toast.error("لطفا دوباره امتحان کنید");
       }
@@ -298,7 +298,11 @@ const CreateProduct = () => {
                 selectedFileItem2.length === 0 ||
                 selectedFileItem3.length === 0 ||
                 productName === "" ||
-                selectedCategory === ""
+                selectedCategory === "" ||
+                checkBoxList.length === 0 ||
+                textArea === '' ||
+                labelInput === '' ||
+                placeholder === ''
               }
               onClick={handleSubmit}
             >
@@ -316,15 +320,8 @@ const CreateProduct = () => {
                 },
               }}
               onClick={() => {
-                console.log(
-                  selectedFileItem,
-                  " 2: ",
-                  selectedFileItem2,
-                  " 3: ",
-                  selectedFileItem3,
-                  " list: ",
-                  checkBoxList
-                );
+                window.location.href = "../admin/products";
+
               }}
             >
               انصراف
