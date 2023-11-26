@@ -1,9 +1,9 @@
 import { Accordion, AccordionDetails, AccordionSummary, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
-const StepOne = (props) => {
-    const [question, setQuestion] = useState('')
-    const [answer, setAnswer] = useState('')
+const StepOne = (props, { getTitel, des, handleChange }) => {
+    const [question, setQuestion] = useState(getTitel)
+    const [answer, setAnswer] = useState(des)
 
 
     const handleSubmit = () => {
@@ -25,12 +25,12 @@ const StepOne = (props) => {
         // }
     };
 
-    const handleChange = (panel) => (event, isExpanded) => {
+    const handleChangeItem = (panel) => (event, isExpanded) => {
         props.onChange(panel, isExpanded);
     };
     return (
         <>
-            <Accordion expanded={props.expanded === `panel${props.id}`} onChange={handleChange(`panel${props.id}`)} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
+            <Accordion expanded={props.expanded === `panel${props.id}`} onChange={handleChangeItem(`panel${props.id}`)} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
                 <AccordionSummary aria-controls={`panel${props.id}d-content`} id={`panel${props.id}d-header`}>
                     <Typography sx={{ color: '#2C7EFA', my: '10px', fontSize: '16px' }}>{props.textStep} </Typography>
                 </AccordionSummary>
@@ -43,7 +43,7 @@ const StepOne = (props) => {
                                         // error={!priceError ? false : true}
                                         // helperText={!priceError ? '' : ErrorList[1]}
                                         onChange={(e) => setQuestion(e.target.value)}
-                                        value={question}
+                                        value={question || getTitel}
                                         label="سوال"
                                         variant="outlined"
                                         sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
@@ -56,7 +56,7 @@ const StepOne = (props) => {
                                         // error={!priceError ? false : true}
                                         // helperText={!priceError ? '' : ErrorList[1]}
                                         onChange={(e) => setAnswer(e.target.value)}
-                                        value={answer}
+                                        value={answer || des}
                                         label="جواب"
                                         variant="outlined"
                                         sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}

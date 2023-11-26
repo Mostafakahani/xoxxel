@@ -11,30 +11,32 @@ const ChangeFaqs = () => {
         { textStep: 'سوال پنجم', },
         { textStep: 'سوال ششم', },
     ]
-    const [expanded, setExpanded] = useState(null); 
+    const [expanded, setExpanded] = useState(null);
 
     const handleAccordionChange = (panel, isExpanded) => {
-        setExpanded(isExpanded ? panel : null); 
+        setExpanded(isExpanded ? panel : null);
     };
 
     return (
         <>
-                <Grid sx={{ backgroundColor: '#fff', p: '25px' }}>
-                    <Grid>
-                        {faqsData.map((x, index) => (
-                            <StepOne
-                                key={index}
-                                id={index}
-                                textStep={x.textStep}
-                                expanded={expanded}
-                                onChange={handleAccordionChange} 
-                            />
-                        ))}
-                    </Grid>
-                    <Grid sx={{ my: '20px' }}>
-                        <Button variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
-                    </Grid>
+            <Grid sx={{ backgroundColor: '#fff', p: '25px' }}>
+                <Grid>
+                    {faqsData.map((x, index) => (
+                        <StepOne
+                            key={index}
+                            id={index}
+                            textStep={x.textStep}
+                            expanded={expanded}
+                            onChange={handleAccordionChange}
+                            getTitel={'sssa'}
+                            des={'sssa'}
+                        />
+                    ))}
                 </Grid>
+                <Grid sx={{ my: '20px' }}>
+                    <Button variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
+                </Grid>
+            </Grid>
 
         </>
     )

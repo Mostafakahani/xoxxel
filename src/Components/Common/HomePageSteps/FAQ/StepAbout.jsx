@@ -4,10 +4,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const StepAbout = ({ getTitel, des, sendQuestion = () => { }, sendText = () => { } }) => {
-    const [question, setQuestion] = useState('')
-    const [text, setText] = useState('')
-
+const StepAbout = ({ getTitel, des, sendQuestion = () => { }, sendText = () => { }, handleChange }) => {
+    const [question, setQuestion] = useState(getTitel);
+    const [text, setText] = useState(des);
 
 
 
@@ -23,7 +22,7 @@ const StepAbout = ({ getTitel, des, sendQuestion = () => { }, sendText = () => {
         //     };
 
         //     const newData = {
-        //         title: question,
+        //         title: question, 
         //         description: text,
         //     };
 
@@ -52,11 +51,13 @@ const StepAbout = ({ getTitel, des, sendQuestion = () => { }, sendText = () => {
                         <Grid container>
                             <Grid item xs={12} sm={7} md={6}>
                                 <TextField
-                                    // error={!priceError ? false : true}
-                                    // helperText={!priceError ? '' : ErrorList[1]}
-                                    onChange={(e) => setQuestion(e.target.value)}
-                                    value={question}
-                                    label="عنوان  "
+                                    onChange={(e) => {
+                                        const newQuestion = e.target.value;
+                                        setQuestion(newQuestion);
+                                        handleChange(newQuestion, text);
+                                    }}
+                                    value={question || getTitel}
+                                    label="عنوان"
                                     variant="outlined"
                                     sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
                                 />
@@ -65,11 +66,13 @@ const StepAbout = ({ getTitel, des, sendQuestion = () => { }, sendText = () => {
                         <Grid container>
                             <Grid item xs={12} sm={7} md={12}>
                                 <TextField
-                                    // error={!priceError ? false : true}
-                                    // helperText={!priceError ? '' : ErrorList[1]}
-                                    onChange={(e) => setText(e.target.value)}
-                                    value={text}
-                                    label="متن  "
+                                    onChange={(e) => {
+                                        const newText = e.target.value;
+                                        setText(newText);
+                                        handleChange(question, newText);
+                                    }}
+                                    value={text || des}
+                                    label="متن"
                                     variant="outlined"
                                     multiline
                                     flexGrow={1}
@@ -78,7 +81,6 @@ const StepAbout = ({ getTitel, des, sendQuestion = () => { }, sendText = () => {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Button onClick={() => handleSubmit()}>Log</Button>
                 </Grid>
             </Grid>
         </>

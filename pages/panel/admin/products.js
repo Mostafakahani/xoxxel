@@ -163,32 +163,7 @@ const Products = () => {
               <CreateCategory />
               <CreateType />
               <EditOptionsDes />
-              <Link
-                href={"/panel/admin/CreateProduct"}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  color: "#FDFDFD",
-                }}
-              >
-                <Button
-                  sx={{
-                    backgroundColor: "#244CDF",
-                    py: "5px",
-                    px: "12px",
-                    borderRadius: "5px",
-                    color: "#FDFDFD",
-                    fontSize: "12px",
-                    "&:hover": {
-                      color: "#FDFDFD",
-                      backgroundColor: "#4166ef",
-                    },
-                  }}
-                >
-                  ثبت محصول جدید
-                  <AddProductIcon />
-                </Button>
-              </Link>
+
             </Grid>
           </Grid>
         </Grid>
@@ -206,27 +181,56 @@ const Products = () => {
           theme="light"
         />
 
-        <Grid sx={{ mt: "20px" }}>
-          <Grid sx={{ display: "flex", justifyContent: "right" }}>
-            {selected.length > 0 && (
+        <Grid container sx={{ mt: "20px", display: 'flex', justifyContent: 'flex-end', my: 1 }} spacing={1}>
+          <Grid item>
+            <Link
+              href={"/panel/admin/CreateProduct"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                color: "#FDFDFD",
+              }}
+            >
               <Button
-                onClick={handleDelete}
-                variant="contained"
-                disabled={selected.length > 0 ? false : true}
-                disableElevation
                 sx={{
+                  backgroundColor: "#244CDF",
+                  py: "5px",
+                  px: "12px",
+                  borderRadius: "5px",
+                  color: "#FDFDFD",
                   fontSize: "12px",
-                  textAlign: "right",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: "8px",
-                  backgroundColor: "#D24093",
+                  "&:hover": {
+                    color: "#FDFDFD",
+                    backgroundColor: "#4166ef",
+                  },
                 }}
               >
-                حذف
+                ثبت محصول جدید
+                <AddProductIcon />
               </Button>
-            )}
+            </Link>
+          </Grid>
+          <Grid item sx={{ display: "flex", justifyContent: "right" }}>
+            {/* {selected.length > 0 && ( */}
+            <Button
+              onClick={handleDelete}
+              variant="contained"
+              color="error"
+              disabled={selected.length > 0 ? false : true}
+              disableElevation
+              sx={{
+                fontSize: "12px",
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "5px",
+                // backgroundColor: "#D24093",
+              }}
+            >
+              حذف
+            </Button>
+            {/* )} */}
           </Grid>
 
           {/* <CustomTable
@@ -242,18 +246,19 @@ const Products = () => {
                         page={0}
                         show={(x) => console.log(x)}
                     /> */}
-          <NewT
-            selected={selected}
-            setSelected={setSelected}
-            dataHead={dataHead}
-            dataBody={dataBody}
-            // selectedItemId={selectedItemId}
-            pageData={pageDataAll}
-            setPage={(e) => setPage(e)}
-            setPerPage={(e) => setPerPage(e)}
-            perPage={pageDataAll.perPage}
-          />
+
         </Grid>
+        <NewT
+          selected={selected}
+          setSelected={setSelected}
+          dataHead={dataHead}
+          dataBody={dataBody}
+          // selectedItemId={selectedItemId}
+          pageData={pageDataAll}
+          setPage={(e) => setPage(e)}
+          setPerPage={(e) => setPerPage(e)}
+          perPage={pageDataAll.perPage}
+        />
       </AccountLayout>
     </>
   );

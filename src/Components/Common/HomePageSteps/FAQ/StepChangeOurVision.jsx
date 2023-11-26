@@ -1,26 +1,25 @@
-import { Accordion, AccordionDetails, AccordionSummary, Grid, TextField, Typography } from "@mui/material";
+import { Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
-const StepChangeOurVision = () => {
-    const [titel, setTitel] = useState('')
-    const [text, setText] = useState('')
-    const handleSubmit = () => {
-
-    };
+const StepChangeOurVision = ({ getTitel, des, handleChange }) => {
+    const [titel, setTitel] = useState(getTitel);
+    const [text, setText] = useState(des);
 
     return (
         <>
             <Grid sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none', p: '20px' }}>
                 <Typography sx={{ color: '#2C7EFA', my: '10px', fontSize: '16px' }}> Our vision </Typography>
-                <Grid >
+                <Grid>
                     <Grid container>
                         <Grid container>
                             <Grid item xs={12} sm={7} md={6}>
                                 <TextField
-                                    // error={!priceError ? false : true}
-                                    // helperText={!priceError ? '' : ErrorList[1]}
-                                    onChange={(e) => setTitel(e.target.value)}
-                                    value={titel}
+                                    onChange={(e) => {
+                                        const newTitel = e.target.value;
+                                        setTitel(newTitel);
+                                        handleChange(newTitel, text);
+                                    }}
+                                    value={titel || getTitel}
                                     label="عنوان  "
                                     variant="outlined"
                                     sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
@@ -30,10 +29,12 @@ const StepChangeOurVision = () => {
                         <Grid container>
                             <Grid item xs={12} sm={7} md={12}>
                                 <TextField
-                                    // error={!priceError ? false : true}
-                                    // helperText={!priceError ? '' : ErrorList[1]}
-                                    onChange={(e) => setText(e.target.value)}
-                                    value={text}
+                                    onChange={(e) => {
+                                        const newText = e.target.value;
+                                        setText(newText);
+                                        handleChange(titel, newText);
+                                    }}
+                                    value={text || des}
                                     label="متن  "
                                     variant="outlined"
                                     multiline
@@ -46,6 +47,7 @@ const StepChangeOurVision = () => {
                 </Grid>
             </Grid>
         </>
-    )
-}
+    );
+};
+
 export default StepChangeOurVision;
