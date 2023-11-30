@@ -6,7 +6,7 @@ const Tickets = () => {
     return (
         <>
             <AccountLayout>
-                <Grid sx={{ backgroundColor: '#fff' , p: 3}}>
+                <Grid sx={{ backgroundColor: '#fff', p: 3, borderRadius: "10px" }}>
                     <Chat />
                 </Grid>
             </AccountLayout>

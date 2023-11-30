@@ -1,4 +1,4 @@
-import { Button, Grid, IconButton, SvgIcon, TextField, useMediaQuery } from "@mui/material";
+import { Box, Button, Grid, IconButton, SvgIcon, TextField, useMediaQuery } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTheme } from "@emotion/react";
 
@@ -8,23 +8,31 @@ const ChatInput = () => {
 
     return (
         <>
-            <Grid container py={1} px={3} sx={{ display: 'flex', flexDirection: { xs: "row", sm: "row" }, justifyContent: "space-between", backgroundColor: '#EAF2FF', borderRadius: '8px' }}>
+            <Grid container sx={{ display: 'flex', flexDirection: { xs: "row", sm: "row" }, justifyContent: "space-between", backgroundColor: '#EAF2FF', borderRadius: '8px', px: { xs: 2, sm: 3 }, px: { xs: 2, sm: 2 } }}>
                 <Grid container item xs={6} sm={6} alignItems={'center'} spacing={2}>
                     <Grid item>
-                        <Button variant="contained" color="info" startIcon={
-                            <SvgIcon>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22" fill="none">
-                                    <path d="M16.3062 14.2114L17.8081 9.7057C19.1201 5.76961 19.7761 3.80157 18.7373 2.76271C17.6984 1.72385 15.7304 2.37986 11.7943 3.69189L7.28863 5.19378C4.11183 6.25272 2.52343 6.78218 2.07205 7.55861C1.64265 8.29723 1.64265 9.20948 2.07205 9.9481C2.52343 10.7245 4.11183 11.254 7.28863 12.3129C7.68234 12.4442 8.12526 12.3505 8.42007 12.0584L13.2375 7.28558C13.5085 7.01707 13.9459 7.01911 14.2144 7.29013C14.4829 7.56115 14.4809 7.99853 14.2099 8.26705L9.47023 12.9628C9.14528 13.2847 9.04242 13.7774 9.18707 14.2114C10.246 17.3882 10.7755 18.9766 11.5519 19.4279C12.2905 19.8574 13.2028 19.8574 13.9414 19.4279C14.7178 18.9766 15.2473 17.3882 16.3062 14.2114Z" fill="white" />
-                                </svg>
-                            </SvgIcon>
-                        }>
-                            Send
-                        </Button>
+                        {!isMobile && (
+                            <Button variant="contained" color="info" startIcon={
+                                <SvgIcon>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22" fill="none">
+                                        <path d="M16.3062 14.2114L17.8081 9.7057C19.1201 5.76961 19.7761 3.80157 18.7373 2.76271C17.6984 1.72385 15.7304 2.37986 11.7943 3.69189L7.28863 5.19378C4.11183 6.25272 2.52343 6.78218 2.07205 7.55861C1.64265 8.29723 1.64265 9.20948 2.07205 9.9481C2.52343 10.7245 4.11183 11.254 7.28863 12.3129C7.68234 12.4442 8.12526 12.3505 8.42007 12.0584L13.2375 7.28558C13.5085 7.01707 13.9459 7.01911 14.2144 7.29013C14.4829 7.56115 14.4809 7.99853 14.2099 8.26705L9.47023 12.9628C9.14528 13.2847 9.04242 13.7774 9.18707 14.2114C10.246 17.3882 10.7755 18.9766 11.5519 19.4279C12.2905 19.8574 13.2028 19.8574 13.9414 19.4279C14.7178 18.9766 15.2473 17.3882 16.3062 14.2114Z" fill="white" />
+                                    </svg>
+                                </SvgIcon>
+                            }>
+                                Send
+                            </Button>
+                        )}
 
                         {isMobile && (
-                            <IconButton variant="contained" color="error" >
-                                <DeleteIcon />
-                            </IconButton>
+                            <Box sx={{ backgroundColor: '#5094FB', borderRadius: '5px' }}>
+                                <IconButton variant="contained" size="small">
+                                    <SvgIcon>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22" fill="none">
+                                            <path d="M16.3062 14.2114L17.8081 9.7057C19.1201 5.76961 19.7761 3.80157 18.7373 2.76271C17.6984 1.72385 15.7304 2.37986 11.7943 3.69189L7.28863 5.19378C4.11183 6.25272 2.52343 6.78218 2.07205 7.55861C1.64265 8.29723 1.64265 9.20948 2.07205 9.9481C2.52343 10.7245 4.11183 11.254 7.28863 12.3129C7.68234 12.4442 8.12526 12.3505 8.42007 12.0584L13.2375 7.28558C13.5085 7.01707 13.9459 7.01911 14.2144 7.29013C14.4829 7.56115 14.4809 7.99853 14.2099 8.26705L9.47023 12.9628C9.14528 13.2847 9.04242 13.7774 9.18707 14.2114C10.246 17.3882 10.7755 18.9766 11.5519 19.4279C12.2905 19.8574 13.2028 19.8574 13.9414 19.4279C14.7178 18.9766 15.2473 17.3882 16.3062 14.2114Z" fill="white" />
+                                        </svg>
+                                    </SvgIcon>
+                                </IconButton>
+                            </Box>
                         )}
                     </Grid>
                     <Grid item>
