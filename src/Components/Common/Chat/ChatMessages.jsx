@@ -1,52 +1,38 @@
-import { Avatar, Box, Typography } from '@mui/material';
+// ChatMessages.js
+import React from 'react';
+import { Box, Typography } from '@mui/material';
+import { useChat } from './ChatContext';
 
-const ChatMessages = () => {
+const ChatMessages = ({ messages }) => {
+    //   const { messages } = useChat();
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-
-            <Box sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                p: 1,
-            }}>
-                <Typography sx={{
-                    bgcolor: '#5094FB',
-                    color: '#FFFFFF',
-                    px: 2,
-                    py: 1,
-                    fontWeight: 100,
-                    borderRadius: '13.516px 13.516px 0px 13.516px',
-                    textAlign: 'right',
-                    direction: 'ltr'
-
-                }}>
-                    Sample message left
-                </Typography>
-                <Avatar sx={{ ml: 2 }} alt="Profile" src="/images/avatar.png" />
-            </Box>
-
-            <Box sx={{
-                display: 'flex',
-                justifyContent: 'flex-start',
-                p: 1
-            }}>
-                <Avatar sx={{ mr: 2 }} alt="Profile" src="/images/avatar.png" />
-                <Typography sx={{
-                    bgcolor: '#DEDEE0',
-                    color: '#1D1E2D',
-                    px: 2,
-                    py: 1,
-                    fontWeight: 100,
-                    borderRadius: ' 13.516px 13.516px 13.516px 0px',
-                    textAlign: 'right',
-                    direction: 'ltr'
-
-                }}>
-                    Sample message right
-                </Typography>
-            </Box>
-
+            {messages.map((message) => (
+                <Box
+                    key={message.id}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: message.from === 'user1' ? 'flex-end' : 'flex-start',
+                        p: 1,
+                    }}
+                >
+                    <Typography
+                        sx={{
+                            bgcolor: message.from === 'user1' ? '#5094FB' : '#DEDEE0',
+                            color: message.from === 'user1' ? '#FFFFFF' : '#1D1E2D',
+                            px: 2,
+                            py: 1,
+                            fontWeight: 100,
+                            borderRadius: message.from === 'user1' ? '13.516px 13.516px 0px 13.516px' : '13.516px 13.516px 13.516px 0px',
+                            textAlign: 'right',
+                            direction: 'ltr',
+                        }}
+                    >
+                        {message.text}
+                    </Typography>
+                </Box>
+            ))}
         </Box>
     );
 };

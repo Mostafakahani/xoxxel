@@ -3,9 +3,11 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
 import { useTheme } from "@emotion/react";
+import { useChat } from "./ChatContext";
 
 const ChatHeader = () => {
     const theme = useTheme();
+
     const isTabletUp = useMediaQuery(theme.breakpoints.up('sm'));
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -68,7 +70,7 @@ const ChatHeader = () => {
                 </Grid>
                 <Grid container item xs={6} sm={6} sx={{ justifyContent: 'flex-end' }}>
                     <Grid item sx={{ display: 'flex', alignItems: 'center', }}>
-                        <Typography mr={1} sx={{ fontWeight: 600, fontSize: {xs: "11px", sm: '15px'} }}>
+                        <Typography mr={1} sx={{ fontWeight: 600, fontSize: { xs: "11px", sm: '15px' } }}>
                             Behroz Sedighi
                         </Typography>
                         <StyledBadge
