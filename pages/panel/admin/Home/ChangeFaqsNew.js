@@ -22,8 +22,9 @@ const CreateOption = () => {
     const [open, setOpen] = useState(false);
     const [rows, setRows] = useState([]);
     const [name, setName] = useState("");
+    const [nameEdit, setNameEdit] = useState("");
+    const [priceEdit, setPriceEdit] = useState("");
     const [price, setPrice] = useState("");
-    const [isPopular, setIsPopular] = useState(false);
     const [addingFeature, setAddingFeature] = useState(false);
     const [editingRowId, setEditingRowId] = useState(null);
 
@@ -37,37 +38,34 @@ const CreateOption = () => {
         const isDuplicate = rows.some((row) => row.name === name && row.price === price);
         if (!isDuplicate) {
             // با افزودن یک سوال جدید، وضعیت محبوبیت به حالت اولیه تنظیم می‌شود
-            setIsPopular(false);
-            setRows([...rows, { id: Date.now(), name, price, isPopular }]);
+            setRows([...rows, { id: Date.now(), name, price }]);
             setName("");
             setPrice("");
-            setIsPopular(false);
 
         } else {
             console.log("این نام و قیمت قبلاً وارد شده است.");
         }
     };
 
-    const handleDeleteRow = (id) => {
-        setRows(rows.filter((row) => row.id !== id));
-    };
+    // const handleDeleteRow = (id) => {
+    //     setRows(rows.filter((row) => row.id !== id));
+    // };
 
-    const handleTogglePopular = (id) => {
-        setRows(
-            rows.map((row) =>
-                row.id === id ? { ...row, isPopular: !row.isPopular } : row
-            )
-        );
-    };
+    // const handleTogglePopular = (id) => {
+    //     setRows(
+    //         rows.map((row) =>
+    //             row.id === id ? { ...row, isPopular: !row.isPopular } : row
+    //         )
+    //     );
+    // };
 
 
     const handleEditRow = (id) => {
         setEditingRowId(id);
         const editingRow = rows.find((row) => row.id === id);
         if (editingRow) {
-            setName(editingRow.name);
-            setPrice(editingRow.price);
-            setIsPopular(editingRow.isPopular);
+            setNameEdit(editingRow.name);
+            setPriceEdit(editingRow.price);
         }
     };
 
@@ -75,7 +73,6 @@ const CreateOption = () => {
         setEditingRowId(null);
         setName("");
         setPrice("");
-        setIsPopular(false);
     };
 
     const handleSaveEdit = (id) => {
@@ -84,22 +81,21 @@ const CreateOption = () => {
                 row.id === id
                     ? {
                         ...row,
-                        name,
-                        price,
-                        isPopular,
+                        name: nameEdit,
+                        price: priceEdit,
                     }
                     : row
             )
         );
 
         setEditingRowId(null);
-        setName("");
-        setPrice("");
-        setIsPopular(false);
+        setNameEdit("");
+        setPriceEdit("");
     };
+
     const handleSubmit = async () => {
         // Validation
-        const isValidData = rows.every((data) => data.name && data.price !== '' && data.isPopular !== '');
+        const isValidData = rows.every((data) => data.name && data.price !== '');
         if (!isValidData) {
             console.log('Error: همه فیلدها باید پر شوند.');
             return;
@@ -115,6 +111,7 @@ const CreateOption = () => {
 
             // ارسال rows به API
             // await axios.post('API_ENDPOINT', { data: rows }, config);
+            console.log(rows)
 
             setOpen(false);
             setName("");
@@ -198,85 +195,89 @@ const CreateOption = () => {
                             <div>
                                 {rows.map((row) => (
                                     <Grid container key={row.id} sx={{ my: '10px' }}>
-                                        {editingRowId === row.id ? (
-                                            <Grid container alignItems="center" marginTop={2}>
-                                                <Grid container xs={12} md={11}>
-                                                    <Grid xs={12} md={5}>
-                                                        <TextField
-                                                            value={name}
-                                                            label="سوال"
-                                                            fullWidth
-                                                            onChange={(e) => setName(e.target.value)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid xs={12} md={7}>
-                                                        <TextField
-                                                            value={price}
-                                                            label="جواب"
-                                                            fullWidth
-                                                            onChange={(e) => setPrice(e.target.value)}
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container xs={12} md={1} alignItems={'center'} >
-                                                    <Button
-                                                        onClick={() => handleSaveEdit(row.id)}
-                                                        color="success"
+                                        {/* {editingRowId === row.id ? ( */}
+                                        <Grid container alignItems="center" marginTop={2}>
+                                            <Grid container xs={12} md={11}>
+                                                <Grid xs={12} md={5}>
+                                                    <TextField
+                                                        value={editingRowId === row.id ? nameEdit : row.name}
+                                                        label="سوال"
                                                         fullWidth
-                                                    >
-                                                        ذخیره
-                                                    </Button>
+                                                        disabled={editingRowId !== row.id}
+                                                        onChange={(e) => editingRowId === row.id ? setNameEdit(e.target.value) : {}}
+                                                    />
                                                 </Grid>
-                                                <Grid container xs={12} md={1} alignItems={'center'} >
-                                                    <Button
-                                                        onClick={handleCancelEdit}
-                                                        color="error"
+                                                <Grid xs={12} md={7}>
+                                                    <TextField
+                                                        value={editingRowId === row.id ? priceEdit : row.price}
+                                                        label="جواب"
                                                         fullWidth
-                                                    >
-                                                        لغو
-                                                    </Button>
+                                                        disabled={editingRowId !== row.id}
+                                                        onChange={(e) => editingRowId === row.id ? setPriceEdit(e.target.value) : {}}
+                                                    />
                                                 </Grid>
                                             </Grid>
-                                        ) : (
-                                            <Grid container alignItems="center" marginTop={2}>
-                                                <Grid container xs={12} md={11}>
-                                                    <Grid xs={12} md={5}>
-                                                        <TextField
-                                                            value={row.name}
-                                                            label="سوال"
-                                                            fullWidth
-                                                            disabled
-                                                        />
-                                                    </Grid>
-                                                    <Grid xs={12} md={7}>
-                                                        <TextField
-                                                            value={row.price}
-                                                            label="جواب"
-                                                            fullWidth
-                                                            disabled
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container xs={12} md={1} alignItems={'center'} >
-                                                    <Button
-                                                        onClick={() => handleEditRow(row.id)}
-                                                        color="warning"
+                                            <Grid container xs={12} md={1} alignItems={'center'} >
+                                                <Button
+                                                    onClick={() => editingRowId === row.id ? handleSaveEdit(row.id) : handleEditRow(row.id)}
+                                                    color="success"
+                                                    fullWidth
+                                                >
+                                                    {
+                                                        editingRowId === row.id ? 'ذخیره' : 'ویرایش'
+                                                    }
+                                                </Button>
+                                            </Grid>
+                                            <Grid container xs={12} md={1} alignItems={'center'} >
+                                                <Button
+                                                    onClick={handleCancelEdit}
+                                                    color="error"
+                                                    fullWidth
+                                                >
+                                                    لغو
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                        {/* ) : ( */}
+                                        {/* <Grid container alignItems="center" marginTop={2}>
+                                            <Grid container xs={12} md={11}>
+                                                <Grid xs={12} md={5}>
+                                                    <TextField
+                                                        value={row.name}
+                                                        label="سوال"
                                                         fullWidth
-                                                    >
-                                                        ویرایش
-                                                    </Button>
+                                                        disabled
+                                                    />
                                                 </Grid>
-                                                <Grid container xs={12} md={1} alignItems={'center'} >
-                                                    <Button
-                                                        onClick={() => handleDeleteRow(row.id)}
-                                                        color="error"
+                                                <Grid xs={12} md={7}>
+                                                    <TextField
+                                                        value={row.price}
+                                                        label="جواب"
                                                         fullWidth
-                                                    >
-                                                        حذف
-                                                    </Button>
+                                                        disabled
+                                                    />
                                                 </Grid>
                                             </Grid>
-                                        )}
+                                            <Grid container xs={12} md={1} alignItems={'center'} >
+                                                <Button
+                                                    onClick={() => handleEditRow(row.id)}
+                                                    color="warning"
+                                                    fullWidth
+                                                >
+                                                    ویرایش
+                                                </Button>
+                                            </Grid>
+                                            <Grid container xs={12} md={1} alignItems={'center'} >
+                                                <Button
+                                                    onClick={() => handleDeleteRow(row.id)}
+                                                    color="error"
+                                                    fullWidth
+                                                >
+                                                    حذف
+                                                </Button>
+                                            </Grid>
+                                        </Grid> */}
+                                        {/* )} */}
                                     </Grid>
                                 ))}
                             </div>
