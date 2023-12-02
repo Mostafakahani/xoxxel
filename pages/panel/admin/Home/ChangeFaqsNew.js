@@ -15,7 +15,7 @@ import {
 import ServerURL from "Components/Common/Layout/config";
 import GetToken from "GetToken";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // ... (قسمت‌های کد قبلی)
 
 const CreateOption = () => {
@@ -28,6 +28,33 @@ const CreateOption = () => {
     const [addingFeature, setAddingFeature] = useState(false);
     const [editingRowId, setEditingRowId] = useState(null);
 
+    useEffect(() => {
+        async function fetchData() {
+            const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+            try {
+                const responseCategory = await axios.get(
+                    `${ServerURL.url}/admin/info/faq/list`,
+                    config
+                );
+
+                const formattedData = formatData(responseCategory.data);
+
+                setRows(formattedData);
+            } catch (error) {
+                console.error("Error fetching data from server", error);
+            }
+        }
+
+        const formatData = (data) => {
+            return data.map((category, index) => ({
+                id: index,
+                name: category.data.question,
+                price: category.data.answer,
+            }));
+        };
+
+        fetchData();
+    }, []); //  تغییر در این قسمت
     const handleAddRow = () => {
         // Validation
         if (name.trim() === "" || price.trim() === "") {
@@ -109,8 +136,11 @@ const CreateOption = () => {
                 }
             };
 
-            // ارسال rows به API
-            // await axios.post('API_ENDPOINT', { data: rows }, config);
+            const dataSend = {
+                "FAQs": rows.map(row => ({ question: row.name, answer: row.price })),
+            };
+
+            await axios.post(`${ServerURL.url}/admin/info/faq/create`, dataSend, config);
             console.log(rows)
 
             setOpen(false);
