@@ -1,14 +1,14 @@
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { Button, Grid } from "@mui/material";
 import { useState, useMemo } from "react";
-import ChangeFaqs from "./ChangeFaqs";
+import ChangeFaqsNew from "./ChangeFaqsNew";
 import ChangeAbout from "./ChangeAbout";
 import ChangeOurVision from "./ChangeOurVision";
 import BackArrow from "Components/Common/Back";
 
 
 const components = {
-    Faq: ChangeFaqs,
+    Faq: ChangeFaqsNew,
     About: ChangeAbout,
     ourV: ChangeOurVision
 };
@@ -44,7 +44,7 @@ const AboutUsOurVsionFaq = () => {
 
         },
 
-        '@keyframes slideIn': { // تعریف انیمیشن
+        '@keyframes slideIn': { 
             from: {
                 width: 0,
             },
