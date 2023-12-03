@@ -9,8 +9,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-import UploadFile from "Components/Common/UploadFile";
-import ProductOption from "Components/Common/ProductOption/ProductOption";
 import StandardImageList from "Components/Common/Images";
 import CheckboxesTags from "Components/Common/CheckBoxList";
 import ServerURL from "Components/Common/Layout/config";
@@ -19,6 +17,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
 import CreateOption from "Components/Common/Creatives/CreateOption";
+import { useRouter } from "next/router";
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
   // const [productPrice, setProductPrice] = useState("");
@@ -32,8 +31,8 @@ const CreateProduct = () => {
   const [checkBoxList, setCheckBoxList] = useState([]);
   const [addingFeature, setAddingFeature] = useState(false);
   const [openThis, setOpenThis] = useState(false);
-
-  const [allData, setAllData] = useState([]);
+  // const router = useRouter()
+  // const [allData, setAllData] = useState([]);
   const [category, setCategory] = useState([]);
   const [countTwo, setCountTwo] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -88,7 +87,8 @@ const CreateProduct = () => {
       );
       if (uploadResponse.status === 201) {
         toast.success("با موفقیت ساخته شد.");
-        window.location.href = "../admin/products";
+        handleRemoveFields()
+        // window.location.href = "../admin/products";
       } else {
         toast.error("لطفا دوباره امتحان کنید");
       }
@@ -99,6 +99,22 @@ const CreateProduct = () => {
       setAddingFeature(false);
     }
   };
+  const handleRemoveFields = () => {
+    // router.push('/panel/admin/products')
+    setProductName('')
+    setLabelInput('')
+    setPlaceholder('')
+    setTextArea('')
+    setSelectedFileItem([])
+    setSelectedFileItem2([])
+    setSelectedFileItem3([])
+    setAddingFeature(false)
+    setOpenThis(false)
+    setCategory([])
+    setCountTwo(0)
+    setSelectedCategory('')
+    setResponseId(0)
+  }
 
   return (
     <>
@@ -255,11 +271,7 @@ const CreateProduct = () => {
           </Grid>
         </Grid>
 
-        <Grid
-          container
-        // spacing={2}
-        // sx={{ borderRadius: '10px', border: '2px dashed #5A5A5A', p: '20px', my: '15px' }}
-        >
+        <Grid container>
           <CheckboxesTags
             value={checkBoxList}
             responseId={responseId}
@@ -267,9 +279,6 @@ const CreateProduct = () => {
               setCheckBoxList(e);
             }}
           />
-          {/* <Grid item xs={12} sm={6}>
-          </Grid> */}
-          {/* <Grid item display={'flex'} alignItems={'center'}> */}
           <CreateOption
             click={openThis}
             setClick={(value) => setOpenThis(value)}
@@ -280,19 +289,13 @@ const CreateProduct = () => {
               console.log(checkBoxList);
             }}
           />
-          {/* </Grid> */}
         </Grid>
-
         <Grid container sx={{ my: "25px" }}>
           <Grid container item spacing={2}>
             <Grid item>
               <Button
                 variant="contained"
                 color="primary"
-                // sx={{
-                //   borderRadius: "5px",
-                //   mr: "10px",
-                // }}
                 disabled={
                   selectedFileItem.length === 0 ||
                   selectedFileItem2.length === 0 ||
@@ -313,15 +316,6 @@ const CreateProduct = () => {
               <Button
                 variant="outlined"
                 color="error"
-                // sx={{
-                //   color: "#B12640",
-                //   border: "1px solid #B12640",
-                //   borderRadius: "5px",
-                //   "&:hover": {
-                //     border: "1px solid #B12640",
-                //     backgroundColor: "#f11c1c0a",
-                //   },
-                // }}
                 onClick={() => {
                   window.location.href = "../admin/products";
                 }}
@@ -334,7 +328,6 @@ const CreateProduct = () => {
                 variant="outlined"
                 color="inherit"
                 onClick={() => setOpenThis(true)}
-              // sx={{ color: '#1D1E2D', borderRadius: '5px', border: '1px solid #807D7D' }}
               >اضافه کردن ویژگی جدید</Button>
             </Grid>
           </Grid>
