@@ -7,9 +7,13 @@ import GetToken from "GetToken";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-
+// ChangeFaqs.js
+// ...
 const ChangeFaqs = () => {
     const [faqsData, setFaqsData] = useState([]);
+
+    const [expanded, setExpanded] = useState(null);
+
     useEffect(() => {
         async function fetchData() {
             const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
@@ -22,19 +26,17 @@ const ChangeFaqs = () => {
         fetchData();
     }, []);
 
-    const [expanded, setExpanded] = useState(null);
-
     const handleAddQuestion = () => {
         setFaqsData([
             ...faqsData,
-            { data: { answer: '', question: `سوال شماره ${faqsData.length + 1}` } }
+            { id: Date.now(), data: { answer: '', question: `سوال شماره ${faqsData.length + 1}` } }
         ]);
     };
 
     const handleChange = (index, newData) => {
         setFaqsData((prevData) => {
             const updatedData = [...prevData];
-            updatedData[index] = { ...updatedData[index], data: { ...updatedData[index].data, ...newData } };
+            updatedData[index] = { ...updatedData[index], ...newData };
             return updatedData;
         });
     };
@@ -71,58 +73,56 @@ const ChangeFaqs = () => {
             if (response.data.status === "success") {
                 toast.success("با موفقیت ذخیره شد.");
             } else {
-                toast.error("لطفا دوباره امتحان کنید");
+                toast.error("لطفاً دوباره امتحان کنید");
             }
         } catch (error) {
             console.error("Error sending save request:", error);
         }
     };
-    return (
-        <AccountLayout>
 
-            <Grid sx={{ backgroundColor: "#fff", p: "25px" }}>
-                <Grid>
-                    {faqsData.map((x, index) => (
-                        <QuestionItem
-                            key={x.id}
-                            id={x.id}
-                            question={x.data.answer}
-                            answer={x.data.question}
-                            expanded={expanded}
-                            onChange={handleAccordionChange}
-                            onChangeItem={(newData) => handleChange(index, newData)}
-                        />
-                    ))}
-                </Grid>
-                <Grid sx={{ my: "20px" }}>
-                    <Button
-                        variant="contained"
-                        disableElevation
-                        sx={{
-                            borderRadius: "5px",
-                            backgroundColor: "#1C49F1",
-                            color: "#FFFFFF"
-                        }}
-                        onClick={handleAddQuestion}
-                    >
-                        افزودن سوال
-                    </Button>
-                    <Button
-                        variant="contained"
-                        disableElevation
-                        sx={{
-                            borderRadius: "5px",
-                            backgroundColor: "#1C49F1",
-                            color: "#FFFFFF",
-                            ml: "10px"
-                        }}
-                        onClick={handleSave}
-                    >
-                        ذخیره تغییرات
-                    </Button>
-                </Grid>
+    return (
+        <Grid sx={{ backgroundColor: "#fff", p: "25px" }}>
+            <Grid>
+                {/* {faqsData.map((x, index) => (
+                    <QuestionItem
+                        key={x.id}
+                        id={x.id}
+                        question={x.data.answer}
+                        answer={x.data.question}
+                        expanded={expanded}
+                        onChange={handleAccordionChange}
+                        onChangeItem={(newData) => handleChange(index, newData)}
+                    />
+                ))} */}
             </Grid>
-        </AccountLayout>
+            <Grid sx={{ my: "20px" }}>
+                <Button
+                    variant="contained"
+                    disableElevation
+                    sx={{
+                        borderRadius: "5px",
+                        backgroundColor: "#1C49F1",
+                        color: "#FFFFFF"
+                    }}
+                    onClick={handleAddQuestion}
+                >
+                    افزودن سوال
+                </Button>
+                <Button
+                    variant="contained"
+                    disableElevation
+                    sx={{
+                        borderRadius: "5px",
+                        backgroundColor: "#1C49F1",
+                        color: "#FFFFFF",
+                        ml: "10px"
+                    }}
+                    onClick={handleSave}
+                >
+                    ذخیره تغییرات
+                </Button>
+            </Grid>
+        </Grid>
     );
 };
 

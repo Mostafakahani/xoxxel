@@ -15,17 +15,29 @@ const QuestionItem = ({ id, question, answer, expanded, onChange, onChangeItem }
         onChange(panel, isExpanded);
     };
 
-    const handleQuestionChange = (e) => {
-        const newQuestion = e.target.value;
-        setLocalQuestion(newQuestion);
-        onChangeItem({ question: newQuestion, answer: localAnswer });
+    const handleQuestionChange = () => {
+        onChangeItem({
+            ...onChangeItem,
+            data: {
+                ...onChangeItem.data,
+                question: localQuestion
+            }
+        });
     };
 
-    const handleAnswerChange = (e) => {
-        const newAnswer = e.target.value;
-        setLocalAnswer(newAnswer);
-        onChangeItem({ question: localQuestion, answer: newAnswer });
+    const handleAnswerChange = () => {
+        onChangeItem({
+            ...onChangeItem,
+            data: {
+                ...onChangeItem.data,
+                answer: localAnswer
+            }
+        });
     };
+
+    useEffect(() => {
+        onChangeItem({ question: localQuestion, answer: localAnswer });
+    }, [localQuestion, localAnswer, onChangeItem]);
 
     return (
         <Accordion expanded={expanded === `panel${id}`} onChange={handleChange(`panel${id}`)} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
