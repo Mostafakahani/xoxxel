@@ -14,13 +14,24 @@ import "swiper/css/navigation";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ServerURL from "Components/Common/Layout/config";
+import GetToken from "GetToken";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
 export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const router = useRouter();
 
+  useEffect(() => {
+    if (!(ServerURL.developerMode === true ? ServerURL.Bear : GetToken('user'))) {
+      router.replace(`${ServerURL.domain}/auth/login`);
+
+    }
+  }, []);
   return (
     <CacheProvider value={emotionCache}>
       <RTL>

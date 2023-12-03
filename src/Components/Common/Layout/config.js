@@ -1,5 +1,6 @@
 
 const ServerURL = {
+  domain: 'https://xoxxel.com',
   url: "https://api.xoxxel.com",
   IMAGE_UPLOAD_URL: "https://api.xoxxel.com",
   developerMode: true,

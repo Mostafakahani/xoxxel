@@ -14,6 +14,7 @@ import ServerURL from "../../Layout/config";
 import CategoryEdit from "./CategoryEdit";
 import TypeEdit from "./TypeEdit";
 import RegonEdit from "./RegonEdit";
+import OptionEdit from "./OptionEdit";
 
 const EditOptionsDes = () => {
   const [open, setOpen] = useState(false);
@@ -118,7 +119,7 @@ const EditOptionsDes = () => {
             handleClickOpen();
           }}
         >
-          ویرایش دسته,ریجن,نوع
+          ویرایش دسته,ریجن,نوع,ویژگی
         </Button>
         <Dialog
           fullWidth
@@ -136,7 +137,9 @@ const EditOptionsDes = () => {
               alignItems: "center",
             }}
           >
-            <DialogTitle>ویرایش دسته,ریجن,نوع</DialogTitle>
+            <DialogTitle>
+              ویرایش دسته,ریجن,نوع,ویژگی
+            </DialogTitle>
             <SvgIcon
               onClick={() => setOpen(false)}
               sx={{ mr: "20px", cursor: "pointer" }}
@@ -187,6 +190,15 @@ const EditOptionsDes = () => {
               >
                 نوع
               </Button>
+              <Button
+                onClick={() => {
+                  setSelectedButton("options");
+                  handleClickOpen();
+                }}
+                sx={selectedButton === "options" ? buttonStyle : {}}
+              >
+                ویژگی ها
+              </Button>
             </Grid>
             <Grid>
               {selectedButton === "category" && (
@@ -202,6 +214,11 @@ const EditOptionsDes = () => {
               {selectedButton === "region" && (
                 <>
                   <RegonEdit />
+                </>
+              )}
+              {selectedButton === "options" && (
+                <>
+                  <OptionEdit />
                 </>
               )}
             </Grid>
