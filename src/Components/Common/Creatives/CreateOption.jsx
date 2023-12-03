@@ -18,8 +18,14 @@ import Alert from "../AlertPopup/AlertPopup";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
 
-const CreateOption = () => {
+const CreateOption = ({ setResponseId = () => { }, status, click, setClick = () => { } }) => {
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (click === true) {
+      setOpen(true);
+      setClick(false);
+    }
+  }, [click, setClick]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedType, setSelectedType] = useState("");
@@ -37,6 +43,7 @@ const CreateOption = () => {
   const [countTwo, setCountTwo] = useState(0);
   const [countThree, setCountThree] = useState(0);
   const [countList, setCountList] = useState(0);
+  // const [responseId, setResponseId] = useState(0);
   const [delRow, setDelRow] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -112,86 +119,7 @@ const CreateOption = () => {
     setSelectedType(event.target.value);
   };
 
-  // const handleAddRow = () => {
-  //     // Validation
-  //     if (name.trim() === "") {
-  //         console.log("نام و قیمت نمی‌تواند خالی باشد.");
-  //         return;
-  //     }
 
-  //     const isDuplicate = rows.some((row) => {
-  //         row.name === name
-  //         // &&
-  //         // row.price === price
-  //     });
-  //     if (!isDuplicate) {
-  //         // با افزودن یک ویژگی جدید، وضعیت محبوبیت به حالت اولیه تنظیم می‌شود
-  //         setRows([...rows,
-  //         {
-  //             id: Date.now(),
-  //             country_id: selectedCountry,
-  //             type_id: selectedType,
-  //             cat_id: selectedCategory,
-  //             name_feature: name,
-  //             price: price,
-  //             count: count,
-  //             popular: isPopular
-  //         }]);
-  //         setIsPopular(false);
-  //         setName("");
-  //         setPrice("");
-  //         setCount(0)
-  //         setCountOne(0)
-  //         setCountTwo(0)
-  //         setCountThree(0)
-  //         setData('')
-  //         setDataCategory('')
-  //         setDataType('')
-  //         setSelectedCategory('')
-  //         setSelectedCountry('')
-  //         setSelectedType('')
-  //         setIsPopular(false)
-
-  //     } else {
-  //         console.log("این نام و قیمت قبلاً وارد شده است.");
-  //     }
-  // };
-
-  // const handleDeleteRow = async (id) => {
-  //     setRows(rows.filter((row) => row.id !== id));
-  //     setDelRow(id)
-  //     try {
-  //         setAddingFeature(true);
-  //         const config = { headers: { Authorization: `${GetToken('user')}` } };
-  //         const dataBody = {
-  //             ids: [id]
-  //         };
-  //         const response = await axios.post(`${ServerURL.url}/admin/feature/delete`, dataBody, config);
-  //         console.log(response);
-  //         setCountList(countList + 1)
-  //     } catch (error) {
-  //         console.error("خطا در ارسال درخواست به سرور", error);
-  //     } finally {
-  //         setAddingFeature(false);
-  //     }
-  // };
-
-  // const handleTogglePopular = (id) => {
-  //     setRows(
-  //         rows.map((row) =>
-  //             row.id === id ? { ...row, isPopular: !row.isPopular } : row
-  //         )
-  //     );
-  // };
-  // const formattedData = rows.map(({ country_id, cat_id, type_id, name_feature, price, count, popular }) => ({
-  //     country_id,
-  //     cat_id,
-  //     type_id,
-  //     name_feature,
-  //     price,
-  //     count,
-  //     popular
-  // }));
 
   const handleSubmit = async () => {
     // Validation
@@ -215,15 +143,6 @@ const CreateOption = () => {
         },
       };
 
-      // const dataBody = rows.map((x) => ({
-      //     country_id: x.country_id,
-      //     cat_id: x.cat_id,
-      //     type_id: x.type_id,
-      //     name_feature: x.name_feature,
-      //     price: x.price,
-      //     count: x.count,
-      //     popular: x.popular
-      // }));
       const dataBody = {
         // id: Date.now(),
         country_id: selectedCountry,
@@ -240,7 +159,8 @@ const CreateOption = () => {
         dataBody,
         config
       );
-      console.log(response);
+      setResponseId(response.data.id);
+
       setErrorMessage("با موفقیت ساخته شد");
       toast.success("با موفقیت ساخته شد.");
       handleClosePanel();
@@ -274,51 +194,47 @@ const CreateOption = () => {
     setIsPopular(false);
   };
 
-  const notify = () => {
-    toast.success("Default Notification !");
 
-    // toast.success("Success Notification !", {
-    //     position: toast.POSITION.TOP_CENTER
-    // });
-
-    // toast.error("Error Notification !", {
-    //     position: toast.POSITION.TOP_LEFT
-    // });
-
-    // toast.warn("Warning Notification !", {
-    //     position: toast.POSITION.BOTTOM_LEFT
-    // });
-
-    // toast.info("Info Notification !", {
-    //     position: toast.POSITION.BOTTOM_CENTER
-    // });
-
-    // toast("Custom Style Notification with css class!", {
-    //     position: toast.POSITION.BOTTOM_RIGHT,
-    //     className: 'foo-bar'
-    // });
-  };
   return (
     <Grid>
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={() => setOpen(true)}
-        sx={{
-          fontSize: "12px",
-          marginRight: "5px",
-          padding: "5px 12px",
-          borderRadius: "5px",
-          border: "1px solid #B6B6B6",
-          mr: { md: "5px", xs: "2px" },
-          color: "#525252",
-          "&:hover": {
-            border: "1px solid #B6B6B6",
-          },
-        }}
-      >
-        ایجاد ویژگی
-      </Button>
+
+      {
+        status === 'plus' ? (
+          ''
+          // <Button
+          //   variant="outlined"
+          //   color="primary"
+          //   onClick={() => setOpen(true)}
+
+          // >
+          //   {
+          //     status === 'plus' ? "اضافه کردن ویژگی جدید" : ' ایجاد ویژگی'
+          //   }
+          // </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setOpen(true)}
+            sx={{
+              fontSize: "12px",
+              marginRight: "5px",
+              padding: "5px 12px",
+              borderRadius: "5px",
+              border: "1px solid #B6B6B6",
+              mr: { md: "5px", xs: "2px" },
+              color: "#525252",
+              "&:hover": {
+                border: "1px solid #B6B6B6",
+              },
+            }}
+          >
+
+            ایجاد ویژگی
+
+          </Button>
+        )
+      }
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -537,7 +453,7 @@ const CreateOption = () => {
                   selectedCategory !== null &&
                   name !== "" &&
                   price !== null) ||
-                0
+                  0
                   ? "#fff"
                   : "",
               fontSize: "12px",
@@ -710,7 +626,7 @@ const CreateOption = () => {
           )}
         </DialogContent>
       </Dialog>
-    </Grid>
+    </Grid >
   );
 };
 

@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
+import CreateOption from "Components/Common/Creatives/CreateOption";
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
   // const [productPrice, setProductPrice] = useState("");
@@ -30,11 +31,13 @@ const CreateProduct = () => {
   const [selectedFileItem3, setSelectedFileItem3] = useState({});
   const [checkBoxList, setCheckBoxList] = useState([]);
   const [addingFeature, setAddingFeature] = useState(false);
+  const [openThis, setOpenThis] = useState(false);
 
   const [allData, setAllData] = useState([]);
   const [category, setCategory] = useState([]);
   const [countTwo, setCountTwo] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [responseId, setResponseId] = useState(0);
 
   // const handleSubmit = () => {
   //     setAllData([...allData, {
@@ -192,12 +195,7 @@ const CreateProduct = () => {
               }}
             />
           </Grid>
-          {/* <UploadFile
-                        id={"file1"}
-                        accept="video/*"
-                        label={"تصویر اصلی ( 297*147)"}
-                        onChange={(e) => console.log(e)}
-                    /> */}
+
           <Grid item xs={12} sm={6} md={4}>
             <StandardImageList
               label={"تصویر Trends (153*190)"}
@@ -206,12 +204,7 @@ const CreateProduct = () => {
                 console.log(e);
               }}
             />
-            {/* <UploadFile
-                            id={"file1"}
-                            accept="video/*"
-                            label={"تصویر Trends ( 153*190)"}
-                            onChange={(e) => console.log(e)}
-                        /> */}
+
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <StandardImageList
@@ -221,20 +214,14 @@ const CreateProduct = () => {
                 console.log(e);
               }}
             />
-            {/* <UploadFile
-                            id={"file1"}
-                            accept="video/*"
-                            label={"تصویر اسلایدی یا مربعی ( 134*134)"}
-                            onChange={(e) => console.log(e)}
-                        /> */}
+
           </Grid>
         </Grid>
 
         <Grid container sx={{ my: "20px" }}>
           <Grid xs={12} sm={4} md={3}>
             <TextField
-              // error={!priceError ? false : true}
-              // helperText={!priceError ? '' : ErrorList[1]}
+              size="small"
               onChange={(e) => setLabelInput(e.target.value)}
               value={labelInput}
               label="Label input"
@@ -244,8 +231,7 @@ const CreateProduct = () => {
           </Grid>
           <Grid xs={12} sm={4} md={3}>
             <TextField
-              // error={!priceError ? false : true}
-              // helperText={!priceError ? '' : ErrorList[1]}
+              size="small"
               onChange={(e) => setPlaceholder(e.target.value)}
               value={placeholder}
               label="Place holder"
@@ -257,10 +243,9 @@ const CreateProduct = () => {
         <Grid container sx={{ my: "20px" }}>
           <Grid xs={12} sm={4} md={12}>
             <TextField
+              size="small"
               fullWidth
               multiline
-              // error={!priceError ? false : true}
-              // helperText={!priceError ? '' : ErrorList[1]}
               onChange={(e) => setTextArea(e.target.value)}
               value={textArea}
               label="متن زیر Input"
@@ -272,63 +257,88 @@ const CreateProduct = () => {
 
         <Grid
           container
+        // spacing={2}
         // sx={{ borderRadius: '10px', border: '2px dashed #5A5A5A', p: '20px', my: '15px' }}
         >
-          {/* <ProductOption tableId={'tableId'} /> */}
           <CheckboxesTags
+            value={checkBoxList}
+            responseId={responseId}
             onChange={(e) => {
               setCheckBoxList(e);
-              // console.log(e)
-              // console.log('list: ', checkBoxList)
             }}
           />
+          {/* <Grid item xs={12} sm={6}>
+          </Grid> */}
+          {/* <Grid item display={'flex'} alignItems={'center'}> */}
+          <CreateOption
+            click={openThis}
+            setClick={(value) => setOpenThis(value)}
+            status={'plus'}
+            setResponseId={(e) => {
+              setResponseId(e);
+              setCheckBoxList([...checkBoxList, e]);
+              console.log(checkBoxList);
+            }}
+          />
+          {/* </Grid> */}
         </Grid>
 
         <Grid container sx={{ my: "25px" }}>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              sx={{
-                // color: selectedFileItem.length !== 0 && selectedFileItem2.length !== 0 && selectedFileItem3.length !== 0 && productName !== '' && productPrice !== null && productPrice !== 0 && productPrice !== '' ? '' : '',
-                borderRadius: "5px",
-                mr: "10px",
-              }}
-              disabled={
-                selectedFileItem.length === 0 ||
-                selectedFileItem2.length === 0 ||
-                selectedFileItem3.length === 0 ||
-                productName === "" ||
-                selectedCategory === "" ||
-                checkBoxList.length === 0 ||
-                textArea === '' ||
-                labelInput === '' ||
-                placeholder === ''
-              }
-              onClick={handleSubmit}
-            >
-              {addingFeature ? <CircularProgress size={24} /> : "ذخیره تغییرات"}
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                color: "#B12640",
-                border: "1px solid #B12640",
-                borderRadius: "5px",
-                "&:hover": {
-                  border: "1px solid #B12640",
-                  backgroundColor: "#f11c1c0a",
-                },
-              }}
-              onClick={() => {
-                window.location.href = "../admin/products";
-
-              }}
-            >
-              انصراف
-            </Button>
+          <Grid container item spacing={2}>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                // sx={{
+                //   borderRadius: "5px",
+                //   mr: "10px",
+                // }}
+                disabled={
+                  selectedFileItem.length === 0 ||
+                  selectedFileItem2.length === 0 ||
+                  selectedFileItem3.length === 0 ||
+                  productName === "" ||
+                  selectedCategory === "" ||
+                  checkBoxList.length === 0 ||
+                  textArea === '' ||
+                  labelInput === '' ||
+                  placeholder === ''
+                }
+                onClick={handleSubmit}
+              >
+                {addingFeature ? <CircularProgress size={24} /> : "ذخیره تغییرات"}
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="error"
+                // sx={{
+                //   color: "#B12640",
+                //   border: "1px solid #B12640",
+                //   borderRadius: "5px",
+                //   "&:hover": {
+                //     border: "1px solid #B12640",
+                //     backgroundColor: "#f11c1c0a",
+                //   },
+                // }}
+                onClick={() => {
+                  window.location.href = "../admin/products";
+                }}
+              >
+                انصراف
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="inherit"
+                onClick={() => setOpenThis(true)}
+              // sx={{ color: '#1D1E2D', borderRadius: '5px', border: '1px solid #807D7D' }}
+              >اضافه کردن ویژگی جدید</Button>
+            </Grid>
           </Grid>
 
-          {/* <Button sx={{ color: '#1D1E2D', borderRadius: '5px', border: '1px solid #807D7D' }}>اضافه کردن ویژگی جدید</Button> */}
         </Grid>
       </AccountLayout>
     </>

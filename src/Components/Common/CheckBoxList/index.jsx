@@ -12,11 +12,19 @@ import ServerURL from "../Layout/config";
 import GetToken from "GetToken";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-export default function CheckboxesTags({ onChange = () => {} }) {
+export default function CheckboxesTags({ onChange = () => { }, value = [], responseId }) {
+  const [localCheckBoxList, setLocalCheckBoxList] = useState(value);
+
+  useEffect(() => {
+    setLocalCheckBoxList(value);
+  }, [value]);
+
   const handleChange = (event, value) => {
     const selectedId = value.map((v) => v.id);
+    setLocalCheckBoxList(value);
     onChange(selectedId);
   };
+
   const [data, setData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +49,7 @@ export default function CheckboxesTags({ onChange = () => {} }) {
       }
     };
     fetchData();
-  }, []);
+  }, [responseId]);
   return (
     <>
       {data.length > 0 && (
@@ -53,6 +61,8 @@ export default function CheckboxesTags({ onChange = () => {} }) {
           options={data}
           disableCloseOnSelect
           getOptionLabel={(option) => option.title}
+          getOptionSelected={(option, value) => option.id === value.id} // اضافه شده
+          value={data.filter(option => localCheckBoxList.includes(option.id))}
           renderOption={(props, option, { selected }) => (
             <li {...props} key={option.id}>
               <Checkbox
