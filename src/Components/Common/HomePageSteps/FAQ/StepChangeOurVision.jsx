@@ -1,9 +1,9 @@
 import { Grid, TextField, Typography } from "@mui/material";
-import { useState } from "react";
 
-const StepChangeOurVision = ({ getTitel, des, handleChange }) => {
-    const [titel, setTitel] = useState(getTitel);
-    const [text, setText] = useState(des);
+const StepChangeOurVision =({ title, description, onFieldChange }) => {
+    const handleChange = (fieldName, value) => {
+        onFieldChange(fieldName, value);
+    };
 
     return (
         <>
@@ -14,38 +14,33 @@ const StepChangeOurVision = ({ getTitel, des, handleChange }) => {
                         <Grid container>
                             <Grid item xs={12} sm={7} md={6}>
                                 <TextField
-                                    onChange={(e) => {
-                                        const newTitel = e.target.value;
-                                        setTitel(newTitel);
-                                        handleChange(newTitel, text);
-                                    }}
-                                    value={titel || getTitel}
-                                    label="عنوان  "
+                                    onChange={(e) => handleChange("title", e.target.value)}
+                                    value={title}
+                                    label="عنوان"
                                     variant="outlined"
-                                    sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
+                                    sx={{ width: { xs: "100%", sm: "100%", md: "100%" }, my: "10px" }}
                                 />
                             </Grid>
                         </Grid>
                         <Grid container>
                             <Grid item xs={12} sm={7} md={12}>
                                 <TextField
-                                    onChange={(e) => {
-                                        const newText = e.target.value;
-                                        setText(newText);
-                                        handleChange(titel, newText);
-                                    }}
-                                    value={text || des}
-                                    label="متن  "
+                                    onChange={(e) => handleChange("description", e.target.value)}
+                                    value={description}
+                                    label="متن"
                                     variant="outlined"
                                     multiline
                                     flexGrow={1}
-                                    sx={{ width: { xs: '100%', sm: '100%', md: '100%' }, my: '10px' }}
+                                    sx={{ width: { xs: "100%", sm: "100%", md: "100%" }, my: "10px" }}
                                 />
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
+            {/*
+      Add any other components or logic you might need here
+      */}
         </>
     );
 };

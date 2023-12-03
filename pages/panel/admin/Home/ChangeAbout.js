@@ -1,36 +1,39 @@
 import { Button, Grid } from "@mui/material";
-import StepAbout from "Components/Common/HomePageSteps/FAQ/StepAbout";
+import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 import ServerURL from "Components/Common/Layout/config";
 import GetToken from "GetToken";
-import axios from "axios";
-import { useEffect } from "react";
-import { useState } from "react";
-import { toast } from "react-toastify";
+import StepAbout from "Components/Common/HomePageSteps/FAQ/StepAbout";
+
 const ChangeAbout = () => {
-    const [count, setCount] = useState(0)
-    const [data, setData] = useState([])
-
-    const [question, setQuestion] = useState('')
-    const [text, setText] = useState('')
-
-    const handleChange = (newQuestion, newText) => {
-        setQuestion(newQuestion);
-        setText(newText);
-    };
+    const [data, setData] = useState({
+        title: "",
+        description: "",
+    });
+    const [dataTemp, setDataTemp] = useState({
+        title: "",
+        description: "",
+    });
 
     useEffect(() => {
         async function fetchData() {
-            const config = {
-                headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`, }
-            };
-            const response = await axios.get(
-                `${ServerURL.url}/admin/info/get-about-us`,
-                config
-            );
-            setData(response.data.data);
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+                    },
+                };
+                const response = await axios.get(`${ServerURL.url}/admin/info/get-about-us`, config);
+                setData(response.data.data);
+                setDataTemp(response.data.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         }
         fetchData();
     }, []);
+
     const handleSaveChanges = async () => {
         try {
             const config = {
@@ -40,8 +43,8 @@ const ChangeAbout = () => {
             };
 
             const newData = {
-                title: question,
-                description: text,
+                title: data.title,
+                description: data.description,
             };
 
             const response = await axios.post(
@@ -60,26 +63,50 @@ const ChangeAbout = () => {
         }
     };
 
+    const handleFieldChange = (fieldName, value) => {
+        setData((prevData) => ({
+            ...prevData,
+            [fieldName]: value,
+        }));
+    };
+
     return (
         <>
-
-            <Grid sx={{ backgroundColor: '#fff', p: '25px' }}>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                limit={5}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+            <Grid sx={{ backgroundColor: "#fff", p: "25px" }}>
                 <Grid>
                     <StepAbout
-                        sendQuestion={(e) => setQuestion(e)}
-                        sendText={(e) => setText(e)}
-                        getTitel={data.title}
-                        des={data.description}
-                        handleChange={handleChange}
+                        title={data.title}
+                        description={data.description}
+                        onFieldChange={handleFieldChange}
                     />
                 </Grid>
-                <Grid sx={{ my: '20px' }}>
-                    <Button onClick={() => handleSaveChanges()} variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
+                <Grid sx={{ my: "20px" }}>
+                    <Button
+                        onClick={handleSaveChanges}
+                        variant="contained"
+                        disableElevation
+                        disabled={data === dataTemp}
+                        sx={{ borderRadius: "5px", backgroundColor: "#1C49F1", color: "#FFFFFF" }}
+                    >
+                        ذخیره تغییرات
+                    </Button>
                 </Grid>
             </Grid>
-
-
         </>
-    )
-}
+    );
+};
+
 export default ChangeAbout;
