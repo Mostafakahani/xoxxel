@@ -30,7 +30,7 @@ const StepAbout = ({ title, description, onFieldChange }) => {
                                     label="متن"
                                     variant="outlined"
                                     multiline
-                                    flexGrow={1}
+                                    // flexGrow={1}
                                     sx={{ width: { xs: "100%", sm: "100%", md: "100%" }, my: "10px" }}
                                 />
                             </Grid>

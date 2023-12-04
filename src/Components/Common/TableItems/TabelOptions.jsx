@@ -14,7 +14,6 @@ import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import AddProductFeatureNew from "../Popup/CreateProductOptionNew";
 import Link from "next/link";
-import EditOptionsDes from "../Creatives/EditOptions/EditOptionsDes";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -267,8 +266,6 @@ export default function TableItems({
                         {e?.type === "text" && (
                           <>
                             <Typography variant="p" sx={{}}>
-                              {/* <EditOptionsDes tableId={row.data[0]} /> */}
-
                               {e?.text}
                             </Typography>
                           </>

@@ -71,9 +71,9 @@ export default function TagInput({
                   <path
                     d="M14.8466 7.96294L7.15479 15.6548M14.8466 15.6547L7.15479 7.96289"
                     stroke="#28303F"
-                    stroke-width="1.35974"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.35974"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
               </Typography>

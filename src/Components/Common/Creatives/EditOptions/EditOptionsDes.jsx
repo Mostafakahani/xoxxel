@@ -7,10 +7,6 @@ import {
   SvgIcon,
 } from "@mui/material";
 import { useState } from "react";
-import TabelOptions from "Components/Common/TableItems/TabelOptions";
-import { useEffect } from "react";
-import axios from "axios";
-import ServerURL from "../../Layout/config";
 import CategoryEdit from "./CategoryEdit";
 import TypeEdit from "./TypeEdit";
 import RegonEdit from "./RegonEdit";
