@@ -26,6 +26,8 @@ import StandardImageList from "Components/Common/Images";
 const StepHomePage = () => {
     const router = useRouter();
 
+    const [selectedFileItemDataApi, setSelectedFileItemDataApi] = useState([]);
+    const [selectedFileItemDataApiEdit, setSelectedFileItemDataApiEdit] = useState([]);
     const [rows, setRows] = useState([]);
     const [rowsTemp, setRowsTemp] = useState([]);
     const [title, setTitle] = useState("");
@@ -46,12 +48,21 @@ const StepHomePage = () => {
         const fetchData = async () => {
             const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
             try {
-                const responseCategory = await axios.get(
+                const responseLevels = await axios.get(
                     `${ServerURL.url}/admin/info/level/list`,
                     config
                 );
+                const reponseDataStorageName = responseLevels.data.map((x) => x.id_storage)
+                setSelectedFileItemDataApi(reponseDataStorageName)
 
-                const formattedData = formatData(responseCategory.data);
+                console.log(responseLevels.data.map((x, index) => ({
+                    id: index,
+                    name: x.data.name,
+                    title: x.data.title,
+                    description: x.data.description,
+                    id_storage: x.id_storage.id
+                })))
+                const formattedData = formatData(responseLevels.data);
 
                 setRows(formattedData);
                 setRowsTemp(formattedData);
@@ -61,11 +72,12 @@ const StepHomePage = () => {
             }
         }
         const formatData = (data) => {
-            return data.map((category, index) => ({
+            return data.map((x, index) => ({
                 id: index,
-                name: category.data.name,
-                title: category.data.title,
-                description: category.data.description,
+                name: x.data.name,
+                title: x.data.title,
+                description: x.data.description,
+                id_storage: x.id_storage.id
             }));
         };
         fetchData()
@@ -84,11 +96,11 @@ const StepHomePage = () => {
         const isDuplicate = rows.some((row) => row.name === name && row.title === title && row.description === description && row.selectedFileItem === selectedFileItem);
         if (!isDuplicate) {
             if (rows.length < 3) {
-                setRows([...rows, { id: Date.now(), name, title, description, selectedFileItem }]);
+                setRows([...rows, { id: Date.now(), name, title, description, id_storage: selectedFileItem }]);
                 setName("");
                 setSelectedFileItem([]);
-                setTitle('')
-                setDescription('')
+                setTitle('');
+                setDescription('');
                 toast.info("به لیست اضافه شد");
             } else {
                 toast.error("حداکثر سه مرحله وجود دارد");
@@ -109,12 +121,15 @@ const StepHomePage = () => {
         const editingRow = rows.find((row) => row.id === id);
         if (editingRow) {
             setNameEdit(editingRow.name);
-            setSelectedFileItemEdit(editingRow.price);
-            setTitleEdit(editingRow.title)
-            setDescriptionEdit(editingRow.description)
-            setSelectedFileItemEdit(editingRow.selectedFileItem)
+            setSelectedFileItemEdit(editingRow.selectedFileItem ? editingRow.selectedFileItem.id : "");
+            setTitleEdit(editingRow.title);
+            setDescriptionEdit(editingRow.description);
+
+            // Pass id_storage to setSelectedFileItemDataApiEdit
+            setSelectedFileItemDataApiEdit(editingRow.selectedFileItem ? [editingRow.selectedFileItem.id] : []);
         }
     };
+
 
     const handleCancelEdit = () => {
         setEditingRowId(null);
@@ -124,7 +139,7 @@ const StepHomePage = () => {
         setDescription('')
     };
 
-    const handleSaveEdit = (id) => {
+    const handleSaveEdit = (id, currentIdStorage) => {
         setRows(
             rows.map((row) =>
                 row.id === id
@@ -133,7 +148,7 @@ const StepHomePage = () => {
                         name: nameEdit,
                         title: titleEdit,
                         description: descriptionEdit,
-                        id_storage: selectedFileItemEdit,
+                        id_storage: currentIdStorage,
                     }
                     : row
             )
@@ -142,11 +157,10 @@ const StepHomePage = () => {
         setEditingRowId(null);
         setNameEdit("");
         setSelectedFileItemEdit("");
-        setTitleEdit('')
-        setDescriptionEdit('')
+        setTitleEdit('');
+        setDescriptionEdit('');
         toast.warning(" عملیات انجام شد. برای اعمال، تغییرات را ذخیره کنید");
     };
-
     const handleSubmit = async () => {
         const isValidData = rows.every((data) => data.name && data.title !== '' && data.description !== '' && data.selectedFileItem !== 0);
         if (!isValidData) {
@@ -163,7 +177,7 @@ const StepHomePage = () => {
             };
 
             const dataSend = {
-                "levels": rows.map(row => ({ name: row.name, title: row.title, description: row.description, id_storage: row.selectedFileItem })),
+                "levels": rows.map(row => ({ name: row.name, title: row.title, description: row.description, id_storage: row.id_storage })),
             };
 
             await axios.post(`${ServerURL.url}/admin/info/level/create`, dataSend, config);
@@ -177,6 +191,7 @@ const StepHomePage = () => {
             setRowsTemp([])
 
         } catch (error) {
+            toast.error(error.response.data.message === 'levels must contain at least 3 elements' ? 'باید هر سه مرحله را وارد کنید' : 'خطایی رخ داده است دوباره تلاش کنید');
             console.error("خطا در ارسال درخواست به سرور", error);
         } finally {
             setAddingFeature(false);
@@ -211,7 +226,7 @@ const StepHomePage = () => {
                 <Grid>
                     <Grid container>
                         <Grid container sx={{ mt: '15px' }} spacing={2}>
-                            <Grid item xs={12} md={12}>
+                            <Grid item container xs={12} md={12} spacing={2} display={'flex'} alignItems={'center'}>
                                 <Grid item md={6}>
                                     <InputLabel>سوال</InputLabel>
                                     <TextField
@@ -219,6 +234,15 @@ const StepHomePage = () => {
                                         // label="سوال"
                                         fullWidth
                                         onChange={(e) => setName(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item md={6}>
+                                    <StandardImageList
+                                        label={"تصویر اصلی (297*147)"}
+                                        onChange={(e) => {
+                                            setSelectedFileItem(e);
+                                            console.log(e);
+                                        }}
                                     />
                                 </Grid>
                             </Grid>
@@ -242,20 +266,13 @@ const StepHomePage = () => {
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={12} >
-                                <StandardImageList
-                                    label={"تصویر اصلی (297*147)"}
-                                    onChange={(e) => {
-                                        setSelectedFileItem(e);
-                                        console.log(e);
-                                    }}
-                                />
-                            </Grid>
+
                         </Grid>
                     </Grid>
                     <Button
                         sx={{ my: 2 }}
                         variant="text"
+                        size="large"
                         color="primary"
                         onClick={handleAddRow}
                         disabled={name !== '' && selectedFileItem.length !== 0 && title !== '' && description !== '' && editingRowId === null ? false : true}
@@ -291,12 +308,13 @@ const StepHomePage = () => {
                                                         />
                                                     </Grid>
                                                     <Grid container item xs={4} sm={2} md={4} sx={{ justifyContent: { xs: 'flex-end' } }}>
+
                                                         <IconButton
                                                             size="medium"
                                                             color={editingRowId === row.id ? 'success' : "default"}
                                                             fullWidth
                                                             sx={{ height: 'fit-content' }}
-                                                            onClick={() => editingRowId === row.id ? handleSaveEdit(row.id) : handleEditRow(row.id)}
+                                                            onClick={() => editingRowId === row.id ? handleSaveEdit(row.id, row.id_storage) : handleEditRow(row.id)}
 
                                                         >
                                                             {
@@ -321,7 +339,21 @@ const StepHomePage = () => {
                                                 </Grid>
 
                                                 <Grid item xs={12} sm={12} md={12}>
-                                                    <TextField
+                                                    <StandardImageList
+                                                        label={"تصویر اصلی (297*147)"}
+                                                        onChange={(e) => editingRowId === row.id ? setSelectedFileItemEdit(e) : null}
+                                                        disableStatus={editingRowId !== row.id}
+                                                        idStorage={row.id_storage}
+
+
+                                                    // idStorage={selectedFileItemDataApi.map((x) => x.id)}
+                                                    />
+                                                    {
+                                                        row.id_storage
+                                                    }
+
+
+                                                    {/* <TextField
                                                         value={editingRowId === row.id ? selectedFileItemEdit : row.selectedFileItem}
                                                         label="جواب"
                                                         variant="outlined"
@@ -330,7 +362,7 @@ const StepHomePage = () => {
                                                         sx={{ my: '10px' }}
                                                         disabled={editingRowId !== row.id}
                                                         onChange={(e) => editingRowId === row.id ? setSelectedFileItemEdit(e.target.value) : {}}
-                                                    />
+                                                    /> */}
                                                 </Grid>
                                                 <Grid item xs={12} sm={12} md={12}>
                                                     <TextField
@@ -372,6 +404,7 @@ const StepHomePage = () => {
                                 variant="contained"
                                 color="primary"
                                 onClick={handleSubmit}
+                                // onClick={() => console.log('rows: ', rows, ' selectedFileItemDataApi: ', selectedFileItemDataApi)}
                                 // onClick={() => console.log(rows)}
                                 sx={{ borderRadius: "5px" }}
                                 disabled={rows === rowsTemp}

@@ -20,13 +20,13 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import GetToken from "GetToken";
 
-export default function StandardImageList({ onChange = () => { }, label }) {
+export default function StandardImageList({ onChange = () => { }, label, disableStatus, changeTypeSelected, idStorage }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [gallery, setGallery] = useState(data);
   const [openAddPhoto, setOpenAddPhoto] = useState(false);
   const [selectedFileItem, setSelectedFileItem] = useState({});
-  const [selectedImageId, setSelectedImageId] = useState(null);
+  const [selectedImageId, setSelectedImageId] = useState(idStorage ? idStorage : null);
   const [addingFeature, setAddingFeature] = useState(false);
   const [count, setCount] = useState(0);
   const [requestError, setRequestError] = useState(null);
@@ -46,7 +46,11 @@ export default function StandardImageList({ onChange = () => { }, label }) {
       setSelectedImageId(null);
     }
   };
-
+  useEffect(() => {
+    // Use the idStorage in your component logic as needed
+    console.log("idStorage:", idStorage);
+    // ... existing code
+  }, [idStorage]);
   const handleSubmit = async () => {
     setAddingFeature(true);
     setRequestError("");
@@ -101,7 +105,7 @@ export default function StandardImageList({ onChange = () => { }, label }) {
   const handleScroll = async () => {
     const { scrollTop, clientHeight, scrollHeight } = scrollContainerRef.current;
     if (scrollTop + clientHeight >= scrollHeight) {
-      setPage((prevPage) => prevPage + 1); 
+      setPage((prevPage) => prevPage + 1);
     }
   };
 
@@ -131,7 +135,7 @@ export default function StandardImageList({ onChange = () => { }, label }) {
     return () => {
       isCancelled = true;
     };
-  }, [page, perPage]); 
+  }, [page, perPage]);
 
 
 
@@ -168,8 +172,10 @@ export default function StandardImageList({ onChange = () => { }, label }) {
             // setCount(count + 1);
             // handleOpen()
           }}
+          disabled={disableStatus ? true : false}
         >
-          {item ? "فایل انتخاب شده" : "انتخاب فایل"}
+          {idStorage ? "فایل انتخاب شده" : "انتخاب فایل"}
+          {/* انتخاب فایل */}
         </Button>
       </Grid>
       <Dialog open={open} onClose={handleClosePanel} fullWidth maxWidth="lg">
