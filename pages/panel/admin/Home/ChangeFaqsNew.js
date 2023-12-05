@@ -250,6 +250,7 @@ const CreateOption = () => {
                                                         size="medium"
                                                         color={editingRowId === row.id ? 'success' : "default"}
                                                         fullWidth
+                                                        sx={{ height: 'fit-content' }}
                                                         onClick={() => editingRowId === row.id ? handleSaveEdit(row.id) : handleEditRow(row.id)}
 
                                                     >
@@ -262,6 +263,7 @@ const CreateOption = () => {
                                                         size="medium"
                                                         color="error"
                                                         fullWidth
+                                                        sx={{ height: 'fit-content' }}
                                                         onClick={() => editingRowId === row.id ? handleCancelEdit(row.id) : handleDeleteRow(row.id)}
 
                                                     >
