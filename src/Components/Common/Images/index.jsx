@@ -46,11 +46,7 @@ export default function StandardImageList({ onChange = () => { }, label, disable
       setSelectedImageId(null);
     }
   };
-  useEffect(() => {
-    // Use the idStorage in your component logic as needed
-    console.log("idStorage:", idStorage);
-    // ... existing code
-  }, [idStorage]);
+
   const handleSubmit = async () => {
     setAddingFeature(true);
     setRequestError("");

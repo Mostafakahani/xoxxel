@@ -23,20 +23,21 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import StandardImageList from "Components/Common/Images";
-const StepHomePage = () => {
+const LevelPage = () => {
     const router = useRouter();
 
-    const [selectedFileItemDataApi, setSelectedFileItemDataApi] = useState([]);
-    const [selectedFileItemDataApiEdit, setSelectedFileItemDataApiEdit] = useState([]);
     const [rows, setRows] = useState([]);
     const [rowsTemp, setRowsTemp] = useState([]);
+    const [name, setName] = useState("");
+    const [nameEdit, setNameEdit] = useState("");
+
     const [title, setTitle] = useState("");
     const [titleEdit, setTitleEdit] = useState("");
+
     const [description, setDescription] = useState("");
     const [descriptionEdit, setDescriptionEdit] = useState("");
 
-    const [name, setName] = useState("");
-    const [nameEdit, setNameEdit] = useState("");
+
     const [selectedFileItem, setSelectedFileItem] = useState([]);
     const [selectedFileItemEdit, setSelectedFileItemEdit] = useState("");
 
@@ -52,21 +53,9 @@ const StepHomePage = () => {
                     `${ServerURL.url}/admin/info/level/list`,
                     config
                 );
-                const reponseDataStorageName = responseLevels.data.map((x) => x.id_storage)
-                setSelectedFileItemDataApi(reponseDataStorageName)
-
-                console.log(responseLevels.data.map((x, index) => ({
-                    id: index,
-                    name: x.data.name,
-                    title: x.data.title,
-                    description: x.data.description,
-                    id_storage: x.id_storage.id
-                })))
                 const formattedData = formatData(responseLevels.data);
-
                 setRows(formattedData);
                 setRowsTemp(formattedData);
-
             } catch (error) {
                 console.error("Error fetching data from server", error);
             }
@@ -81,7 +70,6 @@ const StepHomePage = () => {
             }));
         };
         fetchData()
-
     }
     useEffect(() => {
 
@@ -125,8 +113,6 @@ const StepHomePage = () => {
             setTitleEdit(editingRow.title);
             setDescriptionEdit(editingRow.description);
 
-            // Pass id_storage to setSelectedFileItemDataApiEdit
-            setSelectedFileItemDataApiEdit(editingRow.selectedFileItem ? [editingRow.selectedFileItem.id] : []);
         }
     };
 
@@ -201,12 +187,6 @@ const StepHomePage = () => {
         setExpanded(newExpanded ? panel : false);
     };
 
-    // const handleClosePanel = () => {
-    //     setName("");
-    //     setPrice("");
-    //     setRows([]);
-    // };
-
     return (
         <>
             <AccountLayout>
@@ -228,39 +208,42 @@ const StepHomePage = () => {
                         <Grid container sx={{ mt: '15px' }} spacing={2}>
                             <Grid item container xs={12} md={12} spacing={2} display={'flex'} alignItems={'center'}>
                                 <Grid item md={6}>
-                                    <InputLabel>سوال</InputLabel>
+                                    <InputLabel>نام</InputLabel>
                                     <TextField
                                         value={name}
-                                        // label="سوال"
+                                        error={name.length < 3 && name !== ''}
+                                        helperText={name.length < 3 && name !== '' ? 'حداقل سه کاراکتر وارد کنید' : ''}
                                         fullWidth
                                         onChange={(e) => setName(e.target.value)}
                                     />
                                 </Grid>
                                 <Grid item md={6}>
                                     <StandardImageList
-                                        label={"تصویر اصلی (297*147)"}
+                                        label={'ویدیو (728*357)'}
                                         onChange={(e) => {
                                             setSelectedFileItem(e);
-                                            console.log(e);
                                         }}
+                                        idStorage={selectedFileItem.length !== 0 ? true : false}
                                     />
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} md={12} >
-                                <InputLabel>تایتل</InputLabel>
+                                <InputLabel>عنوان</InputLabel>
                                 <TextField
                                     value={title}
-                                    // label="جواب"
+                                    error={title.length < 3 && title !== ''}
+                                    helperText={title.length < 3 && title !== '' ? 'حداقل سه کاراکتر وارد کنید' : ''}
                                     fullWidth
                                     multiline
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12} md={12} >
-                                <InputLabel>دیسکرپشن</InputLabel>
+                                <InputLabel>متن</InputLabel>
                                 <TextField
                                     value={description}
-                                    // label="جواب"
+                                    error={description.length < 3 && description !== ''}
+                                    helperText={description.length < 3 && description !== '' ? 'حداقل سه کاراکتر وارد کنید' : ''}
                                     fullWidth
                                     multiline
                                     onChange={(e) => setDescription(e.target.value)}
@@ -271,8 +254,8 @@ const StepHomePage = () => {
                     </Grid>
                     <Button
                         sx={{ my: 2 }}
-                        variant="text"
-                        size="large"
+                        variant="contained"
+                        size="medium"
                         color="primary"
                         onClick={handleAddRow}
                         disabled={name !== '' && selectedFileItem.length !== 0 && title !== '' && description !== '' && editingRowId === null ? false : true}
@@ -281,10 +264,10 @@ const StepHomePage = () => {
                     </Button>
                     <div>
                         <Typography variant="h6" style={{ marginTop: "15px" }}>
-                            لیست سوال‌ها
+                            لیست لول ها
                         </Typography>
                         {rows.length === 0 ? (
-                            <Typography my={2}>هیچ سوالی وجود ندارد</Typography>
+                            <Typography my={2}>هیچ لولی وجود ندارد</Typography>
                         ) : (
                             <div>
                                 {rows.map((row) => (
@@ -294,11 +277,11 @@ const StepHomePage = () => {
                                         </AccordionSummary>
                                         <AccordionDetails>
                                             <Grid container spacing={2}>
-                                                <Grid container item xs={12} sm={12} md={12}>
-                                                    <Grid container item xs={8} sm={10} md={8}>
+                                                <Grid container item xs={12} sm={12} md={12} spacing={3}>
+                                                    <Grid container item xs={8} sm={10} md={6}>
                                                         <TextField
                                                             value={editingRowId === row.id ? nameEdit : row.name}
-                                                            label="سوال"
+                                                            label="نام"
                                                             variant="outlined"
                                                             fullWidth
                                                             multiline
@@ -307,8 +290,15 @@ const StepHomePage = () => {
                                                             onChange={(e) => editingRowId === row.id ? setNameEdit(e.target.value) : {}}
                                                         />
                                                     </Grid>
-                                                    <Grid container item xs={4} sm={2} md={4} sx={{ justifyContent: { xs: 'flex-end' } }}>
-
+                                                    <Grid item xs={12} sm={12} md={5} display={'flex'} alignItems={'center'}>
+                                                        <StandardImageList
+                                                            label={'ویدیو (728*357)'}
+                                                            onChange={(e) => editingRowId === row.id ? setSelectedFileItemEdit(e) : null}
+                                                            disableStatus={editingRowId !== row.id}
+                                                            idStorage={row.id_storage}
+                                                        />
+                                                    </Grid>
+                                                    <Grid container item xs={4} sm={2} md={1} display={'flex'} justifyContent={'center'} alignItems={'center'}>
                                                         <IconButton
                                                             size="medium"
                                                             color={editingRowId === row.id ? 'success' : "default"}
@@ -337,37 +327,10 @@ const StepHomePage = () => {
                                                         </IconButton>
                                                     </Grid>
                                                 </Grid>
-
-                                                <Grid item xs={12} sm={12} md={12}>
-                                                    <StandardImageList
-                                                        label={"تصویر اصلی (297*147)"}
-                                                        onChange={(e) => editingRowId === row.id ? setSelectedFileItemEdit(e) : null}
-                                                        disableStatus={editingRowId !== row.id}
-                                                        idStorage={row.id_storage}
-
-
-                                                    // idStorage={selectedFileItemDataApi.map((x) => x.id)}
-                                                    />
-                                                    {
-                                                        row.id_storage
-                                                    }
-
-
-                                                    {/* <TextField
-                                                        value={editingRowId === row.id ? selectedFileItemEdit : row.selectedFileItem}
-                                                        label="جواب"
-                                                        variant="outlined"
-                                                        multiline
-                                                        fullWidth
-                                                        sx={{ my: '10px' }}
-                                                        disabled={editingRowId !== row.id}
-                                                        onChange={(e) => editingRowId === row.id ? setSelectedFileItemEdit(e.target.value) : {}}
-                                                    /> */}
-                                                </Grid>
-                                                <Grid item xs={12} sm={12} md={12}>
+                                                <Grid item xs={12} sm={12} md={8}>
                                                     <TextField
                                                         value={editingRowId === row.id ? titleEdit : row.title}
-                                                        label="تایتل"
+                                                        label="عنوان"
                                                         variant="outlined"
                                                         multiline
                                                         fullWidth
@@ -379,7 +342,7 @@ const StepHomePage = () => {
                                                 <Grid item xs={12} sm={12} md={12}>
                                                     <TextField
                                                         value={editingRowId === row.id ? descriptionEdit : row.description}
-                                                        label="دیسکرپشن"
+                                                        label="متن"
                                                         variant="outlined"
                                                         multiline
                                                         fullWidth
@@ -404,18 +367,9 @@ const StepHomePage = () => {
                                 variant="contained"
                                 color="primary"
                                 onClick={handleSubmit}
-                                // onClick={() => console.log('rows: ', rows, ' selectedFileItemDataApi: ', selectedFileItemDataApi)}
-                                // onClick={() => console.log(rows)}
                                 sx={{ borderRadius: "5px" }}
                                 disabled={rows === rowsTemp}
                             >
-                                {/* {
-                                addingFeature && (
-                                    <div style={{ marginTop: "10px", textAlign: "center" }}>
-                                        <CircularProgress size={24} />
-                                    </div>
-                                )
-                            } */}
                                 ذخیره تغییرات
                             </Button>
                         </Grid>
@@ -436,4 +390,4 @@ const StepHomePage = () => {
     );
 };
 
-export default StepHomePage;
+export default LevelPage;

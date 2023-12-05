@@ -98,7 +98,7 @@ const Setting = () => {
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/StepHomePage'}>
+                                    <Link href={'/panel/admin/Home/LevelPage'}>
                                         <Button sx={{ fontSize: '12px'}} variant="contained">مراحل صفحه اصلی</Button>
                                     </Link>
                                 </Grid>
@@ -117,7 +117,7 @@ const Setting = () => {
                     ) ||
                     selectedButton === "Dashboard shop" && (
                         <Grid item xs={12} md={6}>
-                            <Link href={'/panel/admin/Home/StepHomePage'}>
+                            <Link href={'/panel/admin/Home/LevelPage'}>
                                 <Button sx={{ fontSize: '12px'}} variant="contained">مراحل صفحه اصلی</Button>
                             </Link>
                         </Grid>
