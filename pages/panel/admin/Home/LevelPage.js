@@ -1,28 +1,17 @@
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
     Button,
     CircularProgress,
     Grid,
-    IconButton,
-    InputLabel,
-    TextField,
-    Typography,
 } from "@mui/material";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-
 import ServerURL from "Components/Common/Layout/config";
 import GetToken from "GetToken";
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import CheckIcon from '@mui/icons-material/Check';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CloseIcon from '@mui/icons-material/Close';
-import StandardImageList from "Components/Common/Images";
+import LevelForm from "Components/Common/HomePageSteps/Levels/LevelForm";
+import LevelList from "Components/Common/HomePageSteps/Levels/LevelList";
 const LevelPage = () => {
     const router = useRouter();
 
@@ -177,7 +166,7 @@ const LevelPage = () => {
             setRowsTemp([])
 
         } catch (error) {
-            toast.error(error.response.data.message === 'levels must contain at least 3 elements' ? 'باید هر سه مرحله را وارد کنید' : 'خطایی رخ داده است دوباره تلاش کنید');
+            toast.error(error.response.data.message[0] === 'levels must contain at least 3 elements' ? 'باید هر سه مرحله را وارد کنید' : 'خطایی رخ داده است دوباره تلاش کنید');
             console.error("خطا در ارسال درخواست به سرور", error);
         } finally {
             setAddingFeature(false);
@@ -204,160 +193,38 @@ const LevelPage = () => {
                     theme="light"
                 />
                 <Grid>
-                    <Grid container>
-                        <Grid container sx={{ mt: '15px' }} spacing={2}>
-                            <Grid item container xs={12} md={12} spacing={2} display={'flex'} alignItems={'center'}>
-                                <Grid item md={6}>
-                                    <InputLabel>نام</InputLabel>
-                                    <TextField
-                                        value={name}
-                                        error={name.length < 3 && name !== ''}
-                                        helperText={name.length < 3 && name !== '' ? 'حداقل سه کاراکتر وارد کنید' : ''}
-                                        fullWidth
-                                        onChange={(e) => setName(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item md={6}>
-                                    <StandardImageList
-                                        label={'ویدیو (728*357)'}
-                                        onChange={(e) => {
-                                            setSelectedFileItem(e);
-                                        }}
-                                        idStorage={selectedFileItem.length !== 0 ? true : false}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={12} md={12} >
-                                <InputLabel>عنوان</InputLabel>
-                                <TextField
-                                    value={title}
-                                    error={title.length < 3 && title !== ''}
-                                    helperText={title.length < 3 && title !== '' ? 'حداقل سه کاراکتر وارد کنید' : ''}
-                                    fullWidth
-                                    multiline
-                                    onChange={(e) => setTitle(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={12} >
-                                <InputLabel>متن</InputLabel>
-                                <TextField
-                                    value={description}
-                                    error={description.length < 3 && description !== ''}
-                                    helperText={description.length < 3 && description !== '' ? 'حداقل سه کاراکتر وارد کنید' : ''}
-                                    fullWidth
-                                    multiline
-                                    onChange={(e) => setDescription(e.target.value)}
-                                />
-                            </Grid>
-
-                        </Grid>
-                    </Grid>
-                    <Button
-                        sx={{ my: 2 }}
-                        variant="contained"
-                        size="medium"
-                        color="primary"
-                        onClick={handleAddRow}
-                        disabled={name !== '' && selectedFileItem.length !== 0 && title !== '' && description !== '' && editingRowId === null ? false : true}
-                    >
-                        افزودن به لیست +
-                    </Button>
-                    <div>
-                        <Typography variant="h6" style={{ marginTop: "15px" }}>
-                            لیست لول ها
-                        </Typography>
-                        {rows.length === 0 ? (
-                            <Typography my={2}>هیچ لولی وجود ندارد</Typography>
-                        ) : (
-                            <div>
-                                {rows.map((row) => (
-                                    <Accordion expanded={expanded === `panel${row.id}`} onChange={handleChange(`panel${row.id}`)} sx={{ border: '2px dashed #5a5a5a75', borderRadius: '10px', my: '15px', boxShadow: 'none' }}>
-                                        <AccordionSummary aria-controls={`panel${row.id}d-content`} id={`panel${row.id}d-header`}>
-                                            <Typography sx={{ color: '#2C7EFA', my: '10px', fontSize: '16px', width: '100%', containerType: 'inline-size', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.name}</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
-                                            <Grid container spacing={2}>
-                                                <Grid container item xs={12} sm={12} md={12} spacing={3}>
-                                                    <Grid container item xs={8} sm={10} md={6}>
-                                                        <TextField
-                                                            value={editingRowId === row.id ? nameEdit : row.name}
-                                                            label="نام"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                            multiline
-                                                            sx={{ my: '10px' }}
-                                                            disabled={editingRowId !== row.id}
-                                                            onChange={(e) => editingRowId === row.id ? setNameEdit(e.target.value) : {}}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={5} display={'flex'} alignItems={'center'}>
-                                                        <StandardImageList
-                                                            label={'ویدیو (728*357)'}
-                                                            onChange={(e) => editingRowId === row.id ? setSelectedFileItemEdit(e) : null}
-                                                            disableStatus={editingRowId !== row.id}
-                                                            idStorage={row.id_storage}
-                                                        />
-                                                    </Grid>
-                                                    <Grid container item xs={4} sm={2} md={1} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                                                        <IconButton
-                                                            size="medium"
-                                                            color={editingRowId === row.id ? 'success' : "default"}
-                                                            fullWidth
-                                                            sx={{ height: 'fit-content' }}
-                                                            onClick={() => editingRowId === row.id ? handleSaveEdit(row.id, row.id_storage) : handleEditRow(row.id)}
-
-                                                        >
-                                                            {
-                                                                editingRowId === row.id ? <CheckIcon fontSize="small" /> : <ModeEditIcon fontSize="small" />
-                                                            }
-
-                                                        </IconButton>
-                                                        <IconButton
-                                                            size="medium"
-                                                            color="error"
-                                                            fullWidth
-                                                            sx={{ height: 'fit-content' }}
-                                                            onClick={() => editingRowId === row.id ? handleCancelEdit(row.id) : handleDeleteRow(row.id)}
-
-                                                        >
-                                                            {
-                                                                editingRowId === row.id ? <CloseIcon fontSize="small" /> : <DeleteIcon fontSize="small" />
-                                                            }
-
-                                                        </IconButton>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid item xs={12} sm={12} md={8}>
-                                                    <TextField
-                                                        value={editingRowId === row.id ? titleEdit : row.title}
-                                                        label="عنوان"
-                                                        variant="outlined"
-                                                        multiline
-                                                        fullWidth
-                                                        sx={{ my: '10px' }}
-                                                        disabled={editingRowId !== row.id}
-                                                        onChange={(e) => editingRowId === row.id ? setTitleEdit(e.target.value) : {}}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} sm={12} md={12}>
-                                                    <TextField
-                                                        value={editingRowId === row.id ? descriptionEdit : row.description}
-                                                        label="متن"
-                                                        variant="outlined"
-                                                        multiline
-                                                        fullWidth
-                                                        sx={{ my: '10px' }}
-                                                        disabled={editingRowId !== row.id}
-                                                        onChange={(e) => editingRowId === row.id ? setDescriptionEdit(e.target.value) : {}}
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        </AccordionDetails>
-                                    </Accordion>
-                                ))}
-                            </div>
-                        )}
-                    </div >
+                    <LevelForm
+                        name={name}
+                        title={title}
+                        description={description}
+                        selectedFileItem={selectedFileItem}
+                        onAddRow={handleAddRow}
+                        onEditRow={handleEditRow}
+                        onCancelEdit={handleCancelEdit}
+                        onSaveEdit={handleSaveEdit}
+                        setName={setName}
+                        setTitle={setTitle}
+                        setDescription={setDescription}
+                        setSelectedFileItem={setSelectedFileItem}
+                        editingRowId={editingRowId}
+                    />
+                    <LevelList
+                        rows={rows}
+                        expanded={expanded}
+                        handleChange={handleChange}
+                        editingRowId={editingRowId}
+                        nameEdit={nameEdit}
+                        titleEdit={titleEdit}
+                        descriptionEdit={descriptionEdit}
+                        setNameEdit={setNameEdit}
+                        setTitleEdit={setTitleEdit}
+                        setDescriptionEdit={setDescriptionEdit}
+                        handleEditRow={handleEditRow}
+                        handleCancelEdit={handleCancelEdit}
+                        handleDeleteRow={handleDeleteRow}
+                        handleSaveEdit={handleSaveEdit}
+                        setSelectedFileItemEdit={setSelectedFileItemEdit}
+                    />
                     <Grid container spacing={1}>
                         <Grid item>
                             <Button
@@ -368,7 +235,7 @@ const LevelPage = () => {
                                 color="primary"
                                 onClick={handleSubmit}
                                 sx={{ borderRadius: "5px" }}
-                                disabled={rows === rowsTemp}
+                                disabled={rows === rowsTemp || rows.length < 3}
                             >
                                 ذخیره تغییرات
                             </Button>
