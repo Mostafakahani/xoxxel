@@ -14,12 +14,20 @@ const TableGiftCardTraningPage = () => {
                     </Button>
                     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
                         <DialogContent>
-                            <HandleTableGiftCardTraning />
+                            <Grid container >
+                                <Grid item container>
+                                    <HandleTableGiftCardTraning />
+                                </Grid>
+                                <Grid item container spacing={1} >
+                                    <Grid item md={2}>
+                                        <Button onClick={handleOpen} variant="contained" color="primary" disableElevation >ذخیره تغییرات</Button>
+                                    </Grid>
+                                    <Grid item md={2}>
+                                        <Button onClick={handleClose} variant="outlined" color="error" disableElevation >انصراف </Button>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
                         </DialogContent>
-                        <Grid sx={{ m: '20px' }}>
-                            <Button onClick={handleOpen} variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
-                            <Button onClick={handleClose} variant="outlined" disableElevation sx={{ border: '1px solid #989898', '&:hover': { border: '1px solid #989898' }, ml: '10px', borderRadius: '5px', color: '#222' }}>انصراف </Button>
-                        </Grid>
                     </Dialog>
                 </Grid>
             </Grid>
