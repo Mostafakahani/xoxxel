@@ -4,19 +4,17 @@ import { useTheme } from "@emotion/react";
 import { useChat } from "./ChatContext";
 import { useState } from "react";
 
-const ChatInput = ({ onChange = () => { } }) => {
+const ChatInput = ({ onSendMessage }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-    // const { addMessage } = useChat();
     const [inputText, setInputText] = useState('');
 
     const handleSendMessage = () => {
-        // if (inputText.trim() !== '') {
-        //     addMessage(inputText, 'user1');
-        //     setInputText('');
-        // }
+        if (inputText.trim() !== '') {
+            onSendMessage(inputText); // Call the function to send the message
+            setInputText('');
+        }
     };
-
     return (
         <>
             <Grid
@@ -83,7 +81,7 @@ const ChatInput = ({ onChange = () => { } }) => {
                             }}
                             placeholder="Add your message"
                             // value={text}
-                            onChange={(e) => onChange(e.target.value)}
+                            onChange={(e) => setInputText(e.target.value)}
                         />
 
                     </Grid>

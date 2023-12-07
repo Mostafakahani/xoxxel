@@ -7,50 +7,52 @@ import ChatInput from './ChatInput';
 import { ChatProvider, useChat } from './ChatContext';
 import { useState } from 'react';
 
-const Chat = () => {
+const Chat = ({ data, getData }) => {
   // const { setMessages } = useChat();
-  const [messages, setMessages] = useState([
-
-  ])
+  const [messages, setMessages] = useState([])
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setMessages([
-      {
-        id: 1,
-        text: 'سلام!',
-        from: 'user1',
-      },
-      {
-        id: 2,
-        text: 'سلام به شما!',
-        from: 'user2',
-      },
-      {
-        id: 3,
-        text: 'چطور می‌توانم به شما کمک کنم؟',
-        from: 'user1',
-      },
-      {
-        id: 4,
-        text: 'من به دنبال راهنمایی در مورد یک پروژه هستم.',
-        from: 'user2',
-      },
-      {
-        id: 5,
-        text: 'من به دنبال راهنمایی در مورد یک پروژه هستم.',
-        from: 'user1',
-      },
-    ]);
-  }, []);
+    if (data.formattedInfo && data.formattedInfo.length > 0) {
+      setMessages(
+        data.formattedInfo.map((x) => ({
+          id: x.id,
+          text: x.title,
+          from: x.sender,
+        }))
+      );
+      setIsLoading(false);
+    }
+  }, [data.formattedInfo]);
 
+
+  const handleSendMessage = (messageText) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { id: prevMessages.length + 1, text: messageText, from: 'admin' },
+    ]);
+
+    // ارسال متن به تابع getData از پراپ
+    getData(messageText);
+  };
   return (
     // <ChatProvider initialMessages={[]}>
-    <Grid container sx={{ display: 'flex', flexDirection: 'column' }}>
-      <ChatHeader />
-      <ChatMessages messages={messages} />
-      <ChatInput
-      />
-    </Grid>
+    <>
+      <Grid sx={{ backgroundColor: '#fff', p: 3, borderRadius: "10px" }}>
+        <Grid container sx={{ display: 'flex', flexDirection: 'column' }}>
+          <ChatHeader />
+          <Grid sx={{ height: '500px' }}>
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : (
+              <ChatMessages messages={messages} />
+            )}
+          </Grid>
+          <ChatInput onSendMessage={handleSendMessage} />
+
+        </Grid>
+      </Grid>
+    </>
     // </ChatProvider>
   );
 };
