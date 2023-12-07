@@ -12,77 +12,57 @@ const ProductDetails = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [message, setSendMessage] = useState('');
-
-    useEffect(() => {
-        const fetchData = async () => {
-            if (id) {
-                const config = {
-                    headers: {
-                        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
-                    },
-                };
-                try {
-                    const response = await axios.get(
-                        `${ServerURL.url}/admin/tiket/get-tiket/${id}`,
-                        config
-                    );
-                    const dataResponse = response.data;
-                    setData(dataResponse);
-                } catch (error) {
-                    console.log(error);
-                } finally {
-                    setLoading(false);
-                }
-            }
-        };
-
-        fetchData();
-    }, [id]);
-
-
-    const SendMessage = async () => {
-        if (id && message.trim() !== '') {
-            const config = {
-                headers: {
-                    Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
-                },
-            };
-            const data = {
-                id_tiket: parseInt(id),
-                description: message
-            }
-            try {
-                await axios.post(
-                    `${ServerURL.url}/admin/tiket/replay-tiket`,
-                    data, config
-                );
-                // تاخیر برای به‌روزرسانی message
-                await new Promise(resolve => setTimeout(resolve, 100));
-                // حذف محتوای input پس از ارسال
-                setSendMessage('');
-                // بازیابی داده‌ها (اختیاری)
-                fetchData();
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        }
-    };
+    const [messageTemp, setSendMessageTemp] = useState('');
+    // useEffect(() => {
+    //     if (message) {
+    //         SendMessage();
+    //     }
+    //     // توجه کنید که فقط زمانی می‌خواهید فراخوانی شود که message تغییر کرده باشد.
+    // }, [message]);
+    
 
 
 
+    // const SendMessage = async () => {
+    //     if (message !== '') {
+    //         const config = {
+    //             headers: {
+    //                 Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+    //             },
+    //         };
+    //         const data = {
+    //             id_tiket: parseInt(id),
+    //             description: message
+    //         }
+    //         try {
+    //             const response = await axios.post(
+    //                 `${ServerURL.url}/admin/tiket/replay-tiket`,
+    //                 data, config
+    //             );
+    //             const dataResponse = response.data;
+    //             setData(dataResponse);
+    //             // تغییر messageTemp به مقدار فعلی message
+    //             setSendMessageTemp(message);
+    //         } catch (error) {
+    //             console.log(error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     } else {
 
+    //     }
+    // };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+   
+ 
 
     return (
         <>
             <AccountLayout>
-                <Chat data={data} getData={(e) => { setSendMessage(e); SendMessage(); }} />
-                {console.log(message)}
+                <Chat
+                    id={id}
+                // data={data}
+                />
             </AccountLayout>
         </>
     );

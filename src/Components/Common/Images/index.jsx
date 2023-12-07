@@ -4,7 +4,6 @@ import {
   Button,
   Dialog,
   Typography,
-  IconButton,
   Grid,
   CircularProgress,
 } from "@mui/material";
@@ -20,7 +19,7 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import GetToken from "GetToken";
 
-export default function StandardImageList({ onChange = () => { }, label, disableStatus, changeTypeSelected, idStorage }) {
+export default function StandardImageList({ onChange = () => { }, label, disableStatus, justIcon, idStorage }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [gallery, setGallery] = useState(data);
@@ -161,8 +160,8 @@ export default function StandardImageList({ onChange = () => { }, label, disable
       >
         <label>{label}</label>
         <Button
-          sx={{ mt: 1 }}
-          startIcon={<AddPhotoAlternateOutlinedIcon />}
+          sx={{ mt: justIcon ? 0 : 1 }}
+          startIcon={!justIcon && <AddPhotoAlternateOutlinedIcon />}
           onClick={() => {
             setOpen(true);
             // setCount(count + 1);
@@ -170,10 +169,20 @@ export default function StandardImageList({ onChange = () => { }, label, disable
           }}
           disabled={disableStatus ? true : false}
         >
-          {idStorage ? "فایل انتخاب شده" : "انتخاب فایل"}
+          {
+            justIcon ? (
+              <>
+                {justIcon}
+              </>
+            ) : (
+              <>
+                {idStorage ? "فایل انتخاب شده" : "انتخاب فایل"}
+              </>
+            )
+          }
           {/* انتخاب فایل */}
         </Button>
-      </Grid>
+      </Grid >
       <Dialog open={open} onClose={handleClosePanel} fullWidth maxWidth="lg">
         <Grid sx={{ p: "15px" }}>
           <ImageList

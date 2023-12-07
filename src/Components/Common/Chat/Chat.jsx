@@ -6,11 +6,48 @@ import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import { ChatProvider, useChat } from './ChatContext';
 import { useState } from 'react';
+import ServerURL from '../Layout/config';
+import GetToken from 'GetToken';
+import axios from 'axios';
 
-const Chat = ({ data, getData }) => {
+const Chat = ({ id }) => {
   // const { setMessages } = useChat();
+  const [onUpdate, setOnUpdate] = useState(0)
   const [messages, setMessages] = useState([])
+  const [sendMessage, setSendMessage] = useState([])
   const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [updateCount, setUpdateCount] = useState(0);
+
+  const handleUpdate = (value) => {
+    setUpdateCount((prevCount) => prevCount + value);
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const config = {
+        headers: {
+          Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+        },
+      };
+      try {
+        const response = await axios.get(
+          `${ServerURL.url}/admin/tiket/get-tiket/${id}`,
+          config
+        );
+        const dataResponse = response.data;
+        setData(dataResponse);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+
+    };
+
+    fetchData();
+  }, [id, updateCount]);
+
 
   useEffect(() => {
     if (data.formattedInfo && data.formattedInfo.length > 0) {
@@ -25,16 +62,10 @@ const Chat = ({ data, getData }) => {
     }
   }, [data.formattedInfo]);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  const handleSendMessage = (messageText) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { id: prevMessages.length + 1, text: messageText, from: 'admin' },
-    ]);
-
-    // ارسال متن به تابع getData از پراپ
-    getData(messageText);
-  };
   return (
     // <ChatProvider initialMessages={[]}>
     <>
@@ -48,7 +79,7 @@ const Chat = ({ data, getData }) => {
               <ChatMessages messages={messages} />
             )}
           </Grid>
-          <ChatInput onSendMessage={handleSendMessage} />
+          <ChatInput onUpdate={handleUpdate} id={id} />
 
         </Grid>
       </Grid>
