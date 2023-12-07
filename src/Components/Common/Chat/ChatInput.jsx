@@ -50,8 +50,41 @@ const ChatInput = ({ onUpdate, id }) => {
                 setLoading(false);
                 setLoadingStatus(false)
             }
-        } else {
+        } else if (selectedFileItem.length !== 0) {
 
+            const config = {
+                headers: {
+                    Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+                },
+            };
+            const data = {
+                id_tiket: parseInt(id),
+                id_storage: parseInt(selectedFileItem)
+            }
+            try {
+                const response = await axios.post(
+                    `${ServerURL.url}/admin/tiket/replay-tiket-file`,
+                    data, config
+                );
+                const dataResponse = response.data;
+                if (dataResponse.status === 'success') {
+                    console.log('ok')
+                    onUpdate(1);
+                    setInputText('')
+                    selectedFileItem([])
+                    setLoadingStatus(false)
+                } else {
+                    return
+                }
+            } catch (error) {
+                console.log(error);
+                setLoadingStatus(false)
+            } finally {
+                setLoading(false);
+                setLoadingStatus(false)
+            }
+        } else {
+            return
         }
     };
 
@@ -73,13 +106,15 @@ const ChatInput = ({ onUpdate, id }) => {
                     <Grid container item xs={7} sm={5} md={2} alignItems={'center'} spacing={1}>
                         <Grid item>
                             {!isMobile && (
-                                <Button disabled={loadingStatus || inputText === ''} disableElevation onClick={SendMessage} variant="contained" color="info" startIcon={
-                                    <SvgIcon>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22" fill="none">
-                                            <path d="M16.3062 14.2114L17.8081 9.7057C19.1201 5.76961 19.7761 3.80157 18.7373 2.76271C17.6984 1.72385 15.7304 2.37986 11.7943 3.69189L7.28863 5.19378C4.11183 6.25272 2.52343 6.78218 2.07205 7.55861C1.64265 8.29723 1.64265 9.20948 2.07205 9.9481C2.52343 10.7245 4.11183 11.254 7.28863 12.3129C7.68234 12.4442 8.12526 12.3505 8.42007 12.0584L13.2375 7.28558C13.5085 7.01707 13.9459 7.01911 14.2144 7.29013C14.4829 7.56115 14.4809 7.99853 14.2099 8.26705L9.47023 12.9628C9.14528 13.2847 9.04242 13.7774 9.18707 14.2114C10.246 17.3882 10.7755 18.9766 11.5519 19.4279C12.2905 19.8574 13.2028 19.8574 13.9414 19.4279C14.7178 18.9766 15.2473 17.3882 16.3062 14.2114Z" fill="white" />
-                                        </svg>
-                                    </SvgIcon>
-                                }>
+                                <Button
+                                    // disabled={Object.values(selectedFileItem).some(value => value === 0)}
+                                    disableElevation onClick={SendMessage} variant="contained" color="info" startIcon={
+                                        <SvgIcon>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22" fill="none">
+                                                <path d="M16.3062 14.2114L17.8081 9.7057C19.1201 5.76961 19.7761 3.80157 18.7373 2.76271C17.6984 1.72385 15.7304 2.37986 11.7943 3.69189L7.28863 5.19378C4.11183 6.25272 2.52343 6.78218 2.07205 7.55861C1.64265 8.29723 1.64265 9.20948 2.07205 9.9481C2.52343 10.7245 4.11183 11.254 7.28863 12.3129C7.68234 12.4442 8.12526 12.3505 8.42007 12.0584L13.2375 7.28558C13.5085 7.01707 13.9459 7.01911 14.2144 7.29013C14.4829 7.56115 14.4809 7.99853 14.2099 8.26705L9.47023 12.9628C9.14528 13.2847 9.04242 13.7774 9.18707 14.2114C10.246 17.3882 10.7755 18.9766 11.5519 19.4279C12.2905 19.8574 13.2028 19.8574 13.9414 19.4279C14.7178 18.9766 15.2473 17.3882 16.3062 14.2114Z" fill="white" />
+                                            </svg>
+                                        </SvgIcon>
+                                    }>
 
                                     {loadingStatus ? <CircularProgress size={24} /> :
                                         'Send'
@@ -90,7 +125,10 @@ const ChatInput = ({ onUpdate, id }) => {
 
                             {isMobile && (
                                 // <Box >
-                                <IconButton disabled={loadingStatus || inputText === ''} onClick={SendMessage} sx={{ backgroundColor: '#5094FB', borderRadius: '5px' }} variant="contained" size="small">
+                                <IconButton
+                                    // disabled={loadingStatus || inputText === '' || Object.keys(selectedFileItem).length === 0}
+                                    onClick={SendMessage}
+                                    sx={{ backgroundColor: '#5094FB', borderRadius: '5px' }} variant="contained" size="small">
                                     {loadingStatus ? <CircularProgress size={24} /> :
                                         <SvgIcon>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22" fill="none">
