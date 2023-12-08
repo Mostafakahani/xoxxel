@@ -8,14 +8,17 @@ import GetToken from "GetToken";
 import axios from "axios";
 import StandardImageList from "../Images";
 
-const ChatInput = ({ onUpdate, id }) => {
+const ChatInput = ({ data, onUpdate, id }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [inputText, setInputText] = useState('');
-    const [selectedFileItem, setSelectedFileItem] = useState({});
+    const [selectedFileItem, setSelectedFileItem] = useState(null);
 
     const [loading, setLoading] = useState(true);
     const [loadingStatus, setLoadingStatus] = useState(false);
+    if (!data || !id) {
+        return <div>Loading...</div>;
+    }
     const SendMessage = async (e) => {
         // setSendMessage(e)
         setLoadingStatus(true)
@@ -50,7 +53,7 @@ const ChatInput = ({ onUpdate, id }) => {
                 setLoading(false);
                 setLoadingStatus(false)
             }
-        } else if (selectedFileItem.length !== 0) {
+        } else if (selectedFileItem !== null || selectedFileItem !== 0) {
 
             const config = {
                 headers: {
@@ -107,7 +110,7 @@ const ChatInput = ({ onUpdate, id }) => {
                         <Grid item>
                             {!isMobile && (
                                 <Button
-                                    // disabled={Object.values(selectedFileItem).some(value => value === 0)}
+                                    disabled={!loadingStatus ? false : true || inputText !== '' ? false : true || Object.keys(selectedFileItem).length !== 0 ? false : true}
                                     disableElevation onClick={SendMessage} variant="contained" color="info" startIcon={
                                         <SvgIcon>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22" fill="none">
@@ -126,7 +129,7 @@ const ChatInput = ({ onUpdate, id }) => {
                             {isMobile && (
                                 // <Box >
                                 <IconButton
-                                    // disabled={loadingStatus || inputText === '' || Object.keys(selectedFileItem).length === 0}
+                                    disabled={loadingStatus || inputText === '' || Object.keys(selectedFileItem).length === 0}
                                     onClick={SendMessage}
                                     sx={{ backgroundColor: '#5094FB', borderRadius: '5px' }} variant="contained" size="small">
                                     {loadingStatus ? <CircularProgress size={24} /> :
@@ -154,7 +157,7 @@ const ChatInput = ({ onUpdate, id }) => {
                                         <path d="M13.1885 11.3952L10.3579 14.2513C10.0026 14.6098 9.82491 14.7891 9.6954 14.9594C8.80108 16.1353 8.80108 17.7708 9.6954 18.9468C9.82491 19.1171 10.0026 19.2963 10.3579 19.6548C10.7132 20.0133 10.8908 20.1926 11.0596 20.3232C12.2251 21.2256 13.846 21.2256 15.0115 20.3232C15.1802 20.1926 15.3579 20.0133 15.7132 19.6548L19.3854 15.9496C20.8094 14.5128 21.5214 13.7944 21.9104 13.0241C22.6965 11.4673 22.6965 9.62483 21.9104 8.06802C21.5214 7.29773 20.8094 6.57934 19.3854 5.14257C17.9615 3.70579 17.2495 2.98741 16.4861 2.59492C14.9431 1.80169 13.1171 1.80169 11.5741 2.59492C10.8107 2.98741 10.0987 3.70579 8.67476 5.14257L4.94515 8.90572C4.14545 9.71261 3.7456 10.1161 3.47158 10.5128C2.17614 12.3882 2.17614 14.8794 3.47158 16.7548C3.7456 17.1515 4.14545 17.5549 4.94515 18.3618" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
                                     </svg>
                                 </SvgIcon>}
-                                disabled={loadingStatus}
+                                disableStatus={loadingStatus || data.status === 'close' ? true : false}
                                 onChange={(e) => {
                                     setSelectedFileItem(e);
                                     console.log(e);
@@ -166,6 +169,7 @@ const ChatInput = ({ onUpdate, id }) => {
                     </Grid>
                     <Grid container item xs={5} sm={7} md={9} sx={{ justifyContent: 'flex-end' }}>
                         <TextField
+                            disabled={data.status === 'close' ? true : false}
                             variant="outlined"
                             fullWidth
                             sx={{ direction: 'rtl', border: 'none', "& fieldset": { border: 'none' } }}
@@ -177,7 +181,7 @@ const ChatInput = ({ onUpdate, id }) => {
                                     },
                                 },
                             }}
-                            placeholder="Add your message"
+                            placeholder={data.status === 'close' ? 'Open the chat to send a message' : "Add your message"}
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
                             onKeyPress={(e) => { if (e.key === 'Enter') { SendMessage(); } }}

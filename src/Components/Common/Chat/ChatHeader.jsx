@@ -1,8 +1,7 @@
-import { Avatar, Badge, Button, CircularProgress, Grid, IconButton, Typography, useMediaQuery } from "@mui/material";
+import { Avatar, Button, CircularProgress, Grid, IconButton, Typography, useMediaQuery } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { styled } from '@mui/system';
+// import { styled } from '@mui/system';
 import { useTheme } from "@emotion/react";
-import { useChat } from "./ChatContext";
 import ServerURL from "../Layout/config";
 import GetToken from "GetToken";
 import axios from "axios";
@@ -12,35 +11,36 @@ const ChatHeader = ({ id, data, onUpdate }) => {
     const theme = useTheme();
     const [loadingStatus, setLoadingStatus] = useState(false);
     const [status, setStatus] = useState(null);
-    const StyledBadge = styled(Badge)(({ theme }) => ({
-        '& .MuiBadge-badge': {
-            backgroundColor: '#44b700',
-            color: '#44b700',
-            boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-            // right: '36px', //me added
-            '&::after': {
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                borderRadius: '50%',
-                animation: 'ripple 1.2s infinite ease-in-out',
-                border: '1px solid currentColor',
-                content: '""',
-            },
-        },
-        '@keyframes ripple': {
-            '0%': {
-                transform: 'scale(.8)',
-                opacity: 1,
-            },
-            '100%': {
-                transform: 'scale(2.4)',
-                opacity: 0,
-            },
-        },
-    }));
+    /////////////////////////////////////////////////////////////////// HandleOnlineStatus
+    // const StyledBadge = styled(Badge)(({ theme }) => ({
+    //     '& .MuiBadge-badge': {
+    //         backgroundColor: '#44b700',
+    //         color: '#44b700',
+    //         boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    //         // right: '36px', //me added
+    //         '&::after': {
+    //             position: 'absolute',
+    //             top: 0,
+    //             left: 0,
+    //             width: '100%',
+    //             height: '100%',
+    //             borderRadius: '50%',
+    //             animation: 'ripple 1.2s infinite ease-in-out',
+    //             border: '1px solid currentColor',
+    //             content: '""',
+    //         },
+    //     },
+    //     '@keyframes ripple': {
+    //         '0%': {
+    //             transform: 'scale(.8)',
+    //             opacity: 1,
+    //         },
+    //         '100%': {
+    //             transform: 'scale(2.4)',
+    //             opacity: 0,
+    //         },
+    //     },
+    // }));
     const isTabletUp = useMediaQuery(theme.breakpoints.up('sm'));
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -109,13 +109,13 @@ const ChatHeader = ({ id, data, onUpdate }) => {
                         <Typography mr={1} sx={{ fontWeight: 600, fontSize: { xs: "11px", sm: '15px' } }}>
                             {data.sender}
                         </Typography>
-                        <StyledBadge
+                        {/* <StyledBadge
                             overlap="circular"
                             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                             variant="dot"
-                        >
-                            <Avatar alt="Profile" src="/images/avatar.png" />
-                        </StyledBadge>
+                        > */}
+                        <Avatar alt="Profile" src="/images/avatar.png" />
+                        {/* </StyledBadge> */}
                     </Grid>
                 </Grid>
                 <Grid container my={2} sx={{ border: '1px solid #F5F5F6' }} />

@@ -77,7 +77,7 @@ const Chat = ({ id }) => {
               <ChatMessages messages={messages} />
             )}
           </Grid>
-          <ChatInput onUpdate={handleUpdate} id={id} />
+          <ChatInput data={data.info} onUpdate={handleUpdate} id={id} />
 
         </Grid>
       </Grid>
