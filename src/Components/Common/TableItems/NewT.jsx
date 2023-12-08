@@ -14,6 +14,10 @@ import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import AddProductFeatureNew from "../Popup/CreateProductOptionNew";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import ServerURL from "../Layout/config";
+import GetToken from "GetToken";
+import axios from "axios";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -104,11 +108,51 @@ export default function TableItems({
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [selectedRowId, setSelectedRowId] = React.useState(null);
   const [selectedStatus, setSelectedStatus] = React.useState('');
-  const [alignment, setAlignment] = React.useState(
-    selectedStatus === 'waiting' ? '' : 'accepted' || ''
-  );
-  const handleChange = (event, newAlignment) => {
+  const [submitToServer, setSubmitToServer] = React.useState('');
+  const [count, setCount] = React.useState(0);
+  const [alignment, setAlignment] = React.useState('');
+
+  React.useEffect(() => {
+    if (selectedStatus === 'waiting') {
+      setAlignment('');
+    } else if (selectedStatus === 'accepted') {
+      setAlignment('accepted');
+    }
+
+    setSubmitToServer(alignment);
+  }, [selectedStatus, count]);
+
+  const handleChange = async (event, newAlignment) => {
     setAlignment(newAlignment);
+    setSubmitToServer(newAlignment);
+    if (newAlignment !== '' & newAlignment !== null) {
+      try {
+        const config = {
+          headers: {
+            Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+          },
+        };
+
+        const sendData = {
+          id_payment: selectedRowId,
+          status: newAlignment,
+        };
+
+        const response = await axios.post(
+          `${ServerURL.url}/admin/payment/change-status`,
+          sendData,
+          config
+        );
+        if (response.status === 201) {
+          toast.success("با موفقیت تغغیر داده شد.");
+          setCount(count + 1);
+        } else {
+          toast.error("لطفا دوباره امتحان کنید");
+        }
+      } catch (error) {
+        console.error("Error sending delete request:", error);
+      }
+    }
   };
 
   const openDialog = (id) => {
@@ -178,185 +222,196 @@ export default function TableItems({
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <TableContainer className="container-table table-scroll">
-        <Table
-          stickyHeader
-          aria-label="sticky table"
-          sx={{
-            borderRadius: "8px",
-            overflow: "hidden",
-            minWidth: 1000,
-            "td,tr": {
-              fontSize: "12.67px",
-              color: "#212121",
-              fontWeight: 500,
-              py: 1.6,
-              borderBottom: "none",
-            },
-            th: {
-              fontSize: "12.67px",
-              color: "#212121",
-              fontWeight: 500,
-              p: 0.5,
-              borderBottom: "none",
-            },
-            "tr:hover": {
-              backgroundColor: "transparent !important",
-            },
-            tr: {
-              position: "relative",
-              "&::before": {
-                content: '""',
-                width: "100%",
-                height: "56px",
-                backgroundColor: "grey.themeColor",
-                position: "absolute",
-                top: "50%",
-                transform: "translateY(-50%)",
-                left: "0",
-                borderRadius: "8px",
-                zIndex: -1,
-                borderBottom: "1px solid #EEEEEE",
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        limit={5}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <Box sx={{ width: "100%" }}>
+        <TableContainer className="container-table table-scroll">
+          <Table
+            stickyHeader
+            aria-label="sticky table"
+            sx={{
+              borderRadius: "8px",
+              overflow: "hidden",
+              minWidth: 1000,
+              "td,tr": {
+                fontSize: "12.67px",
+                color: "#212121",
+                fontWeight: 500,
+                py: 1.6,
+                borderBottom: "none",
               },
-              "&.Mui-selected": {
+              th: {
+                fontSize: "12.67px",
+                color: "#212121",
+                fontWeight: 500,
+                p: 0.5,
+                borderBottom: "none",
+              },
+              "tr:hover": {
                 backgroundColor: "transparent !important",
-                ".MuiCheckbox-root": {
-                  svg: {
-                    color: "primary.main",
-                  },
-                },
-
-                // opacity: 0.7,
               },
-            },
-          }}
-          size={"medium"}
-        >
-          <EnhancedTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={dataBody?.length}
-            dataHead={dataHead}
-            selected={selected}
-          />
-          <Dialog open={isDialogOpen} onClose={closeDialog}>
-            <DialogContent>
-              <DialogTitle>{`Row ID: ${selectedRowId}`}</DialogTitle>
+              tr: {
+                position: "relative",
+                "&::before": {
+                  content: '""',
+                  width: "100%",
+                  height: "56px",
+                  backgroundColor: "grey.themeColor",
+                  position: "absolute",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  left: "0",
+                  borderRadius: "8px",
+                  zIndex: -1,
+                  borderBottom: "1px solid #EEEEEE",
+                },
+                "&.Mui-selected": {
+                  backgroundColor: "transparent !important",
+                  ".MuiCheckbox-root": {
+                    svg: {
+                      color: "primary.main",
+                    },
+                  },
 
-              <ToggleButtonGroup
-                color="primary"
-                value={selectedStatus === '' ? null : alignment}
-                exclusive
-                onChange={handleChange}
-                aria-label="Platform"
-              >
+                  // opacity: 0.7,
+                },
+              },
+            }}
+            size={"medium"}
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={dataBody?.length}
+              dataHead={dataHead}
+              selected={selected}
+            />
 
-                <ToggleButton value="accepted" color="success">
-                  Accepted
-                </ToggleButton>
-                <ToggleButton value="rejected" color="error">
-                  Rejected
-                </ToggleButton>
-                <ToggleButton value="" disabled>
-                  :select one
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </DialogContent>
-          </Dialog>
+            <Dialog open={isDialogOpen} onClose={closeDialog}>
+              <DialogContent>
+                <DialogTitle>{`Row ID: ${selectedRowId}`}</DialogTitle>
 
-          <TableBody sx={{ transform: "translateY(7px)" }}>
-            {dataBody?.length !== 0 &&
-              dataBody?.map((row, index) => {
-                const isItemSelected = isSelected(row?.id);
-                const labelId = `enhanced-table-checkbox-${index}`;
+                <ToggleButtonGroup
+                  color="primary"
+                  value={selectedStatus === '' ? null : alignment}
+                  exclusive
+                  onChange={handleChange}
+                  aria-label="Platform"
+                >
+                  <ToggleButton value="accepted" color="success">
+                    Accepted
+                  </ToggleButton>
+                  <ToggleButton value="rejected" color="error">
+                    Rejected
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </DialogContent>
+            </Dialog>
 
-                return (
-                  <TableRow
-                    hover
-                    role={selected && "checkbox"}
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                  >
-                    {selected && (
-                      <TableCell padding="checkbox" sx={{ pl: "6px" }}>
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          onClick={() => handleClick(row?.id)}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                          sx={{
-                            ".MuiSvgIcon-root": {
-                              color: "#6F767E66",
-                            },
-                          }}
-                        />
-                      </TableCell>
-                    )}
-                    {row?.data?.map((e, i) => (
-                      <TableCell align="center" sx={{
-                        textAlign: 'left'
-                      }} key={i}>
-                        {!e?.type && e}
-                        {e?.type === "avatar" && (
-                          <Box className="center">
-                            <Avatar
-                              src={e?.url}
-                              sx={{ width: "30px", height: "30px" }}
-                            />
-                            <Typography
-                              component={"h6"}
-                              sx={{
-                                fontSize: "12.67px",
-                                color: "#212121",
-                                fontWeight: 500,
-                                ml: 1,
+            <TableBody sx={{ transform: "translateY(7px)" }}>
+              {dataBody?.length !== 0 &&
+                dataBody?.map((row, index) => {
+                  const isItemSelected = isSelected(row?.id);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      role={selected && "checkbox"}
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.id}
+                      selected={isItemSelected}
+                    >
+                      {selected && (
+                        <TableCell padding="checkbox" sx={{ pl: "6px" }}>
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            onClick={() => handleClick(row?.id)}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                            sx={{
+                              ".MuiSvgIcon-root": {
+                                color: "#6F767E66",
+                              },
+                            }}
+                          />
+                        </TableCell>
+                      )}
+                      {row?.data?.map((e, i) => (
+                        <TableCell align="center" sx={{
+                          textAlign: 'left'
+                        }} key={i}>
+                          {!e?.type && e}
+                          {e?.type === "avatar" && (
+                            <Box className="center">
+                              <Avatar
+                                src={e?.url}
+                                sx={{ width: "30px", height: "30px" }}
+                              />
+                              <Typography
+                                component={"h6"}
+                                sx={{
+                                  fontSize: "12.67px",
+                                  color: "#212121",
+                                  fontWeight: 500,
+                                  ml: 1,
+                                }}
+                              >
+                                {e?.text}
+                              </Typography>
+                            </Box>
+                          )}
+                          {e?.type === "textBold" && (
+                            <>
+                              <Typography variant="p" sx={{ fontWeight: 600, fontSize: "15px" }}> {e?.text}</Typography>
+                            </>
+                          )}
+                          {e?.type === "text" && (
+                            <>
+                              <Typography variant="p" sx={{}}> {e?.text}</Typography>
+                            </>
+                          )}
+
+                          {e?.type === "status" && (
+                            <StatusButton {...e} variant="contained">
+                              {e?.text}
+                            </StatusButton>
+                          )}
+                          {e?.type === "statusBtn" && (
+                            <StatusButton
+                              {...e}
+                              onClick={() => {
+                                handleStatusBtnClick(row?.id);
+                                setSelectedStatus(e?.text);
                               }}
+                              variant="contained"
                             >
                               {e?.text}
-                            </Typography>
-                          </Box>
-                        )}
-                        {e?.type === "textBold" && (
-                          <>
-                            <Typography variant="p" sx={{ fontWeight: 600, fontSize: "15px" }}> {e?.text}</Typography>
-                          </>
-                        )}
-                        {e?.type === "text" && (
-                          <>
-                            <Typography variant="p" sx={{}}> {e?.text}</Typography>
-                          </>
-                        )}
+                            </StatusButton>
 
-                        {e?.type === "status" && (
-                          <StatusButton {...e} variant="contained">
-                            {e?.text}
-                          </StatusButton>
-                        )}
-                        {e?.type === "statusBtn" && (
-                          <StatusButton
-                            {...e}
-                            onClick={() => {
-                              handleStatusBtnClick(row?.id);
-                              setSelectedStatus(e?.text);
-                            }}
-                            variant="contained"
-                          >
-                            {e?.text}
-                          </StatusButton>
-
-                        )}
-                        {e?.type === "btn" && (
-                          <>
-                            <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-                              {/* <AddProductFeatureNew tableId={row.data[0]} />
+                          )}
+                          {e?.type === "btn" && (
+                            <>
+                              <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
+                                {/* <AddProductFeatureNew tableId={row.data[0]} />
                               <Button
                                 onClick={(x) => console.log(row.data[0])}
                                 // onClick={() => props.show(row["id"])}
@@ -369,19 +424,19 @@ export default function TableItems({
                                   مشاهده و ویرایش
                                 </Link>
                               </Button> */}
-                              <Button disabled startIcon={<EyesIcon />} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
-                                <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
-                                  مشاهده و ویرایش
-                                </Link>
-                              </Button>
-                            </Grid>
-                          </>
-                        )}
+                                <Button disabled startIcon={<EyesIcon />} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
+                                  <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
+                                    مشاهده و ویرایش
+                                  </Link>
+                                </Button>
+                              </Grid>
+                            </>
+                          )}
 
 
-                        {/* {e?.type === "jsx" && e?.jsx} */}
-                        {/* M */}
-                        {/* {e?.type === "text" && (
+                          {/* {e?.type === "jsx" && e?.jsx} */}
+                          {/* M */}
+                          {/* {e?.type === "text" && (
                           <>
                             <Avatar src="/" />
                             <Typography {...e} variant="contained">
@@ -389,48 +444,48 @@ export default function TableItems({
                             </Typography>
                           </>
                         )} */}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {
-        dataBody?.length === 0 && (
-          <Typography
-            component={"h6"}
-            sx={{
-              textAlign: "center",
-              color: "black",
-              my: 3
-            }}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {
+          dataBody?.length === 0 && (
+            <Typography
+              component={"h6"}
+              sx={{
+                textAlign: "center",
+                color: "black",
+                my: 3
+              }}
+            >
+              موردی پیدا نشد!
+            </Typography>
+          )
+        }
+        {dataBody?.length !== 0 && (
+          <Grid
+            spacing={5}
+            display="flex"
+            alignItems="center"
+            sx={{ mt: 2, flexDirection: { xs: "row", sm: 'row', }, justifyContent: { xs: 'space-between', sm: 'center' } }}
           >
-            موردی پیدا نشد!
-          </Typography>
-        )
-      }
-      {dataBody?.length !== 0 && (
-        <Grid
-          spacing={5}
-          display="flex"
-          alignItems="center"
-          sx={{ mt: 2, flexDirection: { xs: "row", sm: 'row', }, justifyContent: { xs: 'space-between', sm: 'center' } }}
-        >
-          <Grid item>
-            <Stack spacing={2}>
-              <Pagination
-                shape="rounded"
-                count={pageData.totalPages}
-                page={page}
-                onChange={(event, value) => setPage(value)}
-                color="standard"
-              />
-            </Stack>
-          </Grid>
-          <Grid item container xs={3} sm={2} md={1}>
-            {/* <Typography
+            <Grid item>
+              <Stack spacing={2}>
+                <Pagination
+                  shape="rounded"
+                  count={pageData.totalPages}
+                  page={page}
+                  onChange={(event, value) => setPage(value)}
+                  color="standard"
+                />
+              </Stack>
+            </Grid>
+            <Grid item container xs={3} sm={2} md={1}>
+              {/* <Typography
               sx={{
                 fontSize: '11px',
                 textAlign: "center",
@@ -439,30 +494,32 @@ export default function TableItems({
             >
               تعداد نمایش
             </Typography> */}
-            <Select
-              displayEmpty
-              size="small"
-              value={perPage}
-              onChange={(e) => setPerPage(e.target.value)}
-              sx={{ width: { xs: '100%', sm: "80%" } }}
-              defaultValue={15}
-            // onOpen={() => setCountTwo(countTwo + 1)}
-            >
-              {Array.isArray(listPerPage) ? (
-                listPerPage.map((data, index) => (
-                  <MenuItem key={index} value={data}>
-                    {data}
+              <Select
+                displayEmpty
+                size="small"
+                value={perPage}
+                onChange={(e) => setPerPage(e.target.value)}
+                sx={{ width: { xs: '100%', sm: "80%" } }}
+                defaultValue={15}
+              // onOpen={() => setCountTwo(countTwo + 1)}
+              >
+                {Array.isArray(listPerPage) ? (
+                  listPerPage.map((data, index) => (
+                    <MenuItem key={index} value={data}>
+                      {data}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value={null}>
+                    Loading...
                   </MenuItem>
-                ))
-              ) : (
-                <MenuItem value={null}>
-                  Loading...
-                </MenuItem>
-              )}
-            </Select>
+                )}
+              </Select>
+            </Grid>
           </Grid>
-        </Grid>
-      )}
-    </Box >
+        )}
+      </Box >
+    </>
+
   );
 }
