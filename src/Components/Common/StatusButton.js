@@ -4,12 +4,12 @@ import Link from "Link";
 import React from "react";
 
 function StatusButton(props) {
-  const { color = "primary", text } = props;
+  const { color = "primary", text, onClick, ...otherProps } = props;
   const theme = useTheme();
 
   const BUTTON = () => {
-    let copyProps = { ...props };
-    delete copyProps?.href;
+    // let copyProps = { ...props };
+    // delete copyProps?.href;
 
     return (
       <Button
@@ -29,7 +29,10 @@ function StatusButton(props) {
             opacity: 0.8,
           },
         }}
-        {...copyProps}
+        // {...copyProps}
+        onClick={onClick}
+        {...otherProps}
+
       >
         {text}
       </Button>

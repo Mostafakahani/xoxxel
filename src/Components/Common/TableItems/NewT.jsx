@@ -9,7 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import { Avatar, Button, Grid, MenuItem, Pagination, Select, Stack } from "@mui/material";
+import { Avatar, Button, Dialog, DialogContent, DialogTitle, Grid, MenuItem, Pagination, Select, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import AddProductFeatureNew from "../Popup/CreateProductOptionNew";
@@ -100,6 +100,29 @@ export default function TableItems({
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   // const [perPage, setPerPage] = React.useState(15);
+  ////Dialog
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [selectedRowId, setSelectedRowId] = React.useState(null);
+  const [selectedStatus, setSelectedStatus] = React.useState('');
+  const [alignment, setAlignment] = React.useState(
+    selectedStatus === 'waiting' ? '' : 'accepted' || ''
+  );
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
+  const openDialog = (id) => {
+    setIsDialogOpen(true);
+    setSelectedRowId(id);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedRowId(null);
+  };
+  const handleStatusBtnClick = (id) => {
+    openDialog(id);
+  };
 
 
   // New for pages:
@@ -220,6 +243,31 @@ export default function TableItems({
             dataHead={dataHead}
             selected={selected}
           />
+          <Dialog open={isDialogOpen} onClose={closeDialog}>
+            <DialogContent>
+              <DialogTitle>{`Row ID: ${selectedRowId}`}</DialogTitle>
+
+              <ToggleButtonGroup
+                color="primary"
+                value={selectedStatus === '' ? null : alignment}
+                exclusive
+                onChange={handleChange}
+                aria-label="Platform"
+              >
+
+                <ToggleButton value="accepted" color="success">
+                  Accepted
+                </ToggleButton>
+                <ToggleButton value="rejected" color="error">
+                  Rejected
+                </ToggleButton>
+                <ToggleButton value="" disabled>
+                  :select one
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </DialogContent>
+          </Dialog>
+
           <TableBody sx={{ transform: "translateY(7px)" }}>
             {dataBody?.length !== 0 &&
               dataBody?.map((row, index) => {
@@ -291,6 +339,19 @@ export default function TableItems({
                           <StatusButton {...e} variant="contained">
                             {e?.text}
                           </StatusButton>
+                        )}
+                        {e?.type === "statusBtn" && (
+                          <StatusButton
+                            {...e}
+                            onClick={() => {
+                              handleStatusBtnClick(row?.id);
+                              setSelectedStatus(e?.text);
+                            }}
+                            variant="contained"
+                          >
+                            {e?.text}
+                          </StatusButton>
+
                         )}
                         {e?.type === "btn" && (
                           <>
