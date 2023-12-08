@@ -96,7 +96,7 @@ export default function TableItems({
   setPage = () => { },
   setPerPage = () => { },
   pageData, // اضافه کردن اطلاعات صفحه به props
-
+  setUptadeCount,
 
 }, props) {
   const { page, perPage } = props;
@@ -146,6 +146,7 @@ export default function TableItems({
         if (response.status === 201) {
           toast.success("با موفقیت تغغیر داده شد.");
           setCount(count + 1);
+          setUptadeCount(1);
         } else {
           toast.error("لطفا دوباره امتحان کنید");
         }
@@ -304,7 +305,7 @@ export default function TableItems({
 
             <Dialog open={isDialogOpen} onClose={closeDialog}>
               <DialogContent>
-                <DialogTitle>{`Row ID: ${selectedRowId}`}</DialogTitle>
+                {/* <DialogTitle>{`Row ID: ${selectedRowId}`}</DialogTitle> */}
 
                 <ToggleButtonGroup
                   color="primary"
@@ -403,6 +404,7 @@ export default function TableItems({
                                 setSelectedStatus(e?.text);
                               }}
                               variant="contained"
+                              color={e?.text === 'waiting' ? 'warning' : 'success'}
                             >
                               {e?.text}
                             </StatusButton>
