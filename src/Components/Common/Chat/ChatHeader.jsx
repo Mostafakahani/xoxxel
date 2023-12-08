@@ -1,15 +1,17 @@
-import { Avatar, Badge, Button, Grid, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from "@mui/material";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Avatar, Badge, Button, CircularProgress, Grid, IconButton, Typography, useMediaQuery } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { styled } from '@mui/material/styles';
+import { styled } from '@mui/system';
 import { useTheme } from "@emotion/react";
 import { useChat } from "./ChatContext";
+import ServerURL from "../Layout/config";
+import GetToken from "GetToken";
+import axios from "axios";
+import { useState } from "react";
 
-const ChatHeader = () => {
+const ChatHeader = ({ id, data, onUpdate }) => {
     const theme = useTheme();
-
-    const isTabletUp = useMediaQuery(theme.breakpoints.up('sm'));
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const [loadingStatus, setLoadingStatus] = useState(false);
+    const [status, setStatus] = useState(null);
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
             backgroundColor: '#44b700',
@@ -39,39 +41,73 @@ const ChatHeader = () => {
             },
         },
     }));
+    const isTabletUp = useMediaQuery(theme.breakpoints.up('sm'));
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    if (!data || !id) {
+        return <div>Loading...</div>;
+    }
+    const handleCloseChat = async () => {
+        setLoadingStatus(true);
+
+        const ticketStatus = data.status === 'open' ? 'close' : 'open';
+
+        if (ticketStatus) {
+            const config = {
+                headers: {
+                    Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+                },
+            };
+            const requestData = {
+                id_tiket: parseInt(id),
+                status: ticketStatus,
+            };
+
+            try {
+                const response = await axios.post(
+                    `${ServerURL.url}/admin/tiket/change-status-tiket`,
+                    requestData,
+                    config
+                );
+
+                const dataResponse = response.data;
+                if (dataResponse.status === 'success') {
+                    console.log('ok');
+                    onUpdate(1);
+                    setStatus(null);
+                    setLoadingStatus(false); // This line updates the loading status after a successful response
+                } else {
+                    // Handle other cases if needed
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoadingStatus(false);
+            }
+
+        }
+    };
+
     return (
         <>
             <Grid container sx={{ display: 'flex', flexDirection: { xs: "row", sm: "row" }, justifyContent: "space-between", }}>
                 <Grid container item xs={6} sm={6} alignItems={'center'}>
                     <Grid item>
-                        <IconButton size="small">
-                            <MoreVertIcon />
-                        </IconButton>
-                        <IconButton size="small">
-                            <SvgIcon>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 36" fill="none">
-                                    <path d="M28.9071 28.3657L22.4937 21.9523C23.9078 20.3025 24.7282 18.1677 24.7282 15.8244C24.7282 10.6167 20.5072 6.39697 15.3007 6.39697C10.0943 6.39697 5.91406 10.618 5.91406 15.8244C5.91406 21.0308 10.1347 25.2519 15.3007 25.2519C17.6431 25.2519 19.7811 24.3926 21.4286 22.9789L27.842 29.3923C28.0233 29.5305 28.2091 29.603 28.3949 29.603C28.5808 29.603 28.7661 29.5322 28.9076 29.3906C29.1927 29.109 29.1927 28.6467 28.9071 28.3657ZM15.3415 23.8015C10.9043 23.8015 7.36445 20.2209 7.36445 15.8244C7.36445 11.428 10.9043 7.84735 15.3415 7.84735C19.7788 7.84735 23.3186 11.3872 23.3186 15.8244C23.3186 20.2617 19.738 23.8015 15.3415 23.8015Z" fill="#28303F" />
-                                </svg>
-                            </SvgIcon>
-                        </IconButton>
-                    </Grid>
-                    <Grid item>
-                        {!isMobile && (
-                            <Button variant="contained" color="error" startIcon={<DeleteIcon />}>
-                                Close chat
-                            </Button>
-                        )}
-                        {isMobile && (
-                            <IconButton variant="contained" color="error" >
-                                <DeleteIcon />
+                        {isMobile ? (
+                            <IconButton onClick={handleCloseChat} variant="contained" color="error" disabled={loadingStatus}>
+                                {loadingStatus ? <CircularProgress size={24} /> : <DeleteIcon />}
                             </IconButton>
+                        ) : (
+                            <Button onClick={handleCloseChat} variant="contained" color={data.status === 'open' ? 'error' : 'info'} disabled={loadingStatus} startIcon={loadingStatus ? <CircularProgress size={24} /> : <DeleteIcon />}>
+                                {loadingStatus ? 'Loading...' : (data.status === 'open' ? 'Close chat' : 'Open chat')}
+                            </Button>
                         )}
                     </Grid>
                 </Grid>
                 <Grid container item xs={6} sm={6} sx={{ justifyContent: 'flex-end' }}>
                     <Grid item sx={{ display: 'flex', alignItems: 'center', }}>
                         <Typography mr={1} sx={{ fontWeight: 600, fontSize: { xs: "11px", sm: '15px' } }}>
-                            Behroz Sedighi
+                            {data.sender}
                         </Typography>
                         <StyledBadge
                             overlap="circular"
@@ -83,9 +119,9 @@ const ChatHeader = () => {
                     </Grid>
                 </Grid>
                 <Grid container my={2} sx={{ border: '1px solid #F5F5F6' }} />
-
-            </Grid >
+            </Grid>
         </>
-    )
-}
+    );
+};
+
 export default ChatHeader;

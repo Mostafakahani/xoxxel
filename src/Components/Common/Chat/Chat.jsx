@@ -1,4 +1,3 @@
-// Chat.js
 import React, { useEffect } from 'react';
 import { Grid } from '@mui/material';
 import ChatHeader from './ChatHeader';
@@ -67,12 +66,11 @@ const Chat = ({ id }) => {
   }
 
   return (
-    // <ChatProvider initialMessages={[]}>
     <>
       <Grid sx={{ backgroundColor: '#fff', p: 3, borderRadius: "10px" }}>
         <Grid container sx={{ display: 'flex', flexDirection: 'column' }}>
-          <ChatHeader />
-          <Grid sx={{ height: '500px' }}>
+          <ChatHeader onUpdate={handleUpdate} data={data.info} id={id} />
+          <Grid sx={{ height: '350px' }}>
             {isLoading ? (
               <div>Loading...</div>
             ) : (
@@ -84,7 +82,6 @@ const Chat = ({ id }) => {
         </Grid>
       </Grid>
     </>
-    // </ChatProvider>
   );
 };
 

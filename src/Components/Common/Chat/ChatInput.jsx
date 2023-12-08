@@ -103,7 +103,7 @@ const ChatInput = ({ onUpdate, id }) => {
                 }}
             >
                 <Grid container sx={{ display: 'flex', flexDirection: { xs: "row", sm: "row" }, justifyContent: "space-between", backgroundColor: '#EAF2FF', borderRadius: '8px', px: { xs: 2, sm: 2 } }}>
-                    <Grid container item xs={7} sm={5} md={2} alignItems={'center'} spacing={1}>
+                    <Grid container item xs={7} sm={5} md={3} alignItems={'center'} spacing={1}>
                         <Grid item>
                             {!isMobile && (
                                 <Button
@@ -164,7 +164,7 @@ const ChatInput = ({ onUpdate, id }) => {
                             {/* </IconButton> */}
                         </Grid>
                     </Grid>
-                    <Grid container item xs={5} sm={7} md={10} sx={{ justifyContent: 'flex-end' }}>
+                    <Grid container item xs={5} sm={7} md={9} sx={{ justifyContent: 'flex-end' }}>
                         <TextField
                             variant="outlined"
                             fullWidth
