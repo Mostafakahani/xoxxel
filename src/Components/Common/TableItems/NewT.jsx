@@ -144,7 +144,7 @@ export default function TableItems({
           config
         );
         if (response.status === 201) {
-          toast.success("با موفقیت تغغیر داده شد.");
+          toast.success("با موفقیت تغییر داده شد.");
           setCount(count + 1);
           setUptadeCount(1);
         } else {

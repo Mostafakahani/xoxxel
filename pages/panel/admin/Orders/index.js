@@ -1,222 +1,96 @@
-import { Button, Grid, Typography } from "@mui/material";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-import { IconAccess, IconOrders, IconPrice } from "Icons/icons";
-import Link from "next/link";
-import TableOrders from 'Components/Common/TableItems/TableOrders'
-import { useState } from "react";
+import { Button, Grid, Typography } from "@mui/material";
+import { useState, useMemo } from "react";
+
+import WaitOrders from "./WaitOrders";
+import AllOrders from "./AllOrders";
+import BackArrow from "Components/Common/Back";
+import { IconOrders, IconProduct } from "Icons/icons";
+
+
+const components = {
+    WaitOrders: WaitOrders,
+    AllOrders: AllOrders,
+};
 
 const Orders = () => {
-    const [selected, setSelected] = useState([]);
-    const dataHead = [
-        "کد سفارش",
-        "کاربر",
-        "نام محصول ",
-        "نوع",
-        "تاریخ ایجاد",
-        "مبلغ",
-        "وضعیت",
-        "اقدامات",
-    ]
-    const dataBody = [
-        {
-            id: 1,
-            data: [
-                "#254",
+    const [selectedButton, setSelectedButton] = useState('AllOrders');
+    const Component = useMemo(() => components[selectedButton], [selectedButton]);
 
+    const handleButtonClick = (buttonType) => {
+        setSelectedButton(buttonType);
+    };
+    const buttonStyle = {
+        position: "relative",
+        "&::after": {
+            content: '""',
+            width: "100%",
+            height: "2px",
+            borderRadius: "6px",
+            backgroundColor: "primary.main",
+            position: "absolute",
+            top: "100%",
+            left: "0%",
+            transform: "translateY(-50%)",
+            display: "block",
+            animation: 'slideIn .5s forwards',
 
-                {
-                    type: "avatar",
-                    text: "Soroush norozy",
-                    url: '/images/avatar.png'
-                },
-                {
-                    type: "textBold",
-                    text: "Call of duty mobile",
-                },
-                {
-                    type: "text",
-                    text: "Top ups",
-                },
-                {
-                    type: "text",
-                    text: "1401/7/7",
-                },
-                {
-                    type: "text",
-                    text: "2,000,000",
-                },
-                {
-                    type: "status",
-                    text: "pending",
-                    color: "pending",
-                },
-                {
-                    type: "btn",
-                    text: "opto",
-                },
-
-            ],
-        },
-        {
-            id: 2,
-            data: [
-                "#254",
-
-
-                {
-                    type: "avatar",
-                    text: "Soroush norozy",
-                    url: '/images/avatar.png'
-                },
-                {
-                    type: "textBold",
-                    text: "Call of duty mobile",
-                },
-                {
-                    type: "text",
-                    text: "Top ups",
-                },
-                {
-                    type: "text",
-                    text: "1401/7/7",
-                },
-                {
-                    type: "text",
-                    text: "2,000,000",
-                },
-                {
-                    type: "status",
-                    text: "Succesfull",
-                    color: "succesfull",
-                },
-                {
-                    type: "btn",
-                    text: "opto",
-                },
-
-            ],
-        },
-        {
-            id: 3,
-            data: [
-                "#254",
-
-
-                {
-                    type: "avatar",
-                    text: "Soroush norozy",
-                    url: '/images/avatar.png'
-                },
-                {
-                    type: "textBold",
-                    text: "Call of duty mobile",
-                },
-                {
-                    type: "text",
-                    text: "Top ups",
-                },
-                {
-                    type: "text",
-                    text: "1401/7/7",
-                },
-                {
-                    type: "text",
-                    text: "2,000,000",
-                },
-                {
-                    type: "status",
-                    text: "Pay",
-                    color: "n",
-                },
-                {
-                    type: "btn",
-                    text: "opto",
-                },
-
-            ],
-        },
-        {
-            id: 3,
-            data: [
-                "#254",
-
-                {
-                    type: "avatar",
-                    text: "Soroush norozy",
-                    url: '/images/avatar.png'
-                },
-                {
-                    type: "textBold",
-                    text: "Call of duty mobile",
-                },
-                {
-                    type: "text",
-                    text: "Top ups",
-                },
-                {
-                    type: "text",
-                    text: "1401/7/7",
-                },
-                {
-                    type: "text",
-                    text: "2,000,000",
-                },
-                {
-                    type: "status",
-                    text: "Pay Pending",
-                    color: "n",
-                },
-                {
-                    type: "btn",
-                    text: "opto",
-                },
-
-            ],
         },
 
+        '@keyframes slideIn': {
+            from: {
+                width: 0,
+            },
+            to: {
+                width: '100%',
+            },
+        },
 
-    ]
-    const [selectedItemId, setSelectedItemId] = useState(null);
-
-
+    };
     return (
-        <>
-            <AccountLayout>
-                <Grid container spacing={2} justifyContent="flex-end" alignItems="center">
-                    <Grid item xs={6} md={6} sx={{ mb: { xs: '0px', md: '0' } }}>
-                        <Grid sx={{ display: 'flex' }}>
-                            <IconOrders />
-                            <Typography sx={{ ml: "10px" }}>لیست سفارشات</Typography>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={6} md={6}>
-                        <Grid sx={{
-                            display: 'flex', flexDirection: 'row',
-                            flexWrap: { xs: 'nowrap', md: 'wrap' },
-                            overflowX: { xs: "auto", md: 'unset' },
-                            whiteSpace: { xs: "nowrap", md: 'unset' },
-                            justifyContent: { xs: 'flex-end', md: 'flex-end' },
-                            alignItems: 'center'
-                        }}>
-                            <Button variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ایجاد دسترسی جدید   </Button>
+        <AccountLayout>
+            <Grid
+                container
+                spacing={2}
+                justifyContent="flex-end"
+                alignItems="center"
+                mb={3}
 
-                        </Grid>
+            >
+                <Grid item xs={12} md={6} sx={{ mb: { xs: "25px", md: "0" } }}>
+                    <Grid sx={{ display: "flex" }}>
+                        <IconOrders />
+                        <Typography sx={{ ml: "10px" }}>لیست سفارشات</Typography>
                     </Grid>
                 </Grid>
-                <Grid sx={{ mt: '20px' }}>
-                    <TableOrders
-                        selected={selected}
-                        setSelected={setSelected}
-                        dataHead={dataHead}
-                        dataBody={dataBody}
-                        // show={(x) => console.log(dataBody.data[0])}
-                        selectedItemId={selectedItemId} />
-                    <Button variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF', my: '15px' }}>آپدیت قیمت </Button>
-                    <Button variant="outlined" disableElevation sx={{ border: '1px solid #989898', '&:hover': { border: '1px solid #989898' }, ml: '10px', borderRadius: '5px', color: '#222' }}>ریست کردن </Button>
-
+                <Grid item xs={12} md={6} sx={{ mb: { xs: "25px", md: "0" } }}>
                 </Grid>
-            </AccountLayout>
-        </>
-    )
-}
+            </Grid>
+            <Grid>
+                <Grid sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '10px' }}>
+                    <Grid>
+                        <Button onClick={() => {
+                            setSelectedButton("AllOrders");
+                        }}
+                            sx={selectedButton === "AllOrders" ? buttonStyle : {}}
+                        >
+                            All Orders
+                        </Button>
+                        <Button onClick={() => {
+                            setSelectedButton("WaitOrders");
+                        }}
+                            sx={selectedButton === "WaitOrders" ? buttonStyle : {}}
+                        >
+                            Waits Orders
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Grid>
+                    {Component && <Component />}
+                </Grid>
+            </Grid>
+        </AccountLayout>
+    );
+};
+
 export default Orders;

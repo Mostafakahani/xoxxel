@@ -9,16 +9,18 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import { Avatar, Button, Dialog, DialogContent, DialogContentText, FormControlLabel, Grid, TextField } from "@mui/material";
+import { Avatar, Button, Dialog, DialogContent, DialogTitle, Grid, MenuItem, Pagination, Select, Stack, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
+import AddProductFeatureNew from "../Popup/CreateProductOptionNew";
 import Link from "next/link";
-import CreateAccessLevel from "../Popup/CreateAccessLevel";
-import CreateAccessLevelNew from "../Popup/CreateAccessLevelNew";
-import EditOrder from "../Popup/EditOrder";
+import { ToastContainer, toast } from "react-toastify";
+import ServerURL from "../Layout/config";
+import GetToken from "GetToken";
+import axios from "axios";
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, numSelected, rowCount, dataHead, selected, updatedData } = props;
+  const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
 
   return (
     <TableHead sx={{ height: "48px" }}>
@@ -64,13 +66,9 @@ function EnhancedTableHead(props) {
         {dataHead?.map((headCell, i) => (
           <TableCell
             key={i}
+            align={i === dataHead.length - 1 ? "left" : "center"}
             padding={"normal"}
-            sx={{
-              color: "#212121", pb: 3,
-              textAlign: i >= dataHead.length - 2 ? "center !Important" : "right",
-              width: i === dataHead.length - 2 ? "250px" : "fit-content"
-
-            }}
+            sx={{ color: "#212121", pb: 3 }}
           >
             {headCell}
           </TableCell>
@@ -95,9 +93,95 @@ export default function TableItems({
   dataBody,
   setSelected = false,
   selected = false,
-}) {
+  setPage = () => { },
+  setPerPage = () => { },
+  pageData, // اضافه کردن اطلاعات صفحه به props
+  setUptadeCount,
+
+}, props) {
+  const { page, perPage } = props;
+
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
+  // const [perPage, setPerPage] = React.useState(15);
+
+
+  ////Dialog
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [selectedRowId, setSelectedRowId] = React.useState(null);
+  const [selectedStatus, setSelectedStatus] = React.useState('');
+  const [dialogText, setDialogText] = React.useState("");
+
+  const [submitToServer, setSubmitToServer] = React.useState('');
+  const [count, setCount] = React.useState(0);
+  const [alignment, setAlignment] = React.useState('');
+
+  React.useEffect(() => {
+    if (selectedStatus === 'waiting') {
+      setAlignment('');
+    } else if (selectedStatus === 'accepted') {
+      setAlignment('accepted');
+    }
+
+    setSubmitToServer(alignment);
+  }, [selectedStatus, count]);
+
+  const handleChange = async (newAlignment) => {
+    if (newAlignment !== '' & newAlignment !== null) {
+      try {
+        const config = {
+          headers: {
+            Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+          },
+        };
+
+        const sendData = {
+          data: newAlignment,
+          id_payment: selectedRowId,
+        };
+
+        const response = await axios.post(
+          `${ServerURL.url}/admin/purchases/create`,
+          sendData,
+          config
+        );
+        if (response.status === 201) {
+          toast.success("با موفقیت ارسال شد.");
+          setCount(count + 1);
+          setUptadeCount(1);
+          setDialogText('')
+          setIsDialogOpen(false)
+        } else {
+          toast.error("لطفا دوباره امتحان کنید");
+        }
+      } catch (error) {
+        console.error("Error sending request:", error);
+      }
+    }
+  };
+
+  const openDialog = (id) => {
+    setIsDialogOpen(true);
+    setSelectedRowId(id);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedRowId(null);
+    setDialogText('')
+  };
+  const handleStatusBtnClick = (id) => {
+    openDialog(id);
+  };
+
+
+  // New for pages:
+  const itemsPerPage = pageData.perPage;
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const listPerPage = [15, 25, 50, 100]
+
 
 
   const handleRequestSort = (event, property) => {
@@ -143,182 +227,228 @@ export default function TableItems({
     }
   };
 
-  // Update Datas
-  const [updatedData, setUpdatedData] = React.useState(null);
-  const handleDataUpdate = (newData) => {
-    setUpdatedData(newData);
-  };
-
   return (
-    <Box sx={{ width: "100%" }}>
-      <TableContainer className="container-table table-scroll">
-        <Table
-          stickyHeader
-          aria-label="sticky table"
-          sx={{
-            borderRadius: "8px",
-            overflow: "hidden",
-            minWidth: 1200,
-            "td,tr": {
-              fontSize: "12.67px",
-              color: "#212121",
-              fontWeight: 500,
-              py: 1.6,
-              borderBottom: "none",
-            },
-            th: {
-              fontSize: "12.67px",
-              color: "#212121",
-              fontWeight: 500,
-              p: 0.5,
-              borderBottom: "none",
-            },
-            "tr:hover": {
-              backgroundColor: "transparent !important",
-            },
-            tr: {
-              position: "relative",
-              "&::before": {
-                content: '""',
-                width: "100%",
-                height: "56px",
-                backgroundColor: "grey.themeColor",
-                position: "absolute",
-                top: "50%",
-                transform: "translateY(-50%)",
-                left: "0",
-                borderRadius: "8px",
-                zIndex: -1,
-                borderBottom: "1px solid #EEEEEE",
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        limit={5}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <Box sx={{ width: "100%" }}>
+        <TableContainer className="container-table table-scroll">
+          <Table
+            stickyHeader
+            aria-label="sticky table"
+            sx={{
+              borderRadius: "8px",
+              overflow: "hidden",
+              minWidth: 1000,
+              "td,tr": {
+                fontSize: "12.67px",
+                color: "#212121",
+                fontWeight: 500,
+                py: 1.6,
+                borderBottom: "none",
               },
-              "&.Mui-selected": {
+              th: {
+                fontSize: "12.67px",
+                color: "#212121",
+                fontWeight: 500,
+                p: 0.5,
+                borderBottom: "none",
+              },
+              "tr:hover": {
                 backgroundColor: "transparent !important",
-                ".MuiCheckbox-root": {
-                  svg: {
-                    color: "primary.main",
-                  },
-                },
-
-                // opacity: 0.7,
               },
-            },
-          }}
-          size={"medium"}
-        >
-          <EnhancedTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={dataBody?.length}
-            dataHead={dataHead}
-            selected={selected}
-          />
-          <TableBody sx={{ transform: "translateY(7px)" }}>
-            {dataBody?.length !== 0 &&
-              dataBody?.map((row, index) => {
-                const isItemSelected = isSelected(row?.id);
-                const labelId = `enhanced-table-checkbox-${index}`;
+              tr: {
+                position: "relative",
+                "&::before": {
+                  content: '""',
+                  width: "100%",
+                  height: "56px",
+                  backgroundColor: "grey.themeColor",
+                  position: "absolute",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  left: "0",
+                  borderRadius: "8px",
+                  zIndex: -1,
+                  borderBottom: "1px solid #EEEEEE",
+                },
+                "&.Mui-selected": {
+                  backgroundColor: "transparent !important",
+                  ".MuiCheckbox-root": {
+                    svg: {
+                      color: "primary.main",
+                    },
+                  },
 
-                return (
-                  <TableRow
-                    hover
-                    role={selected && "checkbox"}
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                  >
-                    {selected && (
-                      <TableCell padding="checkbox" sx={{ pl: "6px" }}>
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          onClick={() => handleClick(row?.id)}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                          sx={{
-                            ".MuiSvgIcon-root": {
-                              color: "#6F767E66",
-                            },
-                          }}
-                        />
-                      </TableCell>
-                    )}
-                    {row?.data?.map((e, i) => (
-                      <TableCell align="center" sx={{
-                        textAlign: i >= dataHead.length - 2 ? "center !Important" : "left",
-                      }} key={i}>
-                        {!e?.type && e}
-                        {e?.type === "avatar" && (
-                          <Box className="center">
-                            <Avatar
-                              src={e?.url}
-                              sx={{ width: "30px", height: "30px" }}
-                            />
-                            <Typography
-                              component={"h6"}
-                              sx={{
-                                fontSize: "12.67px",
-                                color: "#212121",
-                                fontWeight: 500,
-                                ml: 1,
+                  // opacity: 0.7,
+                },
+              },
+            }}
+            size={"medium"}
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={dataBody?.length}
+              dataHead={dataHead}
+              selected={selected}
+            />
+
+            <Dialog open={isDialogOpen} onClose={closeDialog} fullWidth maxWidth='md'>
+              <DialogTitle>
+                <p>{`کد سفارش: ${selectedRowId}`}</p>
+              </DialogTitle>
+              <DialogContent>
+                <Grid mt={2}>
+                  <TextField
+                    label="مقدار"
+                    multiline
+                    fullWidth
+                    value={dialogText}
+                    onChange={(e) => setDialogText(e.target.value)}
+                  />
+                </Grid>
+                <Grid mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }} >
+                  <Button variant="text" color="primary" onClick={() => handleChange(dialogText)}>
+                    ارسال کد
+                  </Button>
+                </Grid>
+              </DialogContent>
+            </Dialog>
+            <TableBody sx={{ transform: "translateY(7px)" }}>
+              {dataBody?.length !== 0 &&
+                dataBody?.map((row, index) => {
+                  const isItemSelected = isSelected(row?.id);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      role={selected && "checkbox"}
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.id}
+                      selected={isItemSelected}
+                    >
+                      {selected && (
+                        <TableCell padding="checkbox" sx={{ pl: "6px" }}>
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            onClick={() => handleClick(row?.id)}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                            sx={{
+                              ".MuiSvgIcon-root": {
+                                color: "#6F767E66",
+                              },
+                            }}
+                          />
+                        </TableCell>
+                      )}
+                      {row?.data?.map((e, i) => (
+                        <TableCell align="center" sx={{
+                          textAlign: 'left'
+                        }} key={i}>
+                          {!e?.type && e}
+                          {e?.type === "avatar" && (
+                            <Box className="center">
+                              <Avatar
+                                src={e?.url}
+                                sx={{ width: "30px", height: "30px" }}
+                              />
+                              <Typography
+                                component={"h6"}
+                                sx={{
+                                  fontSize: "12.67px",
+                                  color: "#212121",
+                                  fontWeight: 500,
+                                  ml: 1,
+                                }}
+                              >
+                                {e?.text}
+                              </Typography>
+                            </Box>
+                          )}
+                          {e?.type === "textBold" && (
+                            <>
+                              <Typography variant="p" sx={{ fontWeight: 600, fontSize: "15px" }}> {e?.text}</Typography>
+                            </>
+                          )}
+                          {e?.type === "text" && (
+                            <>
+                              <Typography variant="p" sx={{}}> {e?.text}</Typography>
+                            </>
+                          )}
+
+                          {e?.type === "status" && (
+                            <StatusButton {...e} variant="contained">
+                              {e?.text}
+                            </StatusButton>
+                          )}
+                          {e?.type === "addCode" && (
+                            <>
+                              <Button disabled={e?.text === 'completed'} disableElevation onClick={(e) => { setIsDialogOpen(true); setSelectedRowId(row?.id) }}>{e?.text === 'completed' ? 'ارسال شده' : 'ارسال کد'}</Button>
+                            </>
+                          )}
+                          {e?.type === "statusBtn" && (
+                            <StatusButton
+                              {...e}
+                              onClick={() => {
+                                handleStatusBtnClick(row?.id);
+                                setSelectedStatus(e?.text);
                               }}
+                              variant="contained"
+                              color={e?.text === 'waiting' ? 'warning' : 'success'}
                             >
                               {e?.text}
-                            </Typography>
-                          </Box>
-                        )}
-                        {e?.type === "textBold" && (
-                          <>
-                            <Typography variant="p" sx={{ fontWeight: 600, fontSize: "15px" }}> {e?.text}</Typography>
-                          </>
-                        )}
-                        {e?.type === "text" && (
-                          <>
-                            <Typography variant="p" sx={{}}> {e?.text}</Typography>
-                          </>
-                        )}
+                            </StatusButton>
 
-                        {/* {e?.type === "status" && (
-                          <StatusButton {...e} variant="contained">
-                            {e?.text}
-                          </StatusButton>
-                        )} */}
-                        {e?.type === "status" && (
-                          <>
-                            <Button disableElevation sx={{
-                              px: '15px', width: '120px',
-                              color: e?.color === 'succesfull' ? '#66DC53' : e?.color === 'pending' ? '#EDA437' : '#2C7EFA',
-                              backgroundColor: e?.color === 'succesfull' ? '#F0FCEE' : e?.color === 'pending' ? '#FDF6EB' : '#EAF2FF',
-                              '&:hover': { backgroundColor: e?.color === 'succesfull' ? '#F0FCEE' : e?.color === 'pending' ? '#FDF6EB' : '#EAF2FF' }
-                            }}
-                            >{e.text}</Button>
-                          </>
-                        )}
-                        {e?.type === "btn" && (
-                          <>
-                            {/* <EditOrder onDataUpdate={handleDataUpdate} tableId={row.data[0]} dataBodyFormat={row.data[1].text} /> */}
-                            <Link href={'/panel/admin/Orders/ChangeOrder'}>
+                          )}
+                          {e?.type === "btn" && (
+                            <>
+                              <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
+                                {/* <AddProductFeatureNew tableId={row.data[0]} />
                               <Button
-                                startIcon={<EyesIcon />}
-                                sx={{
-                                  backgroundColor: "#1C49F11A",
-                                  color: "#1C49F1",
-                                  borderRadius: "5px",
-                                }}>
-                                مشاهده و ویرایش
+                                onClick={(x) => console.log(row.data[0])}
+                                // onClick={() => props.show(row["id"])}
+
+                                sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
+
                               </Button>
-                            </Link>
-                          </>
-                        )}
+                              <Button startIcon={<EyesIcon />} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
+                                <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
+                                  مشاهده و ویرایش
+                                </Link>
+                              </Button> */}
+                                <Button disabled startIcon={<EyesIcon />} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
+                                  <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
+                                    مشاهده و ویرایش
+                                  </Link>
+                                </Button>
+                              </Grid>
+                            </>
+                          )}
 
 
-                        {/* {e?.type === "jsx" && e?.jsx} */}
-                        {/* M */}
-                        {/* {e?.type === "text" && (
+                          {/* {e?.type === "jsx" && e?.jsx} */}
+                          {/* M */}
+                          {/* {e?.type === "text" && (
                           <>
                             <Avatar src="/" />
                             <Typography {...e} variant="contained">
@@ -326,25 +456,84 @@ export default function TableItems({
                             </Typography>
                           </>
                         )} */}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {/* {dataBody?.length === 0 && (
-        <Typography
-          component={"h6"}
-          sx={{
-            textAlign: "center",
-            color: "#fff",
-          }}
-        >
-          موردی پیدا نشد!
-        </Typography>
-      )} */}
-    </Box>
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer >
+        {
+          dataBody?.length === 0 && (
+            <Typography
+              component={"h6"}
+              sx={{
+                textAlign: "center",
+                color: "black",
+                my: 3
+              }}
+            >
+              موردی پیدا نشد!
+            </Typography>
+          )
+        }
+        {
+          dataBody?.length !== 0 && (
+            <Grid
+              spacing={5}
+              display="flex"
+              alignItems="center"
+              sx={{ mt: 2, flexDirection: { xs: "row", sm: 'row', }, justifyContent: { xs: 'space-between', sm: 'center' } }}
+            >
+              <Grid item>
+                <Stack spacing={2}>
+                  <Pagination
+                    shape="rounded"
+                    count={pageData.totalPages}
+                    page={page}
+                    onChange={(event, value) => setPage(value)}
+                    color="standard"
+                  />
+                </Stack>
+              </Grid>
+              <Grid item container xs={3} sm={2} md={1}>
+                {/* <Typography
+              sx={{
+                fontSize: '11px',
+                textAlign: "center",
+                color: "black",
+              }}
+            >
+              تعداد نمایش
+            </Typography> */}
+                <Select
+                  displayEmpty
+                  size="small"
+                  value={perPage}
+                  onChange={(e) => setPerPage(e.target.value)}
+                  sx={{ width: { xs: '100%', sm: "80%" } }}
+                  defaultValue={15}
+                // onOpen={() => setCountTwo(countTwo + 1)}
+                >
+                  {Array.isArray(listPerPage) ? (
+                    listPerPage.map((data, index) => (
+                      <MenuItem key={index} value={data}>
+                        {data}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value={null}>
+                      Loading...
+                    </MenuItem>
+                  )}
+                </Select>
+              </Grid>
+            </Grid>
+          )
+        }
+      </Box >
+    </>
+
   );
 }
