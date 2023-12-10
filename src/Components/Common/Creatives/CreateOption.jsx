@@ -89,10 +89,10 @@ const CreateOption = ({ setResponseId = () => { }, status, click, setClick = () 
     async function fetchData() {
       const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
       const responseCategory = await axios.get(
-        `${ServerURL.url}/admin/storage/get-all-cat`,
+        `${ServerURL.url}/admin/cat/get-all-cat-without-pagination`,
         config
       );
-      setDataCategory(responseCategory.data.data);
+      setDataCategory(responseCategory.data);
     }
     fetchData();
   }, [countTwo]);
@@ -100,10 +100,10 @@ const CreateOption = ({ setResponseId = () => { }, status, click, setClick = () 
     async function fetchData() {
       const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
       const responseType = await axios.get(
-        `${ServerURL.url}/admin/storage/get-all-type-product`,
+        `${ServerURL.url}/admin/type-product/get-all-type-product-without-pagination`,
         config
       );
-      setDataType(responseType.data.data);
+      setDataType(responseType.data);
     }
     fetchData();
   }, [countThree]);

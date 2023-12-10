@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
-import NewT from "Components/Common/TableItems/NewT";
+import TableXp from "Components/Common/TableItems/TableXp";
 import { useEffect, useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { AddProductIcon, IconProduct, IconTickets } from "Icons/icons";
@@ -14,7 +14,7 @@ import ServerURL from "Components/Common/Layout/config";
 import moment from "moment-jalaali";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
-const Products = () => {
+const XpPage = () => {
   const [itemsForDel, setItemsForDel] = useState([]);
   const [page, setPage] = useState(1);
   const [dataBody, setDataBody] = useState([]);
@@ -32,7 +32,7 @@ const Products = () => {
 
       try {
         const response = await axios.get(
-          `${ServerURL.url}/admin/feature/get-all-products?perPage=${perPage}&page=${page}`,
+          `${ServerURL.url}/admin/feature-for-xp/get-all-feature-xp?page=${page}&perPage=${perPage}`,
           config
         );
 
@@ -57,20 +57,32 @@ const Products = () => {
             data: [
               `#${item.id}`,
               {
-                type: "avatar",
-                text: "مدیریت",
-              },
-              {
                 type: "textBold",
-                text: item.title,
+                text: item.name,
               },
               {
                 type: "text",
-                text: item.input_lable,
+                text: item.price,
+              },
+              {
+                type: "text",
+                text: item.xp_value,
+              },
+              {
+                type: "statusBtn",
+                text: item.vip ? 'VIP' : '',
+              },
+              {
+                type: "text",
+                text: item.sell_mode,
               },
               {
                 type: "text",
                 text: moment(item.created_at).format("jYYYY/jM/jD یا YYYY/M/D"),
+              },
+              {
+                type: "statusBtn",
+                text: item.status,
               },
               {
                 type: "btn",
@@ -117,11 +129,14 @@ const Products = () => {
     }
   };
   const dataHead = [
-    "کد محصول",
-    "ایجاد کننده",
-    "نام محصول",
-    "نوع",
-    "تاریخ ایجاد",
+    "کد Xp",
+    "نام",
+    "مبلغ",
+    "مقدار Xp",
+    "vip",
+    "حالت فروش",
+    "تاریخ",
+    "وضعیت",
     "اقدامات",
   ];
   // const [selectedItemId, setSelectedItemId] = useState(null);
@@ -138,34 +153,12 @@ const Products = () => {
           <Grid item xs={12} md={6} sx={{ mb: { xs: "25px", md: "0" } }}>
             <Grid sx={{ display: "flex" }}>
               <IconProduct />
-              <Typography sx={{ ml: "10px" }}>لیست محصولات</Typography>
-            </Grid>
-            <Grid>
-              <Typography sx={{ mt: "10px", fontSize: "12px" }}>
-                شما میتوانید در لیست زیر تمام محصولات ثبت شده را مشاهده و ویرایش
-                کنید.
-              </Typography>
+              <Typography sx={{ ml: "10px" }}>لیست Xp</Typography>
             </Grid>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Grid
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: { xs: "nowrap", md: "wrap" },
-                overflowX: { xs: "auto", md: "unset" },
-                whiteSpace: { xs: "nowrap", md: "unset" },
-                justifyContent: { xs: "flex-start", md: "flex-end" },
-              }}
-            >
-              <CreateOption />
-              <CreateRegon />
-              <CreateCategory />
-              <CreateType />
-              <EditOptionsDes />
-
-            </Grid>
           </Grid>
+
         </Grid>
         <ToastContainer
           position="top-right"
@@ -184,13 +177,14 @@ const Products = () => {
         <Grid container sx={{ mt: "20px", display: 'flex', justifyContent: 'flex-end', my: 1 }} spacing={1}>
           <Grid item>
             <Link
-              href={"/panel/admin/CreateProduct"}
+              href={"/panel/admin/Xp/CreateXp"}
               style={{
                 display: "flex",
                 alignItems: "center",
                 color: "#FDFDFD",
               }}
             >
+
               <Button
                 sx={{
                   backgroundColor: "#244CDF",
@@ -204,9 +198,9 @@ const Products = () => {
                     backgroundColor: "#4166ef",
                   },
                 }}
+                endIcon={<AddProductIcon />}
               >
-                ثبت محصول جدید
-                <AddProductIcon />
+                ثبت Xp جدید
               </Button>
             </Link>
           </Grid>
@@ -248,7 +242,7 @@ const Products = () => {
                     /> */}
 
         </Grid>
-        <NewT
+        <TableXp
           selected={selected}
           setSelected={setSelected}
           dataHead={dataHead}
@@ -263,4 +257,4 @@ const Products = () => {
     </>
   );
 };
-export default Products;
+export default XpPage;
