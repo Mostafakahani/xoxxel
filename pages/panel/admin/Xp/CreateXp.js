@@ -8,7 +8,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
 import CreateOption from "Components/Common/Creatives/CreateOption";
-import { Button, Grid, MenuItem, Select, SvgIcon, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Button, CircularProgress, Grid, MenuItem, Select, SvgIcon, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { PopularIconOff, PopularIconOn } from 'Icons/icons';
 const CreateXp = () => {
     const router = useRouter();
@@ -131,7 +131,7 @@ const CreateXp = () => {
         try {
             const dataBody = {
                 name_feature: nameFeature,
-                id_type: selectedCategory,
+                type_id: selectedCategory,
                 xp: xp,
                 id_Storage: selectedFileItem,
                 popular: isPopular,
@@ -152,7 +152,6 @@ const CreateXp = () => {
             }
         } catch (error) {
             console.error("خطا: ", error);
-            setRequestError("خطا در ارسال درخواست به سرور");
         } finally {
             setAddingFeature(false);
         }
@@ -160,12 +159,13 @@ const CreateXp = () => {
     const handleRemoveFields = () => {
         // router.push('/panel/admin/products')
         setNameFeature('')
+        setIsPopular(false)
+        setSelectedType('')
+        setSelectedCountry('')
         setDataFeature('')
         setSellMode('')
         setXp('')
         setSelectedFileItem([])
-        setSelectedFileItem2([])
-        setSelectedFileItem3([])
         setAddingFeature(false)
         setOpenThis(false)
         setCategory([])

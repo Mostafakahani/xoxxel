@@ -114,7 +114,7 @@ const XpPage = () => {
       };
 
       const response = await axios.post(
-        `${ServerURL.url}/admin/product/delete`,
+        `${ServerURL.url}/admin/feature/delete`,
         deleteData,
         config
       );
