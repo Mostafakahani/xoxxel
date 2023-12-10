@@ -10,7 +10,7 @@ import GetToken from "GetToken";
 import CreateOption from "Components/Common/Creatives/CreateOption";
 import { Button, CircularProgress, Grid, MenuItem, Select, SvgIcon, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { PopularIconOff, PopularIconOn } from 'Icons/icons';
-const CreateXp = () => {
+const CreateOption = () => {
     const router = useRouter();
     // const { id } = router.query;
     const [country, setCountry] = useState([]);
@@ -431,4 +431,4 @@ const CreateXp = () => {
     );
 };
 
-export default CreateXp;
+export default CreateOption;

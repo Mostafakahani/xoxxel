@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
-import TableXp from "Components/Common/TableItems/TableXp";
+import TableOption from "Components/Common/TableItems/TableOption";
 import { useEffect, useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { AddProductIcon, IconProduct, IconTickets, IconXp } from "Icons/icons";
@@ -14,7 +14,7 @@ import ServerURL from "Components/Common/Layout/config";
 import moment from "moment-jalaali";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
-const XpPage = () => {
+const OptionPage = () => {
   const [itemsForDel, setItemsForDel] = useState([]);
   const [page, setPage] = useState(1);
   const [dataBody, setDataBody] = useState([]);
@@ -32,7 +32,7 @@ const XpPage = () => {
 
       try {
         const response = await axios.get(
-          `${ServerURL.url}/admin/feature-for-xp/get-all-feature-xp?page=${page}&perPage=${perPage}`,
+          `${ServerURL.url}/admin/feature/get-all-feature?page=${page}&perPage=${perPage}`,
           config
         );
 
@@ -81,7 +81,7 @@ const XpPage = () => {
                 text: moment(item.created_at).format("jYYYY/jM/jD یا YYYY/M/D"),
               },
               {
-                type: "statusBtn",
+                type: "statusChange",
                 text: item.status,
               },
               {
@@ -129,7 +129,7 @@ const XpPage = () => {
     }
   };
   const dataHead = [
-    "کد Xp",
+    "کد ویژگی",
     "نام",
     "مبلغ",
     "مقدار Xp",
@@ -153,7 +153,7 @@ const XpPage = () => {
           <Grid item xs={12} md={6} sx={{ mb: { xs: "25px", md: "0" } }}>
             <Grid sx={{ display: "flex" }}>
               <IconXp />
-              <Typography sx={{ ml: "10px" }}>لیست Xp</Typography>
+              <Typography sx={{ ml: "10px" }}>لیست ویژگی ها</Typography>
             </Grid>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -200,7 +200,7 @@ const XpPage = () => {
                 }}
                 endIcon={<AddProductIcon />}
               >
-                ثبت Xp جدید
+                ثبت ویژگی جدید
               </Button>
             </Link>
           </Grid>
@@ -242,13 +242,14 @@ const XpPage = () => {
                     /> */}
 
         </Grid>
-        <TableXp
+        <TableOption
           selected={selected}
           setSelected={setSelected}
           dataHead={dataHead}
           dataBody={dataBody}
           // selectedItemId={selectedItemId}
           pageData={pageDataAll}
+          setUptadeCount={(e) => setCount(count + e)}
           setPage={(e) => setPage(e)}
           setPerPage={(e) => setPerPage(e)}
           perPage={pageDataAll.perPage}
@@ -257,4 +258,4 @@ const XpPage = () => {
     </>
   );
 };
-export default XpPage;
+export default OptionPage;

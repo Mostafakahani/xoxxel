@@ -75,6 +75,12 @@ export const dataSidebar = [
     iconActive: <IconCustomer size="22" />,
   },
   {
+    href: "/panel/admin/Option",
+    text: "ویژگی",
+    icon: <IconXpDisable size="22" />,
+    iconActive: <IconXp size="22" />,
+  },
+  {
     href: "/panel/admin/Xp",
     text: "Xp",
     icon: <IconXpDisable size="22" />,

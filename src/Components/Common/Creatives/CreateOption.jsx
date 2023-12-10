@@ -229,9 +229,7 @@ const CreateOption = ({ setResponseId = () => { }, status, click, setClick = () 
               },
             }}
           >
-
             ایجاد ویژگی
-
           </Button>
         )
       }

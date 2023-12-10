@@ -121,10 +121,10 @@ export default function TableItems({
   const [alignment, setAlignment] = React.useState('');
 
   React.useEffect(() => {
-    if (selectedStatus === 'waiting') {
-      setAlignment('');
-    } else if (selectedStatus === 'accepted') {
-      setAlignment('accepted');
+    if (selectedStatus === 'inactive') {
+      setAlignment('inactive');
+    } else if (selectedStatus === 'active') {
+      setAlignment('active');
     }
 
     setSubmitToServer(alignment);
@@ -142,12 +142,11 @@ export default function TableItems({
         };
 
         const sendData = {
-          id_payment: selectedRowId,
           status: newAlignment,
         };
 
         const response = await axios.post(
-          `${ServerURL.url}/admin/payment/change-status`,
+          `${ServerURL.url}/admin/feature/${selectedRowId}/status`,
           sendData,
           config
         );
@@ -155,11 +154,12 @@ export default function TableItems({
           toast.success("با موفقیت تغییر داده شد.");
           setCount(count + 1);
           setUptadeCount(1);
+          closeDialog()
         } else {
           toast.error("لطفا دوباره امتحان کنید");
         }
       } catch (error) {
-        console.error("Error sending delete request:", error);
+        console.error("Error sending request:", error);
       }
     }
   };
@@ -322,11 +322,11 @@ export default function TableItems({
                   onChange={handleChange}
                   aria-label="Platform"
                 >
-                  <ToggleButton value="accepted" color="success">
-                    Accepted
+                  <ToggleButton value="inactive" color="error">
+                    Inactive
                   </ToggleButton>
-                  <ToggleButton value="rejected" color="error">
-                    Rejected
+                  <ToggleButton value="active" color="success">
+                    Active
                   </ToggleButton>
                 </ToggleButtonGroup>
               </DialogContent>
@@ -438,6 +438,20 @@ export default function TableItems({
                               variant="contained"
                               color={e?.text === 'inactive' ? 'error' : 'success'}
 
+                            >
+                              {e?.text}
+                            </StatusButton>
+
+                          )}
+                          {e?.type === "statusChange" && (
+                            <StatusButton
+                              {...e}
+                              onClick={() => {
+                                handleStatusBtnClick(row?.id);
+                                setSelectedStatus(e?.text);
+                              }}
+                              variant="contained"
+                              color={e?.text === 'inactive' ? 'error' : 'success'}
                             >
                               {e?.text}
                             </StatusButton>
