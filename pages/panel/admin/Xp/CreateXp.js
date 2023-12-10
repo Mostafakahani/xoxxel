@@ -8,7 +8,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
 import CreateOption from "Components/Common/Creatives/CreateOption";
-import { Button, Grid, MenuItem, Select, SvgIcon, TextField, Typography } from '@mui/material';
+import { Button, Grid, MenuItem, Select, SvgIcon, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { PopularIconOff, PopularIconOn } from 'Icons/icons';
 const CreateXp = () => {
     const router = useRouter();
@@ -40,7 +40,7 @@ const CreateXp = () => {
     const [countTwo, setCountTwo] = useState(0);
     const [countThree, setCountThree] = useState(0);
 
-
+    const [alignment, setAlignment] = useState('');
 
     const [selectedType, setSelectedType] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
@@ -104,6 +104,9 @@ const CreateXp = () => {
         setSelectedType(event.target.value);
     };
 
+    const handleChangeToggleButtonGroup = async (event, newAlignment) => {
+        setAlignment(newAlignment);
+    }
     const handleSubmit = async () => {
         setAddingFeature(true);
         const config = {
@@ -218,21 +221,40 @@ const CreateXp = () => {
                     pauseOnHover
                     theme="light"
                 />
-                <Typography>ساخت فیچر</Typography>
                 <Grid container spacing={5}>
                     <Grid item container xs={12} md={12} spacing={2}>
-                        <Grid item container xs={12} sm={12} md={12} sx={{ my: "15px", display: "flex", flexDirection: "column" }}>
+                        <Grid item container xs={12} sm={12} md={12} spacing={2} >
                             <Grid item xs={12} sm={6} md={8}>
+                                <Typography>ساخت فیچر</Typography>
                                 <TextField
                                     onChange={(e) => setNameFeature(e.target.value)}
                                     value={nameFeature}
                                     label="نام فیچر"
                                     variant="outlined"
                                     sx={{
-                                        my: "5px",
+                                        mt: 1,
                                         width: { xs: "100%", sm: "100%", md: "100%" },
                                     }}
                                 />
+                            </Grid>
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Typography>حالت فروش</Typography>
+                                <ToggleButtonGroup
+                                    color="primary"
+                                    value={alignment}
+                                    exclusive
+                                    fullWidth
+                                    onChange={handleChangeToggleButtonGroup}
+                                    aria-label="Platform"
+                                    sx={{ mt: 1 }}
+                                >
+                                    <ToggleButton value="auto" color="success">
+                                        Auto
+                                    </ToggleButton>
+                                    <ToggleButton value="manual" color="info">
+                                        Manual
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
                             </Grid>
                         </Grid>
                         <Grid item container spacing={2}>
@@ -308,45 +330,45 @@ const CreateXp = () => {
                             }}
                         />
                     </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Typography>به عنوان محبوب</Typography>
+                        <Grid xs={6} md={6} mt={1}>
+                            <Button
+                                onClick={() => setIsPopular(!isPopular)}
+                                variant='outlined'
+                                endIcon={!isPopular ? <PopularIconOn /> : <PopularIconOff />}
+                            >
+                                Popular
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
-
-                <Grid container sx={{ my: "20px" }}>
-                    <Grid xs={12} sm={4} md={3}>
+                <Grid container item spacing={1}>
+                    <Grid item xs={12} sm={4} md={12}>
                         <TextField
-                            size="small"
+                            size="medium"
                             onChange={(e) => setDataFeature(e.target.value)}
                             value={dataFeature}
-                            label="Label input"
+                            label="Data"
+                            fullWidth
                             variant="outlined"
-                            sx={{ my: "5px", width: { xs: "100%", sm: "90%", md: "80%" } }}
                         />
                     </Grid>
-                    <Grid xs={12} sm={4} md={3}>
-                        <TextField
-                            size="small"
-                            onChange={(e) => setSellMode(e.target.value)}
-                            value={sellMode}
-                            label="Place holder"
-                            variant="outlined"
-                            sx={{ my: "5px", width: { xs: "100%", sm: "90%", md: "80%" } }}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid container sx={{ my: "20px" }}>
-                    <Grid xs={12} sm={4} md={12}>
+                    <Grid item xs={12} sm={4} md={1}>
                         <TextField
                             size="small"
                             fullWidth
                             multiline
                             onChange={(e) => setXp(e.target.value)}
                             value={xp}
-                            label="متن زیر Input"
+                            label="مقدار Xp"
                             variant="outlined"
+                            type='number'
                             sx={{ my: "5px" }}
                         />
                     </Grid>
-                </Grid>
 
+                </Grid>
                 <Grid container>
                     <CheckboxesTags
                         value={checkBoxList}
@@ -408,30 +430,7 @@ const CreateXp = () => {
                                 onClick={() => setOpenThis(true)}
                             >اضافه کردن ویژگی جدید</Button>
                         </Grid>
-                        <Grid xs={12} sm={6} md={3}>
-                            <Typography>به عنوان محبوب</Typography>
-                            <Grid xs={6} md={6}>
-                                <Button
-                                    onClick={() => setIsPopular(!isPopular)}
-                                    sx={{
-                                        color: "#4B4B57",
-                                        p: "15px",
-                                        px: { sm: "40px", md: "15px" },
-                                        border: "1px solid #bdbdbd",
-                                        alignItems: "center",
-                                        display: "flex",
-                                        fontSize: "13px",
-                                    }}
-                                >
-                                    Popular
-                                    {!isPopular ? (
-                                        <SvgIcon sx={{ ml: "35px" }}><PopularIconOn /></SvgIcon>
-                                    ) : (
-                                        <SvgIcon sx={{ ml: "35px" }}><PopularIconOff /></SvgIcon>
-                                    )}
-                                </Button>
-                            </Grid>
-                        </Grid>
+
                     </Grid>
 
                 </Grid>
