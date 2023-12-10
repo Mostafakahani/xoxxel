@@ -22,11 +22,10 @@ const CreateXp = () => {
     // const [productPrice, setProductPrice] = useState("");
     // const [starRating, setStarRating] = useState("");
     const [dataFeature, setDataFeature] = useState("");
-    const [sellMode, setSellMode] = useState("");
     const [xp, setXp] = useState("");
-    const [selectedFileItem, setSelectedFileItem] = useState({});
-    const [selectedFileItem2, setSelectedFileItem2] = useState({});
-    const [selectedFileItem3, setSelectedFileItem3] = useState({});
+    const [selectedFileItem, setSelectedFileItem] = useState([]);
+    const [selectedFileItem2, setSelectedFileItem2] = useState([]);
+    const [selectedFileItem3, setSelectedFileItem3] = useState([]);
     const [checkBoxList, setCheckBoxList] = useState([]);
     const [addingFeature, setAddingFeature] = useState(false);
     const [openThis, setOpenThis] = useState(false);
@@ -40,7 +39,7 @@ const CreateXp = () => {
     const [countTwo, setCountTwo] = useState(0);
     const [countThree, setCountThree] = useState(0);
 
-    const [alignment, setAlignment] = useState('');
+    const [sellMode, setSellMode] = useState('');
 
     const [selectedType, setSelectedType] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
@@ -105,7 +104,7 @@ const CreateXp = () => {
     };
 
     const handleChangeToggleButtonGroup = async (event, newAlignment) => {
-        setAlignment(newAlignment);
+        setSellMode(newAlignment);
     }
     const handleSubmit = async () => {
         setAddingFeature(true);
@@ -222,7 +221,7 @@ const CreateXp = () => {
                     theme="light"
                 />
                 <Grid container spacing={5}>
-                    <Grid item container xs={12} md={12} spacing={2}>
+                    <Grid item container spacing={2}>
                         <Grid item container xs={12} sm={12} md={12} spacing={2} >
                             <Grid item xs={12} sm={6} md={8}>
                                 <Typography>ساخت فیچر</Typography>
@@ -241,7 +240,7 @@ const CreateXp = () => {
                                 <Typography>حالت فروش</Typography>
                                 <ToggleButtonGroup
                                     color="primary"
-                                    value={alignment}
+                                    value={sellMode}
                                     exclusive
                                     fullWidth
                                     onChange={handleChangeToggleButtonGroup}
@@ -324,6 +323,7 @@ const CreateXp = () => {
                     <Grid item xs={12} sm={6} md={4}>
                         <StandardImageList
                             label={"تصویر اصلی (297*147)"}
+                            idStorage={selectedFileItem.length !== 0 ? true : false}
                             onChange={(e) => {
                                 setSelectedFileItem(e);
                                 console.log(e);
@@ -342,8 +342,17 @@ const CreateXp = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Grid container item spacing={1}>
+                    <Grid item xs={12} sm={4} md={1.2}>
+                        <Typography>مقدار Xp</Typography>
+                        <TextField
+                            sx={{ mt: 1 }}
+                            size="small"
+                            fullWidth
+                            onChange={(e) => setXp(e.target.value.replace(/\D/g, ''))}
+                            value={xp}
+                            variant="outlined"
+                        />
+                    </Grid>
                     <Grid item xs={12} sm={4} md={12}>
                         <TextField
                             size="medium"
@@ -354,39 +363,6 @@ const CreateXp = () => {
                             variant="outlined"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={4} md={1}>
-                        <TextField
-                            size="small"
-                            fullWidth
-                            multiline
-                            onChange={(e) => setXp(e.target.value)}
-                            value={xp}
-                            label="مقدار Xp"
-                            variant="outlined"
-                            type='number'
-                            sx={{ my: "5px" }}
-                        />
-                    </Grid>
-
-                </Grid>
-                <Grid container>
-                    <CheckboxesTags
-                        value={checkBoxList}
-                        responseId={responseId}
-                        onChange={(e) => {
-                            setCheckBoxList(e);
-                        }}
-                    />
-                    <CreateOption
-                        click={openThis}
-                        setClick={(value) => setOpenThis(value)}
-                        status={'plus'}
-                        setResponseId={(e) => {
-                            setResponseId(e);
-                            setCheckBoxList([...checkBoxList, e]);
-                            console.log(checkBoxList);
-                        }}
-                    />
                 </Grid>
 
                 <Grid container sx={{ my: "25px" }}>
@@ -397,11 +373,8 @@ const CreateXp = () => {
                                 color="primary"
                                 disabled={
                                     selectedFileItem.length === 0 ||
-                                    selectedFileItem2.length === 0 ||
-                                    selectedFileItem3.length === 0 ||
                                     nameFeature === "" ||
                                     selectedCategory === "" ||
-                                    checkBoxList.length === 0 ||
                                     xp === '' ||
                                     dataFeature === '' ||
                                     sellMode === ''
