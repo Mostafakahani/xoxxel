@@ -21,12 +21,8 @@ const CreateXp = () => {
     const [nameFeature, setNameFeature] = useState("");
     // const [productPrice, setProductPrice] = useState("");
     // const [starRating, setStarRating] = useState("");
-    const [dataFeature, setDataFeature] = useState("");
     const [xp, setXp] = useState("");
     const [selectedFileItem, setSelectedFileItem] = useState([]);
-    const [selectedFileItem2, setSelectedFileItem2] = useState([]);
-    const [selectedFileItem3, setSelectedFileItem3] = useState([]);
-    const [checkBoxList, setCheckBoxList] = useState([]);
     const [addingFeature, setAddingFeature] = useState(false);
     const [openThis, setOpenThis] = useState(false);
     // const router = useRouter()
@@ -46,6 +42,25 @@ const CreateXp = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
 
     const [isPopular, setIsPopular] = useState(false);
+
+
+    //New Test:
+    const [dataFeature, setDataFeature] = useState('');
+    const [uniqueTrimmedArray, setUniqueTrimmedArray] = useState([]);
+
+    const handleInputChange = (event) => {
+        const newValue = event.target.value;
+        setDataFeature(newValue);
+
+        const newUniqueTrimmedArray = newValue
+            .split('\n')
+            .map(value => value.trim())
+            .filter(value => value !== "")
+            .filter((value, index, self) => self.indexOf(value) === index);
+
+        setUniqueTrimmedArray(newUniqueTrimmedArray);
+    };
+
 
     // useEffect(() => {
     //     async function fetchData() {
@@ -354,13 +369,18 @@ const CreateXp = () => {
                         />
                     </Grid>
                     <Grid item xs={12} sm={4} md={12}>
+                        <p>تعداد کد ها: {uniqueTrimmedArray.length}</p>
                         <TextField
+                            sx={{ mt: 1 }}
                             size="medium"
-                            onChange={(e) => setDataFeature(e.target.value)}
-                            value={dataFeature}
-                            label="Data"
+                            // onChange={(e) => setDataFeature(e.target.value)}
+                            label="کد ها"
+                            multiline
                             fullWidth
                             variant="outlined"
+                            rows={10}
+                            value={dataFeature}
+                            onChange={handleInputChange}
                         />
                     </Grid>
                 </Grid>
@@ -405,7 +425,6 @@ const CreateXp = () => {
                         </Grid>
 
                     </Grid>
-
                 </Grid>
             </AccountLayout>
         </>
