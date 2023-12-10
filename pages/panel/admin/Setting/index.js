@@ -94,22 +94,27 @@ const Setting = () => {
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={3}>
                                     <Link href={'/panel/admin/Home/AboutUsOurVsionFaq'}>
-                                        <Button sx={{ fontSize: '12px'}} variant="contained">صفحه اصلی About us,our vision,faq</Button>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">صفحه اصلی About us,our vision,faq</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
                                     <Link href={'/panel/admin/Home/LevelPage'}>
-                                        <Button sx={{ fontSize: '12px'}} variant="contained">مراحل صفحه اصلی</Button>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">مراحل صفحه اصلی</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
                                     <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                        <Button sx={{ fontSize: '12px'}} variant="contained">اسلایدر های صفحه اصلی</Button>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">اسلایدر های صفحه اصلی</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
                                     <Link href={'/panel/admin/Home/ChangeCompanies'}>
-                                        <Button sx={{ fontSize: '12px'}} variant="contained">کمپانی صفحه اصلی</Button>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">کمپانی صفحه اصلی</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    <Link href={'/panel/admin/Home/ChangeCompanies'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">صفحه اصلی Accounts</Button>
                                     </Link>
                                 </Grid>
                             </Grid>
@@ -118,16 +123,84 @@ const Setting = () => {
                     selectedButton === "Dashboard shop" && (
                         <Grid item xs={12} md={6}>
                             <Link href={'/panel/admin/Home/LevelPage'}>
-                                <Button sx={{ fontSize: '12px'}} variant="contained">مراحل صفحه اصلی</Button>
+                                <Button sx={{ fontSize: '12px' }} variant="contained">مراحل صفحه اصلی</Button>
                             </Link>
                         </Grid>
                     ) ||
                     selectedButton === "Category gift card" && (
-                        <Grid item xs={12} md={6}>
-                            <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                <Button sx={{ fontSize: '12px'}} variant="contained">اسلایدر های صفحه اصلی</Button>
-                            </Link>
-                        </Grid>
+                        <>
+                            <Grid container spacing={2}>
+
+                                <Grid item xs={12} md={2}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">اسلایدر های صفحه اصلی</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">بنر صفحه Category gift card</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">تصویر ایتم های زیر بنر Category gift card</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">صفحه گیفت کارت trending gift card</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">صفحه گیفت کارت pupolar gift card</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={2}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">صفحه گیفت کارت The latest</Button>
+                                    </Link>
+                                </Grid>
+                            </Grid>
+
+                        </>
+                    ) ||
+                    selectedButton === "Category top up" && (
+                        <>
+                            <Grid container spacing={2}>
+
+                                <Grid item xs={12} md={6}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">اسلایدر های صفحه اصلی</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category top up بالای صفحه</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-Top games</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-For you</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-Trend gaming</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-Trend gaming</Button>
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </>
                     )
                 }
 

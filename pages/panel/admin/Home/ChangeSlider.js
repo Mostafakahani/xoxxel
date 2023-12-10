@@ -1,50 +1,289 @@
-import { Button, Grid, Typography } from "@mui/material";
-import BackArrow from "Components/Common/Back";
-import StepChangeSlider from "Components/Common/HomePageSteps/FAQ/StepChangeSlider";
+import {
+    Button,
+    CircularProgress,
+    Grid,
+} from "@mui/material";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-import { useState } from "react";
+import ServerURL from "Components/Common/Layout/config";
+import GetToken from "GetToken";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import SliderForm from "Components/Common/HomePageSteps/Sliders/SliderForm";
+import SliderList from "Components/Common/HomePageSteps/Sliders/SliderList";
 const ChangeSlider = () => {
-    const sliderData = [
-        { textStep: 'اسلایدر اول', },
-        { textStep: 'اسلایدر دوم', },
-        { textStep: 'اسلایدر سوم', },
-        { textStep: 'اسلایدر چهارم', },
-        { textStep: 'اسلایدر پنجم', },
-        { textStep: 'اسلایدر ششم', },
-    ]
+    const router = useRouter();
+
+    const [rows, setRows] = useState([]);
+    const [rowsTemp, setRowsTemp] = useState([]);
+    const [name, setName] = useState("");
+    const [nameEdit, setNameEdit] = useState("");
+
+    const [title, setTitle] = useState("");
+    const [titleEdit, setTitleEdit] = useState("");
+
+    const [description, setDescription] = useState("");
+    const [descriptionEdit, setDescriptionEdit] = useState("");
+    const [count, setCount] = useState(0);
+
+
+    const [selectedFileItem, setSelectedFileItem] = useState([]);
+    const [selectedFileItemEdit, setSelectedFileItemEdit] = useState("");
+
+    const [addingFeature, setAddingFeature] = useState(false);
+    const [editingRowId, setEditingRowId] = useState(null);
     const [expanded, setExpanded] = useState(null);
 
-    const handleAccordionChange = (panel, isExpanded) => {
-        setExpanded(isExpanded ? panel : null);
+    const getItems = () => {
+        const fetchData = async () => {
+            const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+            try {
+                const responseLevels = await axios.get(
+                    `${ServerURL.url}/admin/sliders/main/list?page=1&perPage=30`,
+                    config
+                );
+                const formattedData = formatData(responseLevels.data.data);
+                setRows(formattedData);
+                setRowsTemp(formattedData);
+            } catch (error) {
+                console.error("Error fetching data from server", error);
+            }
+        }
+        const formatData = (data) => {
+            return data.map((x, index) => ({
+                id: index,
+                name: x.data.title,
+                title: x.link,
+                description: x.data.txtBtn,
+                id_storage: x.id
+            }));
+        };
+        fetchData()
+    }
+    useEffect(() => {
+
+        getItems();
+    }, [count]);
+    const handleAddRow = () => {
+        if (name.trim() === "" || title.trim() === "" || description.trim() === "" || selectedFileItem.length === 0) {
+            toast.error("تمامی فیلد ها را پر کنید");
+            return;
+        }
+
+        const isDuplicate = rows.some((row) => row.name === name && row.title === title && row.description === description && row.selectedFileItem === selectedFileItem);
+        if (!isDuplicate) {
+            if (rows.length < 3) {
+                setRows([...rows, { id: Date.now(), name, title, description, id_storage: selectedFileItem }]);
+                setName("");
+                setSelectedFileItem([]);
+                setTitle('');
+                setDescription('');
+                toast.info("به لیست اضافه شد");
+            } else {
+                toast.error("حداکثر سه مرحله وجود دارد");
+            }
+        } else {
+            toast.error("فیلد ها تکراری است");
+        }
+    };
+
+    const handleDeleteRow = async (id) => {
+        const config = {
+            headers: {
+                Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`
+            }
+        };
+        try {
+            const data = {
+                ids: [id]
+            }
+
+            const response = await axios.post(`${ServerURL.url}/admin/sliders/main/delete`, data, config);
+
+            setRows(rows.filter((row) => row.id !== id));
+
+            setCount(count + 1);
+
+            toast.success("عملیات انجام شد");
+        } catch (error) {
+            console.error("Error deleting row", error);
+            toast.error("خطا در حذف ردیف");
+        }
+    };
+
+
+    const handleEditRow = (id) => {
+        setEditingRowId(id);
+        const editingRow = rows.find((row) => row.id === id);
+        if (editingRow) {
+            setNameEdit(editingRow.name);
+            setSelectedFileItemEdit(editingRow.selectedFileItem ? editingRow.selectedFileItem.id : "");
+            setTitleEdit(editingRow.title);
+            setDescriptionEdit(editingRow.description);
+
+        }
+    };
+
+
+    const handleCancelEdit = () => {
+        setEditingRowId(null);
+        setName("");
+        setSelectedFileItem([]);
+        setTitle('')
+        setDescription('')
+    };
+
+    const handleSaveEdit = (id, currentIdStorage) => {
+        setRows(
+            rows.map((row) =>
+                row.id === id
+                    ? {
+                        ...row,
+                        name: nameEdit,
+                        title: titleEdit,
+                        description: descriptionEdit,
+                        id_storage: currentIdStorage,
+                    }
+                    : row
+            )
+        );
+
+        setEditingRowId(null);
+        setNameEdit("");
+        setSelectedFileItemEdit("");
+        setTitleEdit('');
+        setDescriptionEdit('');
+        toast.warning(" عملیات انجام شد. برای اعمال، تغییرات را ذخیره کنید");
+    };
+    const handleSubmit = async () => {
+        const isDuplicate = rows.some((row) => row.name === name && row.title === title && row.description === description && row.selectedFileItem === selectedFileItem);
+        if (!isDuplicate) {
+            const isValidData = rows.every((data) => data.name && data.title !== '' && data.description !== '' && data.selectedFileItem !== 0);
+            if (!isValidData) {
+                toast.error('همه فیلدها باید پر شوند.');
+                return;
+            }
+
+            try {
+                setAddingFeature(true);
+                const config = {
+                    headers: {
+                        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`
+                    }
+                };
+
+                const dataSend = {
+                    title: name,
+                    link: title,
+                    txtBtn: description,
+                    id_storage: selectedFileItem
+                }
+                console.log(dataSend)
+
+
+                await axios.post(`${ServerURL.url}/admin/sliders/main/create`, dataSend, config);
+                console.log(rows)
+                toast.success("با موفقیت اضافه شد");
+                setCount(count + 1)
+                setName("");
+                setSelectedFileItem([]);
+                setTitle('')
+                setDescription('')
+                getItems();
+                setRowsTemp([])
+
+            } catch (error) {
+                // toast.error(error.response.data.message === 'levels must contain at least 3 elements' ? 'باید هر سه مرحله را وارد کنید' : 'خطایی رخ داده است دوباره تلاش کنید');
+                console.error("خطا در ارسال درخواست به سرور", error);
+            } finally {
+                setAddingFeature(false);
+            }
+        }
+    };
+    const handleChange = (panel) => (event, newExpanded) => {
+        setExpanded(newExpanded ? panel : false);
     };
 
     return (
         <>
             <AccountLayout>
-                <Grid sx={{ backgroundColor: '#fff', p: '25px' }}>
-                    <Grid sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '10px' }}>
-                        <Typography sx={{ color: '#333333', my: '15px', fontSize: '18px' }}> اسلایدر صفحه اصلی</Typography>
-                        <BackArrow />
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    limit={5}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
+                <Grid>
+                    <SliderForm
+                        name={name}
+                        title={title}
+                        description={description}
+                        selectedFileItem={selectedFileItem}
+                        onAddRow={handleSubmit}
+                        // onEditRow={handleEditRow}
+                        // onCancelEdit={handleCancelEdit}
+                        // onSaveEdit={handleSaveEdit}
+                        setName={setName}
+                        setTitle={setTitle}
+                        setDescription={setDescription}
+                        setSelectedFileItem={setSelectedFileItem}
+                        editingRowId={editingRowId}
+                    />
+                    <SliderList
+                        rows={rows}
+                        expanded={expanded}
+                        handleChange={handleChange}
+                        editingRowId={editingRowId}
+                        // nameEdit={nameEdit}
+                        // titleEdit={titleEdit}
+                        // descriptionEdit={descriptionEdit}
+                        setNameEdit={setNameEdit}
+                        // setTitleEdit={setTitleEdit}
+                        setDescriptionEdit={setDescriptionEdit}
+                        // handleEditRow={handleEditRow}
+                        // handleCancelEdit={handleCancelEdit}
+                        handleDeleteRow={handleDeleteRow}
+                    // handleSaveEdit={handleSaveEdit}
+                    // setSelectedFileItemEdit={setSelectedFileItemEdit}
+                    />
+                    <Grid container spacing={1}>
+                        <Grid item>
+                            <Button
+                                startIcon={addingFeature && (
+                                    <CircularProgress color="warning" size={24} />
+                                )}
+                                variant="contained"
+                                color="primary"
+                                onClick={handleSubmit}
+                                sx={{ borderRadius: "5px" }}
+                                disabled={rows === rowsTemp || rows.length < 3}
+                            >
+                                ذخیره تغییرات
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                onClick={() => router.push("/panel/admin/Setting")}
+                                sx={{ borderRadius: "5px" }}
+                            >
+                                بازگشت
+                            </Button>
+                        </Grid>
                     </Grid>
-
-                    <Grid>
-                        {sliderData.map((x, index) => (
-                            <StepChangeSlider
-                                key={index}
-                                id={index}
-                                textStep={x.textStep}
-                                expanded={expanded}
-                                onChange={handleAccordionChange}
-                            />
-                        ))}
-                    </Grid>
-                    <Grid sx={{ my: '20px' }}>
-                        <Button variant="contained" disableElevation sx={{ borderRadius: '5px', backgroundColor: '#1C49F1', color: '#FFFFFF' }}>ذخیره تغییرات</Button>
-                    </Grid>
-                </Grid>
+                </Grid >
             </AccountLayout>
-
         </>
-    )
-}
+    );
+};
+
 export default ChangeSlider;

@@ -10,15 +10,15 @@ import {
 import StandardImageList from "Components/Common/Images";
 import BackArrow from "Components/Common/Back";
 
-const LevelForm = ({
+const SliderForm = ({
   name,
   title,
   description,
   selectedFileItem,
   onAddRow,
-  onEditRow,
-  onCancelEdit,
-  onSaveEdit,
+  // onEditRow,
+  // onCancelEdit,
+  // onSaveEdit,
   setName,
   setTitle,
   setDescription,
@@ -29,8 +29,8 @@ const LevelForm = ({
     <Grid container spacing={2}>
       <Grid item container xs={12} md={12} spacing={2} display={"flex"} alignItems={"center"}>
         <Grid item xs={12} md={5.5}>
-          <InputLabel>نام</InputLabel>
           <TextField
+            label='متن'
             value={name}
             error={name.length < 3 && name !== ""}
             helperText={name.length < 3 && name !== "" ? "حداقل سه کاراکتر وارد کنید" : ""}
@@ -40,7 +40,7 @@ const LevelForm = ({
         </Grid>
         <Grid item md={5.5}>
           <StandardImageList
-            label={"ویدیو (728*357)"}
+            label={'تصویر (728*357)'}
             onChange={(e) => setSelectedFileItem(e)}
             idStorage={selectedFileItem.length !== 0 ? true : false}
           />
@@ -50,19 +50,25 @@ const LevelForm = ({
         </Grid>
       </Grid>
       <Grid item xs={12} md={12}>
-        <InputLabel>عنوان</InputLabel>
         <TextField
+          label='لینک'
+          placeholder="https://"
           value={title}
           error={title.length < 3 && title !== ""}
           helperText={title.length < 3 && title !== "" ? "حداقل سه کاراکتر وارد کنید" : ""}
           fullWidth
           multiline
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {
+            const inputValue = e.target.value;
+            const startsWithHttps = inputValue.toLowerCase().startsWith("https://");
+            setTitle(startsWithHttps ? inputValue : `https://${inputValue}`);
+          }}
         />
+
       </Grid>
       <Grid item xs={12} md={12}>
-        <InputLabel>متن</InputLabel>
         <TextField
+          label="متن دکمه (حداکثر 10 کاراکتر)"
           value={description}
           error={description.length < 3 && description !== ""}
           helperText={description.length < 3 && description !== "" ? "حداقل سه کاراکتر وارد کنید" : ""}
@@ -80,11 +86,11 @@ const LevelForm = ({
           onClick={onAddRow}
           disabled={name !== "" && selectedFileItem.length !== 0 && title !== "" && description !== "" && editingRowId === null ? false : true}
         >
-          افزودن به لیست +
+          افزودن به اسلایدر ها +
         </Button>
       </Grid>
     </Grid>
   );
 };
 
-export default LevelForm;
+export default SliderForm;
