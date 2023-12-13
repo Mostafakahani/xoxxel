@@ -12,12 +12,16 @@ const LatestGiftCardsSliderList = ({
   expanded,
   handleChange,
   editingRowId,
-  input3Edit,
   input1Edit,
   input2Edit,
-  setInput3Edit,
+  input3Edit,
+  input4Edit,
+  input5Edit,
   setInput1Edit,
   setInput2Edit,
+  setInput3Edit,
+  setInput4Edit,
+  setInput5Edit,
   handleEditRow,
   handleCancelEdit,
   handleDeleteRow,
@@ -53,19 +57,19 @@ const LatestGiftCardsSliderList = ({
                   <Grid container item xs={12} sm={12} md={12} spacing={3}>
                     <Grid container item xs={12} sm={5} md={6}>
                       <TextField
-                        value={editingRowId === row.id ? input3Edit : row.name}
-                        label="نام"
+                        value={editingRowId === row.id ? input1Edit : row.link}
+                        label='لینک (728*357)'
                         variant="outlined"
                         fullWidth
                         multiline
                         sx={{ my: "10px" }}
                         disabled={editingRowId !== row.id}
-                        onChange={(e) => (editingRowId === row.id ? setInput3Edit(e.target.value) : {})}
+                        onChange={(e) => (editingRowId === row.id ? setInput1Edit(e.target.value) : {})}
                       />
                     </Grid>
                     <Grid item xs={8} sm={5} md={5} display={"flex"} alignItems={"center"}>
                       <StandardImageList
-                        label={"ویدیو (728*357)"}
+                        label={'تصویر (728*357)'}
                         onChange={(e) => (editingRowId === row.id ? setSelectedFileItemEdit(e) : null)}
                         disableStatus={editingRowId !== row.id}
                         idStorage={row.id_storage}
@@ -92,28 +96,52 @@ const LatestGiftCardsSliderList = ({
                       </IconButton>
                     </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={8}>
+                  <Grid item xs={6} sm={3} md={3}>
                     <TextField
-                      value={editingRowId === row.id ? input1Edit : row.title}
-                      label="عنوان"
-                      variant="outlined"
-                      multiline
-                      fullWidth
-                      sx={{ my: "10px" }}
-                      disabled={editingRowId !== row.id}
-                      onChange={(e) => (editingRowId === row.id ? setInput1Edit(e.target.value) : {})}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={12}>
-                    <TextField
-                      value={editingRowId === row.id ? input2Edit : row.description}
-                      label="متن"
+                      value={editingRowId === row.id ? input2Edit : row.deliveryType}
+                      label="Delivery type"
                       variant="outlined"
                       multiline
                       fullWidth
                       sx={{ my: "10px" }}
                       disabled={editingRowId !== row.id}
                       onChange={(e) => (editingRowId === row.id ? setInput2Edit(e.target.value) : {})}
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={3} md={3}>
+                    <TextField
+                      value={editingRowId === row.id ? input3Edit : row.customer}
+                      label="Customer"
+                      variant="outlined"
+                      multiline
+                      fullWidth
+                      sx={{ my: "10px" }}
+                      disabled={editingRowId !== row.id}
+                      onChange={(e) => (editingRowId === row.id ? setInput3Edit(e.target.value) : {})}
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={3} md={3}>
+                    <TextField
+                      value={editingRowId === row.id ? input4Edit : row.save}
+                      label="Save"
+                      variant="outlined"
+                      multiline
+                      fullWidth
+                      sx={{ my: "10px" }}
+                      disabled={editingRowId !== row.id}
+                      onChange={(e) => (editingRowId === row.id ? setInput4Edit(e.target.value) : {})}
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={3} md={3}>
+                    <TextField
+                      value={editingRowId === row.id ? input5Edit : row.btn}
+                      label="Button"
+                      variant="outlined"
+                      multiline
+                      fullWidth
+                      sx={{ my: "10px" }}
+                      disabled={editingRowId !== row.id}
+                      onChange={(e) => (editingRowId === row.id ? setInput5Edit(e.target.value) : {})}
                     />
                   </Grid>
                 </Grid>
