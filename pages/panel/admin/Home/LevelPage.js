@@ -51,11 +51,11 @@ const LevelPage = () => {
         }
         const formatData = (data) => {
             return data.map((x, index) => ({
-                id: index,
+                id: x.id,
                 name: x.data.name,
                 title: x.data.title,
                 description: x.data.description,
-                id_storage: x.id_storage.id
+                id_storage: x?.id_storage?.id
             }));
         };
         fetchData()
@@ -123,7 +123,7 @@ const LevelPage = () => {
                         name: nameEdit,
                         title: titleEdit,
                         description: descriptionEdit,
-                        id_storage: currentIdStorage,
+                        id_storage: selectedFileItemEdit,
                     }
                     : row
             )

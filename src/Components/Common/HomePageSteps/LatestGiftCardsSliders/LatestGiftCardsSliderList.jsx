@@ -27,10 +27,10 @@ const LatestGiftCardsSliderList = ({
   return (
     <div>
       <Typography variant="h6" style={{ marginTop: "15px" }}>
-        لیست لول ها
+        لیست گیفت کارت ها (Lasts)
       </Typography>
       {rows.length === 0 ? (
-        <Typography my={2}>هیچ لولی وجود ندارد</Typography>
+        <Typography my={2}>هیچ گیفت کارتی (Lasts) وجود ندارد</Typography>
       ) : (
         <div>
           {rows.map((row) => (

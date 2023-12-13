@@ -81,19 +81,21 @@ const ChangeGiftCards = () => {
         getItems();
     }, [count]);
     const handleAddRow = () => {
-        if (input3.trim() === "" || input1.trim() === "" || input2.trim() === "" || selectedFileItem.length === 0) {
+        if (input3.trim() === "" || input1.trim() === "" || input2.trim() === "" || selectedFileItem.length === 0 || input4.trim() === '' || input5.trim() === '') {
             toast.error("تمامی فیلد ها را پر کنید");
             return;
         }
 
-        const isDuplicate = rows.some((row) => row.name === input3 && row.title === input1 && row.description === input2 && row.selectedFileItem === selectedFileItem);
+        const isDuplicate = rows.some((row) => row.input3 === input3 && row.input1 === input1 && row.input2 === input2 && row.selectedFileItem === selectedFileItem && row.input4 === input4 && row.input5 === input5);
         if (!isDuplicate) {
             if (rows.length < 3) {
-                setRows([...rows, { id: Date.now(), name: input3, title: input1, description: input2, id_storage: selectedFileItem }]);
-                setInput3("");
+                setRows([...rows, { id: Date.now(), input3: input3, input1: input1, input2: input2, input4: input4, input5: input5, id_storage: selectedFileItem }]);
                 setSelectedFileItem([]);
                 setInput1('');
                 setInput2('');
+                setInput3("");
+                setInput4('');
+                setInput5('');
                 toast.info("به لیست اضافه شد");
             } else {
                 toast.error("حداکثر سه مرحله وجود دارد");
@@ -143,10 +145,12 @@ const ChangeGiftCards = () => {
 
     const handleCancelEdit = () => {
         setEditingRowId(null);
-        setInput3("");
         setSelectedFileItem([]);
-        setInput1('')
-        setInput2('')
+        setInput1('');
+        setInput2('');
+        setInput3("");
+        setInput4('');
+        setInput5('');
     };
 
     const handleSaveEdit = (id, currentIdStorage) => {
@@ -165,16 +169,18 @@ const ChangeGiftCards = () => {
         );
 
         setEditingRowId(null);
-        setInput3Edit("");
         setSelectedFileItemEdit("");
         setInput1Edit('');
         setInput2Edit('');
+        setInput3Edit("");
+        setInput4Edit('');
+        setInput5Edit('');
         toast.warning(" عملیات انجام شد. برای اعمال، تغییرات را ذخیره کنید");
     };
     const handleSubmit = async () => {
-        const isDuplicate = rows.some((row) => row.name === input3 && row.title === input1 && row.description === input2 && row.selectedFileItem === selectedFileItem);
+        const isDuplicate = rows.some((row) => row.input3 === input3 && row.input1 === input1 && row.input2 === input2 && row.selectedFileItem === selectedFileItem && row.input4 === input4 && row.input5 === input5);
         if (!isDuplicate) {
-            const isValidData = rows.every((data) => data.name && data.title !== '' && data.description !== '' && data.selectedFileItem !== 0);
+            const isValidData = rows.every((data) => data.input3 && data.input1 !== '' && data.input2 !== '' && data.selectedFileItem !== 0 && data.input4 !== '' && data.input5 !== '');
             if (!isValidData) {
                 toast.error('همه فیلدها باید پر شوند.');
                 return;
@@ -238,17 +244,21 @@ const ChangeGiftCards = () => {
                 />
                 <Grid>
                     <LatestGiftCardsSliderForm
-                        input3={input3}
                         input1={input1}
                         input2={input2}
+                        input3={input3}
+                        input4={input4}
+                        input5={input5}
                         selectedFileItem={selectedFileItem}
                         onAddRow={handleSubmit}
                         onEditRow={handleEditRow}
                         onCancelEdit={handleCancelEdit}
                         onSaveEdit={handleSaveEdit}
-                        setInput3={setInput3}
                         setInput1={setInput1}
                         setInput2={setInput2}
+                        setInput3={setInput3}
+                        setInput4={setInput4}
+                        setInput5={setInput5}
                         setSelectedFileItem={setSelectedFileItem}
                         editingRowId={editingRowId}
                     />
@@ -257,12 +267,16 @@ const ChangeGiftCards = () => {
                         expanded={expanded}
                         handleChange={handleChange}
                         editingRowId={editingRowId}
-                        input3Edit={input3Edit}
                         input1Edit={input1Edit}
                         input2Edit={input2Edit}
-                        setInput3Edit={setInput3Edit}
+                        input3Edit={input3Edit}
+                        input4Edit={input4Edit}
+                        input5Edit={input5Edit}
                         setInput1Edit={setInput1Edit}
                         setInput2Edit={setInput2Edit}
+                        setInput3Edit={setInput3Edit}
+                        setInput4Edit={setInput4Edit}
+                        setInput5Edit={setInput5Edit}
                         handleEditRow={handleEditRow}
                         handleCancelEdit={handleCancelEdit}
                         handleDeleteRow={handleDeleteRow}
