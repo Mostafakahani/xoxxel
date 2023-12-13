@@ -27,6 +27,8 @@ const ChangeSlider = () => {
     const [descriptionEdit, setDescriptionEdit] = useState("");
     const [count, setCount] = useState(0);
 
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(30);
 
     const [selectedFileItem, setSelectedFileItem] = useState([]);
     const [selectedFileItemEdit, setSelectedFileItemEdit] = useState("");
@@ -40,7 +42,7 @@ const ChangeSlider = () => {
             const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
             try {
                 const responseLevels = await axios.get(
-                    `${ServerURL.url}/admin/sliders/main/list?page=1&perPage=30`,
+                    `${ServerURL.url}/admin/sliders/main/list?page=${page}&perPage=${perPage}`,
                     config
                 );
                 const formattedData = formatData(responseLevels.data.data);
@@ -52,7 +54,7 @@ const ChangeSlider = () => {
         }
         const formatData = (data) => {
             return data.map((x, index) => ({
-                id: index,
+                id: x.id,
                 name: x.data.title,
                 title: x.link,
                 description: x.data.txtBtn,

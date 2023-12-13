@@ -1,16 +1,16 @@
 import { Button, Grid, Typography } from "@mui/material";
 import BackArrow from "Components/Common/Back";
-import StepChangeSlider from "Components/Common/HomePageSteps/FAQ/StepChangeSlider";
+import StepChangeCompanies from "Components/Common/HomePageSteps/FAQ/StepChangeCompanies";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { useState } from "react";
-const ChangeSlider = () => {
-    const sliderData = [
-        { textStep: 'اسلایدر اول', },
-        { textStep: 'اسلایدر دوم', },
-        { textStep: 'اسلایدر سوم', },
-        { textStep: 'اسلایدر چهارم', },
-        { textStep: 'اسلایدر پنجم', },
-        { textStep: 'اسلایدر ششم', },
+const ChangeCompanies = () => {
+    const companiesData = [
+        { textStep: 'کمپانی اول', },
+        { textStep: 'کمپانی دوم', },
+        { textStep: 'کمپانی سوم', },
+        { textStep: 'کمپانی چهارم', },
+        { textStep: 'کمپانی پنجم', },
+        { textStep: 'کمپانی ششم', },
     ]
     const [expanded, setExpanded] = useState(null);
 
@@ -23,13 +23,13 @@ const ChangeSlider = () => {
             <AccountLayout>
                 <Grid sx={{ backgroundColor: '#fff', p: '25px' }}>
                     <Grid sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: '10px' }}>
-                        <Typography sx={{ color: '#333333', my: '15px', fontSize: '18px' }}> اسلایدر صفحه اصلی</Typography>
+                        <Typography sx={{ color: '#333333', my: '15px', fontSize: '18px' }}> کمپانی های صفحه اصلی</Typography>
                         <BackArrow />
                     </Grid>
 
                     <Grid>
-                        {sliderData.map((x, index) => (
-                            <StepChangeSlider
+                        {companiesData.map((x, index) => (
+                            <StepChangeCompanies
                                 key={index}
                                 id={index}
                                 textStep={x.textStep}
@@ -47,4 +47,4 @@ const ChangeSlider = () => {
         </>
     )
 }
-export default ChangeSlider;
+export default ChangeCompanies;
