@@ -113,7 +113,7 @@ const Setting = () => {
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeCompanies'}>
+                                    <Link href={'/panel/admin/Home/ChangeAcounts'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">صفحه اصلی Accounts</Button>
                                     </Link>
                                 </Grid>
@@ -132,12 +132,7 @@ const Setting = () => {
                             <Grid container spacing={2}>
 
                                 <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                        <Button sx={{ fontSize: '12px' }} variant="contained">اسلایدر های صفحه اصلی</Button>
-                                    </Link>
-                                </Grid>
-                                <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                    <Link href={'/panel/admin/Home/ChangeGiftCards'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">بنر صفحه Category gift card</Button>
                                     </Link>
                                 </Grid>

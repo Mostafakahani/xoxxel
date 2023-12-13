@@ -25436,7 +25436,7 @@
         objectLeft: FA,
         objectCenter: OA,
         objectRight: NA,
-        objectFullWidth: zA,
+        objectfullWidth: zA,
         objectInline: MA,
         objectBlockLeft: RA,
         objectBlockRight: IA,
