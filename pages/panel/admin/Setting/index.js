@@ -163,20 +163,14 @@ const Setting = () => {
                     selectedButton === "Category top up" && (
                         <>
                             <Grid container spacing={2}>
-
                                 <Grid item xs={12} md={6}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                        <Button sx={{ fontSize: '12px' }} variant="contained">اسلایدر های صفحه اصلی</Button>
+                                    <Link href={'/panel/admin/Home/ChangeTopUpPopularGames'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-Top games</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Link href={'/panel/admin/Home/ChangeSlider'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">Category top up بالای صفحه</Button>
-                                    </Link>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-Top games</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
