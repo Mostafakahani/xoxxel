@@ -88,14 +88,19 @@ const ChangeTopUpPopularGames = () => {
 
         const isDuplicate = rows.some((row) => row.input3 === input3 && row.input1 === input1 && row.input2 === input2 && row.selectedFileItem === selectedFileItem && row.input4 === input4 && row.input5 === input5);
         if (!isDuplicate) {
-            setRows([...rows, { id: Date.now(), customer: input3, link: input1, deliveryType: input2, save: input4, btn: input5, id_storage: selectedFileItem }]);
-            setSelectedFileItem([]);
-            setInput1('');
-            setInput2('');
-            setInput3("");
-            setInput4('');
-            setInput5('');
-            toast.info("به لیست اضافه شد");
+            if (rows.length < 3) {
+                // setRows([...rows, { id: Date.now(), title: input3, link: input1, deliveryType: input2, save: input4, btn: input5, id_storage: selectedFileItem }]);
+                setRows([...rows, { id: Date.now(), title: input2, link: input1, id_storage: selectedFileItem }]);
+                setSelectedFileItem([]);
+                setInput1('');
+                setInput2('');
+                setInput3("");
+                setInput4('');
+                setInput5('');
+                toast.info("به لیست اضافه شد");
+            } else {
+                toast.error("حداکثر سه مرحله وجود دارد");
+            }
 
         } else {
             toast.error("فیلد ها تکراری است");
@@ -161,10 +166,10 @@ const ChangeTopUpPopularGames = () => {
                         ...row,
                         input1: input1Edit,
                         input2: input2Edit,
-                        input3: input3Edit,
-                        input4: input4Edit,
-                        input5: input5Edit,
-                        id_storage: currentIdStorage,
+                        // input3: input3Edit,
+                        // input4: input4Edit,
+                        // input5: input5Edit,
+                        id_storage: selectedFileItemEdit,
                     }
                     : row
             )
@@ -199,9 +204,9 @@ const ChangeTopUpPopularGames = () => {
                 const dataSend = {
                     "populars": rows.map(row => (
                         {
-                            title: row.name,
-                            link: row.title,
-                            id_storage: row.description,
+                            title: row.title,
+                            link: row.link,
+                            id_storage: row.id_storage,
                         }
                     )),
                 };
@@ -294,7 +299,7 @@ const ChangeTopUpPopularGames = () => {
                                 color="primary"
                                 onClick={handleSubmit}
                                 sx={{ borderRadius: "5px" }}
-                                disabled={rows === rowsTemp}
+                                disabled={rows === rowsTemp || rows.length < 3}
                             >
                                 ذخیره تغییرات
                             </Button>

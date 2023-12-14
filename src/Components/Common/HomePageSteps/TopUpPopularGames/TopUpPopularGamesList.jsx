@@ -31,10 +31,10 @@ const TopUpPopularGamesList = ({
   return (
     <div>
       <Typography variant="h6" style={{ marginTop: "15px" }}>
-        لیست گیفت کارت ها (items)
+        لیست گیفت کارت ها (PopularGames)
       </Typography>
       {rows.length === 0 ? (
-        <Typography my={2}>هیچ گیفت کارتی (items) وجود ندارد</Typography>
+        <Typography my={2}>هیچ گیفت کارتی (PopularGames) وجود ندارد</Typography>
       ) : (
         <div>
           {rows.map((row) => (
