@@ -137,7 +137,7 @@ const Setting = () => {
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                    <Link href={'/panel/admin/Home/ChangeGiftCardsItem'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">تصویر ایتم های زیر بنر Category gift card</Button>
                                     </Link>
                                 </Grid>
