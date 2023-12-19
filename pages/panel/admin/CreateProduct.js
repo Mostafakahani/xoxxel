@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
-import CreateOption from "Components/Common/Creatives/CreateOption";
+import CreateOptionFeature from "Components/Common/Creatives/CreateOptionFeature";
 import { useRouter } from "next/router";
 const CreateProduct = () => {
   const [productName, setProductName] = useState("");
@@ -49,10 +49,10 @@ const CreateProduct = () => {
     async function fetchData() {
       const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
       const responseCategory = await axios.get(
-        `${ServerURL.url}/admin/storage/get-all-cat`,
+        `${ServerURL.url}/admin/cat/get-all-cat-without-pagination`,
         config
       );
-      setCategory(responseCategory.data.data);
+      setCategory(responseCategory.data);
     }
     fetchData();
   }, [countTwo]);
@@ -279,10 +279,10 @@ const CreateProduct = () => {
               setCheckBoxList(e);
             }}
           />
-          <CreateOption
+          <CreateOptionFeature
             click={openThis}
             setClick={(value) => setOpenThis(value)}
-            status={'plus'}
+            // status={'plus'}
             setResponseId={(e) => {
               setResponseId(e);
               setCheckBoxList([...checkBoxList, e]);
@@ -317,7 +317,8 @@ const CreateProduct = () => {
                 variant="outlined"
                 color="error"
                 onClick={() => {
-                  window.location.href = "../admin/products";
+                  console.log(checkBoxList)
+                  // window.location.href = "../admin/products";
                 }}
               >
                 انصراف

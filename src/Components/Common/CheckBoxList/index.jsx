@@ -35,7 +35,7 @@ export default function CheckboxesTags({ onChange = () => { }, value = [], respo
           },
         };
         const response = await axios.get(
-          `${ServerURL.url}/admin/feature/get-all-feature?page=1`,
+          `${ServerURL.url}/admin/feature/get-all-feature?page=1&perPage=30`,
           config
         );
         const apiData = response.data;

@@ -8,7 +8,7 @@ import CreateRegon from "Components/Common/Creatives/CreateRegon";
 import CreateCategory from "Components/Common/Creatives/CreateCategory";
 import CreateType from "Components/Common/Creatives/CreateType";
 import EditOptionsDes from "Components/Common/Creatives/EditOptions/EditOptionsDes";
-import CreateOption from "Components/Common/Creatives/CreateOption";
+import CreateOptionFeature from "Components/Common/Creatives/CreateOptionFeature";
 import axios from "axios";
 import ServerURL from "Components/Common/Layout/config";
 import moment from "moment-jalaali";
@@ -158,7 +158,7 @@ const Products = () => {
                 justifyContent: { xs: "flex-start", md: "flex-end" },
               }}
             >
-              <CreateOption />
+              <CreateOptionFeature />
               <CreateRegon />
               <CreateCategory />
               <CreateType />
