@@ -28,7 +28,7 @@ export default function MyApp(props) {
 
   useEffect(() => {
     if (!(ServerURL.developerMode === true ? ServerURL.Bear : GetToken('user'))) {
-      router.replace(`${ServerURL.domain}/auth/login`);
+      router.push(`${ServerURL.domain}/auth/login`);
 
     }
   }, []);
