@@ -24,7 +24,7 @@ const OptionEdit = () => {
         setUpdateData(false);
 
         const response = await axios.get(
-          `${ServerURL.url}/admin/feature/get-all-feature`,
+          `${ServerURL.url}/admin/feature/get-all-feature?page=1&perPage=50`,
           config
         );
         const apiData = response.data;

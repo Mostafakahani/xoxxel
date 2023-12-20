@@ -26,7 +26,7 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
   const [nameFeature, setNameFeature] = useState("");
   // const [productPrice, setProductPrice] = useState("");
   // const [starRating, setStarRating] = useState("");
-  const [xp, setXp] = useState("");
+  const [price, setPrice] = useState(0);
   const [selectedFileItem, setSelectedFileItem] = useState([]);
   const [addingFeature, setAddingFeature] = useState(false);
   const [openThis, setOpenThis] = useState(false);
@@ -121,22 +121,24 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
     };
     try {
       const dataBody = {
+        country_id: selectedCountry,
+        cat_id: selectedCategory,
+        type_id: selectedType,
         name_feature: nameFeature,
-        type_id: selectedCategory,
-        xp: xp,
-        id_Storage: selectedFileItem,
+        price: price,
         popular: isPopular,
+        // id_Storage: selectedFileItem,
         data_feature: dataFeature,
         sell_mode: sellMode,
+
       };
       const uploadResponse = await axios.post(
-        `${ServerURL.url}/admin/feature-for-xp/create`,
+        `${ServerURL.url}/admin/feature/create`,
         dataBody,
         config
       );
-      setResponseId(uploadResponse.data.id);
-      console.log('id: ', uploadResponse.data.id)
       if (uploadResponse.status === 201) {
+        setResponseId(uploadResponse.data.id);
         toast.success("با موفقیت ساخته شد.");
         handleRemoveFields()
         // window.location.href = "../admin/products";
@@ -158,14 +160,14 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
     setSelectedCountry('')
     setDataFeature('')
     setSellMode('')
-    setXp('')
+    setPrice('')
     setSelectedFileItem([])
     setAddingFeature(false)
     setOpenThis(false)
     setCategory([])
     setCountTwo(0)
     setSelectedCategory('')
-    setResponseId(0)
+    // setResponseId(0)
   }
 
 
@@ -318,13 +320,13 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
               </Grid>
             </Grid>
             <Grid item xs={12} sm={4} md={1.2}>
-              <Typography>مقدار Xp</Typography>
+              <Typography>قیمت</Typography>
               <TextField
                 sx={{ mt: 1 }}
                 size="small"
                 fullWidth
-                onChange={(e) => setXp(e.target.value.replace(/\D/g, ''))}
-                value={xp}
+                onChange={(e) => setPrice(e.target.value.replace(/\D/g, ''))}
+                value={price}
                 variant="outlined"
               />
             </Grid>
@@ -355,7 +357,7 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
                     selectedFileItem.length === 0 ||
                     nameFeature === "" ||
                     selectedCategory === "" ||
-                    xp === '' ||
+                    price === '' ||
                     dataFeature === '' ||
                     sellMode === ''
                   }

@@ -286,7 +286,7 @@ const CreateProduct = () => {
             setResponseId={(e) => {
               setResponseId(e);
               setCheckBoxList([...checkBoxList, e]);
-              console.log(checkBoxList);
+              // console.log(checkBoxList);
             }}
           />
         </Grid>
