@@ -3,7 +3,6 @@ import { Grid } from '@mui/material';
 import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
-import { ChatProvider, useChat } from './ChatContext';
 import { useState } from 'react';
 import ServerURL from '../Layout/config';
 import GetToken from 'GetToken';

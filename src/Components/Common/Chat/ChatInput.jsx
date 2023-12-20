@@ -1,18 +1,19 @@
 import { Box, Button, CircularProgress, Grid, IconButton, SvgIcon, TextField, Typography, useMediaQuery } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTheme } from "@emotion/react";
-import { useChat } from "./ChatContext";
 import { useState } from "react";
 import ServerURL from "../Layout/config";
 import GetToken from "GetToken";
 import axios from "axios";
 import StandardImageList from "../Images";
+import { ToastContainer, toast } from "react-toastify";
 
 const ChatInput = ({ data, onUpdate, id }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [inputText, setInputText] = useState('');
     const [selectedFileItem, setSelectedFileItem] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
 
     const [loading, setLoading] = useState(true);
     const [loadingStatus, setLoadingStatus] = useState(false);
@@ -43,12 +44,16 @@ const ChatInput = ({ data, onUpdate, id }) => {
                     onUpdate(1);
                     setInputText('')
                     setLoadingStatus(false)
+                    toast.success("با موفقیت ارسال شد.");
+
                 } else {
                     return
                 }
             } catch (error) {
                 console.log(error);
                 setLoadingStatus(false)
+                toast.error("دوباره تلاش کنید");
+
             } finally {
                 setLoading(false);
                 setLoadingStatus(false)
@@ -76,12 +81,17 @@ const ChatInput = ({ data, onUpdate, id }) => {
                     setInputText('')
                     selectedFileItem([])
                     setLoadingStatus(false)
+                    setImageUrl(null)
+                    toast.success("با موفقیت ارسال شد.");
+
                 } else {
                     return
                 }
             } catch (error) {
                 console.log(error);
                 setLoadingStatus(false)
+                toast.error("دوباره تلاش کنید");
+
             } finally {
                 setLoading(false);
                 setLoadingStatus(false)
@@ -93,6 +103,30 @@ const ChatInput = ({ data, onUpdate, id }) => {
 
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                limit={5}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+            {
+                selectedFileItem !== null & selectedFileItem !== 0 & imageUrl !== null & imageUrl !== '' ? (
+                    < Grid container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <Grid item>
+                            <Box onClick={() => setImageUrl('')} sx={{ cursor: 'pointer', transition: '.8s', '&:hover': { border: '1px solid #07bc0c', transition: '.4s' } }} component={'img'} src={imageUrl} width={100} height={'auto'} />
+                        </Grid>
+                    </Grid >
+                ) : (
+                    <></>
+                )
+            }
             <Grid
                 container
                 sx={{
@@ -110,7 +144,7 @@ const ChatInput = ({ data, onUpdate, id }) => {
                         <Grid item>
                             {!isMobile && (
                                 <Button
-                                    disabled={!loadingStatus ? false : true || inputText !== '' ? false : true || Object.keys(selectedFileItem).length !== 0 ? false : true}
+                                    disabled={loadingStatus || inputText === '' & imageUrl === ''}
                                     disableElevation onClick={SendMessage} variant="contained" color="info" startIcon={
                                         <SvgIcon>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="22" viewBox="0 0 21 22" fill="none">
@@ -129,7 +163,7 @@ const ChatInput = ({ data, onUpdate, id }) => {
                             {isMobile && (
                                 // <Box >
                                 <IconButton
-                                    disabled={loadingStatus || inputText === '' || Object.keys(selectedFileItem).length === 0}
+                                    disabled={loadingStatus || inputText === '' & imageUrl === ''}
                                     onClick={SendMessage}
                                     sx={{ backgroundColor: '#5094FB', borderRadius: '5px' }} variant="contained" size="small">
                                     {loadingStatus ? <CircularProgress size={24} /> :
@@ -162,6 +196,7 @@ const ChatInput = ({ data, onUpdate, id }) => {
                                     setSelectedFileItem(e);
                                     console.log(e);
                                 }}
+                                imageUrlLink={setImageUrl}
                             />
                             {/* // } */}
                             {/* </IconButton> */}
@@ -186,7 +221,6 @@ const ChatInput = ({ data, onUpdate, id }) => {
                             onChange={(e) => setInputText(e.target.value)}
                             onKeyPress={(e) => { if (e.key === 'Enter') { SendMessage(); } }}
                         />
-
                     </Grid>
 
                 </Grid >

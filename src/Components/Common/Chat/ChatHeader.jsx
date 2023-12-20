@@ -6,7 +6,7 @@ import ServerURL from "../Layout/config";
 import GetToken from "GetToken";
 import axios from "axios";
 import { useState } from "react";
-
+import ChatIcon from '@mui/icons-material/Chat';
 const ChatHeader = ({ id, data, onUpdate }) => {
     const theme = useTheme();
     const [loadingStatus, setLoadingStatus] = useState(false);
@@ -94,11 +94,11 @@ const ChatHeader = ({ id, data, onUpdate }) => {
                 <Grid container item xs={6} sm={6} alignItems={'center'}>
                     <Grid item>
                         {isMobile ? (
-                            <IconButton onClick={handleCloseChat} variant="contained" color="error" disabled={loadingStatus}>
-                                {loadingStatus ? <CircularProgress size={24} /> : <DeleteIcon />}
+                            <IconButton onClick={handleCloseChat} variant="contained" color={data.status === 'open' ? "error" : 'info'} disabled={loadingStatus}>
+                                {loadingStatus ? <CircularProgress size={24} /> : data.status === 'open' ? <DeleteIcon /> : <ChatIcon />}
                             </IconButton>
                         ) : (
-                            <Button onClick={handleCloseChat} variant="contained" color={data.status === 'open' ? 'error' : 'info'} disabled={loadingStatus} startIcon={loadingStatus ? <CircularProgress size={24} /> : <DeleteIcon />}>
+                            <Button onClick={handleCloseChat} variant="contained" color={data.status === 'open' ? 'error' : 'info'} disabled={loadingStatus} startIcon={loadingStatus ? <CircularProgress size={24} /> : data.status === 'open' ? <DeleteIcon /> : <ChatIcon />}>
                                 {loadingStatus ? 'Loading...' : (data.status === 'open' ? 'Close chat' : 'Open chat')}
                             </Button>
                         )}

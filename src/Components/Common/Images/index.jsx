@@ -19,7 +19,7 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import GetToken from "GetToken";
 
-export default function StandardImageList({ onChange = () => { }, label, disableStatus, justIcon, idStorage }) {
+export default function StandardImageList({ onChange = () => { }, imageUrlLink = () => { }, label, disableStatus, justIcon, idStorage }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [gallery, setGallery] = useState(data);
@@ -30,6 +30,7 @@ export default function StandardImageList({ onChange = () => { }, label, disable
   const [count, setCount] = useState(0);
   const [requestError, setRequestError] = useState(null);
   const [imageId, setImageId] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
   const [item, setItem] = useState(false);
   const [scrollStatus, setScrollStatus] = useState(false);
   const [page, setPage] = useState(1);
@@ -210,6 +211,7 @@ export default function StandardImageList({ onChange = () => { }, label, disable
                   onClick={() => {
                     handleImageClick(x.id);
                     setImageId(x.id);
+                    setImageUrl(x.url)
                   }}
                 />
               </ImageListItem>
@@ -225,6 +227,7 @@ export default function StandardImageList({ onChange = () => { }, label, disable
                 startIcon={<AddToPhotosOutlinedIcon />}
                 onClick={() => {
                   onChange(imageId);
+                  imageUrlLink(imageUrl);
                   handleClosePanel();
                 }}
                 sx={{ mt: 2, fontSize: { xs: "12px", md: "13px" } }}

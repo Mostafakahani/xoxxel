@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
-import { useChat } from './ChatContext';
 
 const ChatMessages = ({ messages }) => {
-    // const { messages } = useChat();
+    const chatBoxRef = useRef();
+
+    useEffect(() => {
+        // Scroll to the bottom of the chat box when messages change
+        chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }, [messages]);
 
     return (
         <Box
+            ref={chatBoxRef}
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
