@@ -1,7 +1,6 @@
 import { Button, Grid } from "@mui/material";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { useState } from "react";
-import TableProducts from "./Tables/TableProducts";
 import StepAcounts from "Components/Common/HomePageSteps/FAQ/StepAcounts";
 const ChangeAcounts = () => {
     const faqsData = [
