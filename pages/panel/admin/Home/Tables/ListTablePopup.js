@@ -16,9 +16,7 @@ const ListTablePopup = () => {
                 <Grid container>
                     <Typography>List Tables</Typography>
                 </Grid>
-                <Grid md={6}>
-                    <TableGiftCardTraningPage />
-                </Grid>
+               
                 <Grid md={6}>
                     <TableTopUpGamesPage />
                 </Grid>

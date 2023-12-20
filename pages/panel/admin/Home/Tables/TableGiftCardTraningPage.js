@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import ServerURL from "Components/Common/Layout/config";
 import { toast } from "react-toastify";
 import axios from "axios";
+import AccountLayout from "Components/Common/Layout/AccountLayout";
+import BackArrow from "Components/Common/Back";
+
 const TableGiftCardTraningPage = () => {
     const [open, setOpen] = useState(false);
     const [selectedId, setSelectedId] = useState([]);
@@ -33,22 +36,23 @@ const TableGiftCardTraningPage = () => {
 
     return (
         <>
-            <Grid >
-                <Grid md={6}>
-
-                    <Grid container >
-                        <Grid item container>
-                            <HandleTableGiftCardTraning setSelectedId={(e) => setSelectedId(e)} />
-                        </Grid>
-                        <Grid item container spacing={1} >
-                            <Grid item md={2}>
-                                <Button onClick={handleCreate} variant="contained" color="primary" disableElevation >ذخیره تغییرات</Button>
+            <AccountLayout>
+                <Grid >
+                    <Grid container>
+                        <Grid container >
+                            <Grid item container>
+                                <HandleTableGiftCardTraning setSelectedId={(e) => setSelectedId(e)} />
                             </Grid>
+                            <Grid item container spacing={1} >
+                                <Grid item md={2}>
+                                    <Button onClick={handleCreate} variant="contained" color="primary" disableElevation >ذخیره تغییرات</Button>
+                                </Grid>
 
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
+            </AccountLayout>
         </>
     )
 }

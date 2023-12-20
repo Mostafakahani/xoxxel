@@ -43,7 +43,7 @@ const HandleTableGiftCardTraning = ({ setSelectedId = () => { } }) => {
                 const data = response.data;
                 const pageData = data;
                 // console.log(data.map((x) => x.id_product.title))
-                setSelected(data.map((x) => x?.id_product.id))
+                setSelected(data.map((x)=>x?.id_product.id))
                 setDataBody(
                     data.map((item, index) => ({
                         id: index + 1,

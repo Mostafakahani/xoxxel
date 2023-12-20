@@ -15,6 +15,7 @@ import { EyesIcon } from "Icons/icons";
 import Link from "next/link";
 import { useState } from "react";
 import { useEffect } from "react";
+import BackArrow from "Components/Common/Back";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -190,9 +191,16 @@ export default function TableItems({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Typography sx={{ color: '#3C3C3C', fontWeight: 700, my: '15px' }}>
-        {label}
-      </Typography>
+      <Grid container >
+        <Grid item sm={6}>
+          <Typography sx={{ color: '#3C3C3C', fontWeight: 700, my: '15px' }}>
+            {label}
+          </Typography>
+        </Grid>
+        <Grid item sm={6} sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: 'flex-end', alignItems: 'center' }}>
+          <BackArrow />
+        </Grid>
+      </Grid>
       <Grid sx={{ width: { xs: '100%', sm: '60%', md: '50%', lg: '30%' }, my: '15px' }}>
         <TextField
           size="small"
