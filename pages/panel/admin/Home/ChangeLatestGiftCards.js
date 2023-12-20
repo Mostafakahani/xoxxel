@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
-const ChangeGiftCards = () => {
+const ChangeLatestGiftCards = () => {
     const router = useRouter();
 
     const [rows, setRows] = useState([]);
@@ -321,4 +321,4 @@ const ChangeGiftCards = () => {
     );
 };
 
-export default ChangeGiftCards;
+export default ChangeLatestGiftCards;

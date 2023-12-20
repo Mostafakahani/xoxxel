@@ -112,11 +112,6 @@ const Setting = () => {
                                         <Button sx={{ fontSize: '12px' }} variant="contained">کمپانی صفحه اصلی</Button>
                                     </Link>
                                 </Grid>
-                                <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeAcounts'}>
-                                        <Button sx={{ fontSize: '12px' }} variant="contained">صفحه اصلی Accounts</Button>
-                                    </Link>
-                                </Grid>
                             </Grid>
                         </>
                     ) ||
@@ -152,7 +147,7 @@ const Setting = () => {
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                    <Link href={'/panel/admin/Home/ChangeLatestGiftCards'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">صفحه گیفت کارت The latest</Button>
                                     </Link>
                                 </Grid>
@@ -164,23 +159,23 @@ const Setting = () => {
                         <>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={6}>
+                                    <Link href={'/panel/admin/Home/ChangeTopUpPopularGames'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Popular Games</Button>
+                                    </Link>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
                                     <Link href={'/panel/admin/Home/Tables/TableTopGamesGiftCardPage'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">Category Top games</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category top up بالای صفحه</Button>
-                                    </Link>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
                                     <Link href={'/panel/admin/Home/Tables/TableTopForYouPage'}>
-                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-For you</Button>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top For you</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Link href={'/panel/admin/Home/Tables/TableTopTrendGamesPage'}>
-                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-Trend gaming</Button>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top Trend games</Button>
                                     </Link>
                                 </Grid>
                             </Grid>
