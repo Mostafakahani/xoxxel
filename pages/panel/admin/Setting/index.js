@@ -142,7 +142,7 @@ const Setting = () => {
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                    <Link href={'/panel/admin/Home/Tables/TableGiftCardTraningPage'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">صفحه گیفت کارت trending gift card</Button>
                                     </Link>
                                 </Grid>

@@ -3,8 +3,9 @@ import { Grid } from "@mui/material";
 import NewGift from "Components/Common/HomePageSteps/TableGiftCards/Tables/TableGiftCardTraning";
 import axios from 'axios';
 import ServerURL from 'Components/Common/Layout/config';
+import moment from 'moment-jalaali';
 
-const HandleTableGiftCardTraning = () => {
+const HandleTableGiftCardTraning = ({ setSelectedId = () => { } }) => {
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [selected, setSelected] = useState([]);
     const [dataBody, setDataBody] = useState([]);
@@ -36,11 +37,13 @@ const HandleTableGiftCardTraning = () => {
             try {
                 const response = await axios.get(
                     // `https://api.thecatapi.com/v1/images/search?limit=20`,
-                    `${ServerURL.url}/admin/feature/get-all-products?perPage=${perPage}&page=${page}`,
+                    `${ServerURL.url}/admin/sliders/trend-gift-cart/list`,
                     config
                 );
-                const data = response.data.data;
+                const data = response.data;
                 const pageData = data;
+                // console.log(data.map((x) => x.id_product.title))
+                setSelected(data.map((x) => x?.id_product.id))
                 setDataBody(
                     data.map((item, index) => ({
                         id: index + 1,
@@ -48,16 +51,16 @@ const HandleTableGiftCardTraning = () => {
                             `#${index + 1}`,
                             {
                                 type: "textBold",
-                                text: item.title || "نام ناشناخته",
+                                text: item?.id_product.title || "نام ناشناخته",
                                 // text: item?.breeds[0]?.name || "نام ناشناخته",
                             },
                             {
                                 type: "text",
-                                text: "Gift card",
+                                text: item?.status,
                             },
                             {
                                 type: "text",
-                                text: "1401/7/7",
+                                text: moment(item?.created_at).format("jYYYY/jM/jD یا YYYY/M/D"),
                             },
                         ],
                     }))
@@ -91,7 +94,7 @@ const HandleTableGiftCardTraning = () => {
             <NewGift
                 label={'صفحه اصلی Trending gift card'}
                 selected={selected}
-                setSelected={setSelected}
+                setSelected={(e) => { setSelected(e); setSelectedId(e); }}
                 dataHead={dataHead}
                 dataBody={dataBody}
                 selectedItemId={selectedItemId}
