@@ -1,4 +1,4 @@
-import HandleTablePupolarGiftCard from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTablePupolarGiftCard";
+import HandleTables from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTables";
 import { Button, Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import ServerURL from "Components/Common/Layout/config";
@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 
-const TablePupolarGiftCardPage = () => {
+const TableTopGamesGiftCardPage = () => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
@@ -22,7 +22,7 @@ const TablePupolarGiftCardPage = () => {
                 id_products: selectedId
             }
 
-            const response = await axios.post(`${ServerURL.url}/admin/sliders/giftcart/popular-gift-card/create`, data, config);
+            const response = await axios.post(`${ServerURL.url}/admin/sliders/top-up/top-up/create`, data, config);
 
             toast.success("عملیات انجام شد");
         } catch (error) {
@@ -37,7 +37,7 @@ const TablePupolarGiftCardPage = () => {
                 <Grid container>
                     <Grid item container >
                         <Grid item container>
-                            <HandleTablePupolarGiftCard setSelectedId={setSelectedId} />
+                            <HandleTables labelTable={'Category Top games'} getLinkTable={'/admin/sliders/top-up/top-up/list'} setSelectedId={setSelectedId} />
                         </Grid>
                     </Grid>
                     <Grid item container spacing={1} >
@@ -51,4 +51,4 @@ const TablePupolarGiftCardPage = () => {
         </>
     )
 }
-export default TablePupolarGiftCardPage;
+export default TableTopGamesGiftCardPage;

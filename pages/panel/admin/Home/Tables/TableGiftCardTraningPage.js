@@ -1,4 +1,4 @@
-import HandleTableGiftCardTraning from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTableGiftCardTraning";
+import HandleTables from "Components/Common/HomePageSteps/TableGiftCards/HandleTables/HandleTables";
 import { Button, Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ServerURL from "Components/Common/Layout/config";
@@ -41,7 +41,7 @@ const TableGiftCardTraningPage = () => {
                     <Grid container>
                         <Grid container >
                             <Grid item container>
-                                <HandleTableGiftCardTraning setSelectedId={(e) => setSelectedId(e)} />
+                            <HandleTables labelTable={'Trending Giftcard'} getLinkTable={'/admin/sliders/trend-gift-cart/list'} setSelectedId={setSelectedId} />
                             </Grid>
                             <Grid item container spacing={1} >
                                 <Grid item md={2}>

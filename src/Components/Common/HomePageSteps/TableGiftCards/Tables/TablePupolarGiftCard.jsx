@@ -9,12 +9,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import { Avatar, Button, Grid, InputAdornment, SvgIcon, TextField } from "@mui/material";
+import { Avatar, Button, Grid, InputAdornment, MenuItem, Pagination, Select, Stack, TextField } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import Link from "next/link";
 import { useState } from "react";
 import { useEffect } from "react";
+import BackArrow from "Components/Common/Back";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -90,9 +91,24 @@ export default function TableItems({
   dataBody,
   setSelected = false,
   selected = false,
-}) {
+  setPage = () => { },
+  setPerPage = () => { },
+  pageData, // اضافه کردن اطلاعات صفحه به props
+  label,
+
+}, props) {
+  const { page, perPage } = props;
+
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
+
+  // New for pages:
+  const itemsPerPage = pageData.perPage;
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const listPerPage = [15, 25, 50, 100]
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -144,6 +160,20 @@ export default function TableItems({
   // Search
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState(dataBody);
+  ////////////////////////////////////////////// هر دوش کار میکنه
+  // useEffect(() => {
+  //   if (searchText.trim() === '') {
+  //     setFilteredData(dataBody);
+  //   } else {
+  //     const lowercaseSearchText = searchText.toLowerCase();
+  //     const filteredItems = dataBody.filter(row => {
+  //       const hasTextBold = row.data.some(e => e.type === 'textBold' && e.text.toLowerCase().includes(lowercaseSearchText));
+  //       return hasTextBold;
+  //     });
+  //     setFilteredData(filteredItems);
+  //   }
+  // }, [searchText, dataBody]);
+
 
   useEffect(() => {
     if (searchText.trim() === '') {
@@ -151,7 +181,7 @@ export default function TableItems({
     } else {
       const lowercaseSearchText = searchText.toLowerCase();
       const filteredItems = dataBody.filter(row => {
-        const hasTextBold = row.data.some(e => e.type === 'textBold' && e.text.toLowerCase().includes(lowercaseSearchText));
+        const hasTextBold = row.data.some(e => e.type === 'textBold' && typeof e.text === 'string' && e.text.toLowerCase().includes(lowercaseSearchText));
         return hasTextBold;
       });
       setFilteredData(filteredItems);
@@ -159,22 +189,16 @@ export default function TableItems({
   }, [searchText, dataBody]);
 
 
-
-
   return (
     <Box sx={{ width: "100%" }}>
-      <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
-        <Grid xs={12} sm={5} md={4}>
-          <Typography sx={{ color: '#3C3C3C', fontWeight: 700, my: '15px', fontSize: '16px' }}>
-            صفحه گیفت کارت
-            Pupolar gift card
-
+      <Grid container >
+        <Grid item sm={6}>
+          <Typography sx={{ color: '#3C3C3C', fontWeight: 700, my: '15px' }}>
+            {label}
           </Typography>
         </Grid>
-        <Grid xs={12} sm={5} md={4}>
-          <Typography sx={{ color: '#3C3C3C', fontWeight: 500, my: '15px', fontSize: '13px' }}>
-            (16 مورد انتخاب شود)
-          </Typography>
+        <Grid item sm={6} sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: 'flex-end', alignItems: 'center' }}>
+          <BackArrow />
         </Grid>
       </Grid>
       <Grid sx={{ width: { xs: '100%', sm: '60%', md: '50%', lg: '30%' }, my: '15px' }}>
@@ -387,6 +411,59 @@ export default function TableItems({
           موردی پیدا نشد!
         </Typography>
       )} */}
+      {dataBody?.length !== 0 && (
+        <Grid
+          spacing={5}
+          display="flex"
+          alignItems="center"
+          sx={{ mt: 2, flexDirection: { xs: "row", sm: 'row', }, justifyContent: { xs: 'space-between', sm: 'center' } }}
+        >
+          <Grid item>
+            <Stack spacing={2}>
+              <Pagination
+                shape="rounded"
+                count={pageData.totalPages}
+                page={page}
+                onChange={(event, value) => setPage(value)}
+                color="standard"
+              />
+            </Stack>
+          </Grid>
+          <Grid item container xs={3} sm={2} md={1}>
+            {/* <Typography
+              sx={{
+                fontSize: '11px',
+                textAlign: "center",
+                color: "black",
+              }}
+            >
+              تعداد نمایش
+            </Typography> */}
+            <Select
+              displayEmpty
+              size="small"
+              value={perPage}
+              onChange={(e) => setPerPage(e.target.value)}
+              sx={{ width: { xs: '100%', sm: "80%", md: '100%' } }}
+              defaultValue={15}
+            // onOpen={() => setCountTwo(countTwo + 1)}
+            >
+              {Array.isArray(listPerPage) ? (
+                listPerPage.map((data, index) => (
+                  <MenuItem key={index} value={data}>
+                    {data}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem value={null}>
+                  Loading...
+                </MenuItem>
+              )}
+            </Select>
+          </Grid>
+        </Grid>
+      )}
+
     </Box>
   );
 }

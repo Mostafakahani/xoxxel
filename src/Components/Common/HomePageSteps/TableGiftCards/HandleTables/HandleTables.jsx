@@ -5,7 +5,7 @@ import ServerURL from 'Components/Common/Layout/config';
 import axios from 'axios';
 import moment from 'moment-jalaali';
 
-const HandleTablePupolarGiftCard = ({ setSelectedId = () => { } }) => {
+const HandleTable = ({ setSelectedId = () => { } , getLinkTable, labelTable}) => {
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [selected, setSelected] = useState([]);
     const [dataBody, setDataBody] = useState([]);
@@ -29,7 +29,7 @@ const HandleTablePupolarGiftCard = ({ setSelectedId = () => { } }) => {
             try {
                 const response = await axios.get(
                     // `https://api.thecatapi.com/v1/images/search?limit=20`,
-                    `${ServerURL.url}/admin/sliders/giftcart/popular-gift-card/list`,
+                    `${ServerURL.url}${getLinkTable}`,
                     config
                 );
                 const data = response.data;
@@ -81,7 +81,7 @@ const HandleTablePupolarGiftCard = ({ setSelectedId = () => { } }) => {
     return (
         <>
             <NewGift
-                label={'صفحه اصلی Trending gift card'}
+                label={labelTable}
                 selected={selected}
                 setSelected={(e) => { setSelected(e); setSelectedId(e); }}
                 dataHead={dataHead}
@@ -96,4 +96,4 @@ const HandleTablePupolarGiftCard = ({ setSelectedId = () => { } }) => {
     );
 }
 
-export default HandleTablePupolarGiftCard;
+export default HandleTable;

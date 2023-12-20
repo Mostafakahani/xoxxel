@@ -147,7 +147,7 @@ const Setting = () => {
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={2}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                    <Link href={'/panel/admin/Home/Tables/TablePupolarGiftCardPage'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">صفحه گیفت کارت pupolar gift card</Button>
                                     </Link>
                                 </Grid>
@@ -164,8 +164,8 @@ const Setting = () => {
                         <>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={6}>
-                                    <Link href={'/panel/admin/Home/ChangeTopUpPopularGames'}>
-                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-Top games</Button>
+                                    <Link href={'/panel/admin/Home/Tables/TableTopGamesGiftCardPage'}>
+                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top games</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -174,17 +174,12 @@ const Setting = () => {
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                    <Link href={'/panel/admin/Home/Tables/TableTopForYouPage'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-For you</Button>
                                     </Link>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
-                                        <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-Trend gaming</Button>
-                                    </Link>
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Link href={'/panel/admin/Home/ChangeSlider'}>
+                                    <Link href={'/panel/admin/Home/Tables/TableTopTrendGamesPage'}>
                                         <Button sx={{ fontSize: '12px' }} variant="contained">Category Top ups-Trend gaming</Button>
                                     </Link>
                                 </Grid>
