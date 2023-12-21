@@ -139,11 +139,11 @@ const CreateProduct = () => {
               item
               container
               xs={12}
-              sm={12}
-              md={12}
+              sm={8}
+              md={8}
               sx={{ my: "15px", display: "flex", flexDirection: "column" }}
             >
-              <Grid xs={12} sm={6} md={8}>
+              <Grid xs={12} sm={8} md={8}>
                 <TextField
                   onChange={(e) => setProductName(e.target.value)}
                   value={productName}
@@ -179,7 +179,7 @@ const CreateProduct = () => {
                                 />
                             </Grid> */}
             </Grid>
-            <Grid item xs={12} sm={6} md={4} sx={{ mb: "50px" }}>
+            <Grid item xs={12} sm={4} md={4} sx={{ mb: "50px" }}>
               <Typography>دسته</Typography>
               <Select
                 value={selectedCategory}

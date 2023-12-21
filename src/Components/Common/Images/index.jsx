@@ -205,7 +205,7 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
                   style={{
                     cursor: "pointer",
                     border:
-                      selectedImageId === x.id ? "2px solid #1c49f1" : "none",
+                      idStorage === x.id || selectedImageId === x.id ? "2px solid #1c49f1" : "none",
                     borderRadius: "5px",
                   }}
                   onClick={() => {
