@@ -190,7 +190,6 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
         <Grid item container spacing={2}>
           <Grid item container xs={12} sm={12} md={12} spacing={2} >
             <Grid item xs={12} sm={6} md={8}>
-              {id}
               <Typography>ساخت فیچر</Typography>
               <TextField
                 onChange={(e) => setNameFeature(e.target.value)}

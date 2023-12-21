@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
+import Link from 'next/link';
 
-const ChatMessages = ({ messages }) => {
+const ChatMessages = ({ messages, idStorage }) => {
     const chatBoxRef = useRef();
 
     useEffect(() => {
         // Scroll to the bottom of the chat box when messages change
         chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-    }, [messages]);
-
+    }, [messages, idStorage]);
+    const x = idStorage?.map((x) => x?.name).filter((item) => item !== null || item === ',');
     return (
         <Box
             ref={chatBoxRef}
@@ -44,7 +45,10 @@ const ChatMessages = ({ messages }) => {
                             direction: 'ltr',
                         }}
                     >
-                        {message.text}
+                        {/* {idStorage} */}
+
+                        {message.text === null & message.id_storage !== null ? <Link href={idStorage}>Link</Link> : message.text}
+                        <br />
                     </Typography>
                 </Box>
             ))}

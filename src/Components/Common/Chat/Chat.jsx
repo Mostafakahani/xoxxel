@@ -12,6 +12,7 @@ const Chat = ({ id }) => {
   // const { setMessages } = useChat();
   const [onUpdate, setOnUpdate] = useState(0)
   const [messages, setMessages] = useState([])
+  const [idStorage, setIdStorage] = useState([])
   const [sendMessage, setSendMessage] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -54,8 +55,11 @@ const Chat = ({ id }) => {
           id: x.id,
           text: x.title,
           from: x.sender,
-        }))
-      );
+          id_storage: x.id_storage,
+        })));
+      setIdStorage(
+        data?.formattedInfo?.map((x) => x?.id_storage).map((x) => x?.name)
+      )
       setIsLoading(false);
     }
   }, [data.formattedInfo]);
@@ -73,7 +77,7 @@ const Chat = ({ id }) => {
             {isLoading ? (
               <div>Loading...</div>
             ) : (
-              <ChatMessages messages={messages} />
+              <ChatMessages messages={messages} idStorage={idStorage} />
             )}
           </Grid>
           <ChatInput data={data.info} onUpdate={handleUpdate} id={id} />

@@ -14,13 +14,20 @@ import ServerURL from "../Layout/config";
 import GetToken from "GetToken";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-export default function CheckboxesTags({ onChange = () => { }, value = [], responseId }) {
+export default function CheckboxesTags({ setSelectedItem = () => { }, value = [], responseId }) {
   const [localCheckBoxList, setLocalCheckBoxList] = useState(value);
   const [page, setPage] = useState(1);
   const [dataBody, setDataBody] = useState([]);
   const [pageDataAll, setPageDataAll] = useState({});
   const [perPage, setPerPage] = useState(15);
   const [count, setCount] = useState(0);
+  const [selected, setSelected] = useState([]);
+
+  useEffect(() => {
+    setSelectedItem(selected)
+
+  }, [selected]);
+
   useEffect(() => {
     const fetchData = async () => {
       const config = {
@@ -96,7 +103,6 @@ export default function CheckboxesTags({ onChange = () => { }, value = [], respo
 
     fetchData();
   }, [page, perPage, count]);
-  const [selected, setSelected] = useState([]);
 
   const handleDelete = async () => {
     try {

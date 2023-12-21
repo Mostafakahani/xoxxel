@@ -72,7 +72,6 @@ const ProductEdit = () => {
                     setPlaceholder(dataResponse?.placeholder_input);
                     setTextArea(dataResponse?.description);
                     setSelectedCategory(dataResponse?.id_type);
-                    console.log(dataResponse?.id_type.id)
                     setSelectedFileItem3(dataResponse?.image_square?.id);
                     setSelectedFileItem2(dataResponse?.image_trend?.id);
                     setSelectedFileItem(dataResponse?.image_main?.id);
@@ -351,6 +350,7 @@ const ProductEdit = () => {
                     <CheckboxesTags
                         value={checkBoxList}
                         responseId={responseId}
+                        setSelectedItem={(e) => setCheckBoxList(e)}
                         onChange={(e) => {
                             setCheckBoxList(e);
                         }}
@@ -404,7 +404,7 @@ const ProductEdit = () => {
                             <Button
                                 variant="outlined"
                                 color="inherit"
-                                onClick={() => setOpenThis(true)}
+                                onClick={() => console.log(checkBoxList)}
                             >اضافه کردن ویژگی جدید</Button>
                         </Grid>
                     </Grid>
