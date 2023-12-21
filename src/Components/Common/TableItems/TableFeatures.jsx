@@ -18,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import ServerURL from "../Layout/config";
 import GetToken from "GetToken";
 import axios from "axios";
+import EditOptionFeature from "../Creatives/EditOptionFeature";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -303,24 +304,19 @@ export default function TableItems({
               selected={selected}
             />
 
-            <Dialog open={isDialogOpen} onClose={closeDialog}>
+            <Dialog open={isDialogOpen} onClose={closeDialog} fullWidth maxWidth='lg'>
               <DialogContent>
-                {/* <DialogTitle>{`Row ID: ${selectedRowId}`}</DialogTitle> */}
-
-                <ToggleButtonGroup
-                  color="primary"
-                  value={selectedStatus === '' ? null : alignment}
-                  exclusive
-                  onChange={handleChange}
-                  aria-label="Platform"
-                >
-                  <ToggleButton value="accepted" color="success">
-                    Accepted
-                  </ToggleButton>
-                  <ToggleButton value="rejected" color="error">
-                    Rejected
-                  </ToggleButton>
-                </ToggleButtonGroup>
+                <EditOptionFeature
+                  // click={openThis}
+                  // setClick={(value) => setOpenThis(value)}
+                  // status={'plus'}
+                  id={selectedRowId}
+                  setResponseId={(e) => {
+                    console.log(e);
+                    // setCheckBoxList([...checkBoxList, e]);
+                    // console.log(checkBoxList);
+                  }}
+                />
               </DialogContent>
             </Dialog>
 

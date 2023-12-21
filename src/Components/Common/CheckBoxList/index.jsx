@@ -57,12 +57,12 @@ export default function CheckboxesTags({ onChange = () => { }, value = [], respo
             data: [
               `#${item.id}`,
               {
-                type: "avatar",
-                text: "مدیریت",
-              },
-              {
                 type: "textBold",
                 text: item.name,
+              },
+              {
+                type: "text",
+                text: '50$',
               },
               {
                 type: "text",
