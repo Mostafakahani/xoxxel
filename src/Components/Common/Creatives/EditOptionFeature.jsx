@@ -108,6 +108,47 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
   const handleChangeToggleButtonGroup = async (event, newAlignment) => {
     setSellMode(newAlignment);
   }
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+        const config = {
+            headers: {
+                Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+            },
+        };
+
+        try {
+            const response = await axios.get(
+                `${ServerURL.url}/admin/feature/${id}/list-data-feature`,
+                config
+            );
+            const dataResponse = response.data;
+            // console.log(dataResponse.map((x)=>x.))
+            if (dataResponse) {
+                // Set initial state based on data from the API
+                setProductName(dataResponse?.title);
+                setLabelInput(dataResponse?.input_lable);
+                setPlaceholder(dataResponse?.placeholder_input);
+                setTextArea(dataResponse?.description);
+                setSelectedCategory(dataResponse?.id_type);
+                setSelectedFileItem3(dataResponse?.image_square?.id);
+                setSelectedFileItem2(dataResponse?.image_trend?.id);
+                setSelectedFileItem(dataResponse?.image_main?.id);
+                setCheckBoxList(dataResponse?.features?.map((x) => x.id));
+            } else {
+                return
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchData();
+}, [countTwo, id]);
+  
   const handleSubmit = async () => {
     setAddingFeature(true);
     const config = {
