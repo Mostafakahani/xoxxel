@@ -12,6 +12,7 @@ import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableHead, T
 import { useState } from "react";
 import ServerURL from "../Layout/config";
 import GetToken from "GetToken";
+import moment from "moment-jalaali";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function CheckboxesTags({ setSelectedItem = () => { }, value = [], responseId }) {
@@ -69,19 +70,19 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, value = []
               },
               {
                 type: "text",
-                text: '50$',
+                text: item.price + '$',
+              },
+              {
+                type: "statusVip",
+                text: item.vip ? 'VIP' : 'NO',
               },
               {
                 type: "text",
-                text: 'VIP',
+                text: moment(item.created_at).format("YYYY/M/D"),
               },
               {
-                type: "text",
-                text: 'jYYYY/jM/jD',
-              },
-              {
-                type: "text",
-                text: 'AUTO',
+                type: "statusBtnSellMode",
+                text: item.sell_mode,
               },
               // {
               //   type: "text",

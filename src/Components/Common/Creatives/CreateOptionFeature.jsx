@@ -147,6 +147,7 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
       }
     } catch (error) {
       console.error("خطا: ", error);
+      toast.error(error?.response?.data?.message)
     } finally {
       setAddingFeature(false);
     }
@@ -297,7 +298,7 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            {/* <Grid item xs={12} sm={6} md={4}>
               <StandardImageList
                 label={"تصویر اصلی (297*147)"}
                 idStorage={selectedFileItem.length !== 0 ? true : false}
@@ -306,7 +307,7 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
                   // console.log(e);
                 }}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6} md={4}>
               <Typography>به عنوان محبوب</Typography>
               <Grid xs={6} md={6} mt={1}>
@@ -330,21 +331,27 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={12} sm={4} md={12}>
-              <Typography variant='subtitle1'>تعداد کد ها: {uniqueTrimmedArray.length}</Typography>
-              <TextField
-                sx={{ mt: 1 }}
-                size="medium"
-                // onChange={(e) => setDataFeature(e.target.value)}
-                label="کد ها"
-                multiline
-                fullWidth
-                variant="outlined"
-                rows={10}
-                value={dataFeature}
-                onChange={handleInputChange}
-              />
-            </Grid>
+            {
+              sellMode === 'auto' ? (
+                <Grid item xs={12} sm={4} md={12}>
+                  <Typography variant='subtitle1'>تعداد کد ها: {uniqueTrimmedArray.length}</Typography>
+                  <TextField
+                    sx={{ mt: 1 }}
+                    size="medium"
+                    // onChange={(e) => setDataFeature(e.target.value)}
+                    label="کد ها"
+                    multiline
+                    fullWidth
+                    variant="outlined"
+                    rows={10}
+                    value={dataFeature}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+              ) : (
+                <></>
+              )
+            }
           </Grid>
 
           <Grid container sx={{ my: "25px" }}>
@@ -354,11 +361,13 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
                   variant="contained"
                   color="primary"
                   disabled={
-                    selectedFileItem.length === 0 ||
+                    // selectedFileItem.length === 0 ||
                     nameFeature === "" ||
-                    selectedCategory === "" ||
-                    price === '' ||
-                    dataFeature === '' ||
+                    // selectedCategory === "" ||
+                    // price === '' ||
+                    // dataFeature === '' ||
+                    // sellMode === 'auto' && price === '' ||
+                    sellMode === 'auto' && dataFeature === '' ||
                     sellMode === ''
                   }
                   onClick={handleSubmit}
@@ -371,25 +380,26 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
                   variant="outlined"
                   color="error"
                   onClick={() => {
-                    console.log('')
+                    // console.log('')
+                    setOpen(false)
                     // window.location.href = "../admin/products";
                   }}
                 >
                   انصراف
                 </Button>
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <Button
                   variant="outlined"
                   color="inherit"
                   onClick={() => setOpenThis(true)}
                 >اضافه کردن ویژگی جدید</Button>
-              </Grid>
+              </Grid> */}
 
             </Grid>
           </Grid>
         </DialogContent>
-      </Dialog>
+      </Dialog >
     </>
 
   );

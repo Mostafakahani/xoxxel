@@ -37,6 +37,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
   const [countThree, setCountThree] = useState(0);
 
   const [sellMode, setSellMode] = useState('');
+  const [autoSell, setAutoSell] = useState(true);
 
   const [selectedType, setSelectedType] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -112,43 +113,69 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
 
   useEffect(() => {
     const fetchData = async () => {
-        const config = {
-            headers: {
-                Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
-            },
-        };
+      const config = {
+        headers: {
+          Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+        },
+      };
 
-        try {
-            const response = await axios.get(
-                `${ServerURL.url}/admin/feature/${id}/list-data-feature`,
-                config
-            );
-            const dataResponse = response.data;
-            // console.log(dataResponse.map((x)=>x.))
-            if (dataResponse) {
-                // Set initial state based on data from the API
-                setProductName(dataResponse?.title);
-                setLabelInput(dataResponse?.input_lable);
-                setPlaceholder(dataResponse?.placeholder_input);
-                setTextArea(dataResponse?.description);
-                setSelectedCategory(dataResponse?.id_type);
-                setSelectedFileItem3(dataResponse?.image_square?.id);
-                setSelectedFileItem2(dataResponse?.image_trend?.id);
-                setSelectedFileItem(dataResponse?.image_main?.id);
-                setCheckBoxList(dataResponse?.features?.map((x) => x.id));
-            } else {
-                return
-            }
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setLoading(false);
+      try {
+        if (id !== null) {
+
+          const response = await axios.get(
+            `${ServerURL.url}/admin/feature/${id}`,
+            config
+          );
+          const dataResponse = response.data;
+          // console.log(dataResponse.map((x)=>x.))
+          if (dataResponse) {
+            // Set initial state based on data from the API
+            setNameFeature(dataResponse?.name);
+            setAutoSell(dataResponse?.sell_mode === 'manual' ? false : true);
+            setSellMode(dataResponse?.sell_mode === 'manual' ? 'manual' : 'auto');
+            setSelectedCategory(dataResponse?.id_cat?.id);
+            setSelectedCountry(dataResponse?.id_country?.id);
+            setSelectedType(dataResponse?.id_typeProduct?.id);
+            setIsPopular(dataResponse?.vip);
+            setPrice(dataResponse?.price);
+          }
+        } else {
+          return
         }
+      } catch (error) {
+        console.log(error);
+        toast.error(error?.response?.data?.message)
+
+      } finally {
+        return
+        // setLoading(false);
+      }
     };
 
     fetchData();
-}, [countTwo, id]);
-  
+  }, [countTwo, id]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (autoSell & sellMode === 'auto') {
+        const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+        const responseDataFeature = await axios.get(
+          `${ServerURL.url}/admin/feature/${id}/list-data-feature`,
+          config
+        );
+        setDataFeature(responseDataFeature?.data[0]?.data);
+
+      }
+    }
+    fetchData();
+
+  }, [autoSell]);
+  useEffect(() => {
+    setDataFeature('')
+    setUniqueTrimmedArray([])
+  }, [sellMode]);
+
+
   const handleSubmit = async () => {
     setAddingFeature(true);
     const config = {
@@ -176,11 +203,14 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
       );
       if (uploadResponse.status === 201) {
         setResponseId(uploadResponse.data.id);
-        toast.success("با موفقیت ساخته شد.");
+        toast.success("با موفقیت انجام شد.");
         handleRemoveFields()
+        setOpen(false)
         // window.location.href = "../admin/products";
       } else {
         toast.error("لطفا دوباره امتحان کنید");
+        toast.error(error?.response?.data?.message)
+
       }
     } catch (error) {
       console.error("خطا: ", error);
@@ -231,7 +261,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
         <Grid item container spacing={2}>
           <Grid item container xs={12} sm={12} md={12} spacing={2} >
             <Grid item xs={12} sm={6} md={8}>
-              <Typography>ساخت فیچر</Typography>
+              <Typography>ویرایش فیچر</Typography>
               <TextField
                 onChange={(e) => setNameFeature(e.target.value)}
                 value={nameFeature}
@@ -327,7 +357,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={4}>
+        {/* <Grid item xs={12} sm={6} md={4}>
           <StandardImageList
             label={"تصویر اصلی (297*147)"}
             idStorage={selectedFileItem.length !== 0 ? true : false}
@@ -336,7 +366,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
               // console.log(e);
             }}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} sm={6} md={4}>
           <Typography>به عنوان محبوب</Typography>
           <Grid xs={6} md={6} mt={1}>
@@ -349,7 +379,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
             </Button>
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={4} md={1.2}>
+        <Grid item xs={12} sm={4} md={2}>
           <Typography>قیمت</Typography>
           <TextField
             sx={{ mt: 1 }}
@@ -360,21 +390,27 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
             variant="outlined"
           />
         </Grid>
-        <Grid item xs={12} sm={4} md={12}>
-          <Typography variant='subtitle1'>تعداد کد ها: {uniqueTrimmedArray.length}</Typography>
-          <TextField
-            sx={{ mt: 1 }}
-            size="medium"
-            // onChange={(e) => setDataFeature(e.target.value)}
-            label="کد ها"
-            multiline
-            fullWidth
-            variant="outlined"
-            rows={10}
-            value={dataFeature}
-            onChange={handleInputChange}
-          />
-        </Grid>
+        {autoSell || sellMode === 'auto' ? (
+          sellMode === 'auto' && (
+            <Grid item xs={12} sm={4} md={12}>
+              <Typography variant='subtitle1'>تعداد کد ها: {uniqueTrimmedArray.length}</Typography>
+              <TextField
+                sx={{ mt: 1 }}
+                size="medium"
+                // onChange={(e) => setDataFeature(e.target.value)}
+                label="کد ها"
+                multiline
+                fullWidth
+                variant="outlined"
+                rows={10}
+                value={dataFeature}
+                onChange={handleInputChange}
+              />
+            </Grid>
+          )
+        ) : (
+          <></>
+        )}
       </Grid>
 
       <Grid container sx={{ my: "25px" }}>
@@ -384,12 +420,11 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
               variant="contained"
               color="primary"
               disabled={
-                selectedFileItem.length === 0 ||
+                // selectedFileItem.length === 0 ||
                 nameFeature === "" ||
                 selectedCategory === "" ||
                 price === '' ||
-                dataFeature === '' ||
-                sellMode === ''
+                sellMode === 'auto' && dataFeature === ''
               }
               onClick={handleSubmit}
             >

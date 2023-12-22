@@ -19,7 +19,7 @@ import ServerURL from "../Layout/config";
 import GetToken from "GetToken";
 import axios from "axios";
 import EditOptionFeature from "../Creatives/EditOptionFeature";
-
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
 
@@ -393,15 +393,54 @@ export default function TableItems({
                             </StatusButton>
                           )}
                           {e?.type === "statusBtn" && (
-                            <StatusButton
-                              {...e}
+                            <Button
+                              // {...e}
                               onClick={() => {
                                 handleStatusBtnClick(row?.id);
                                 setSelectedStatus(e?.text);
                               }}
-                              variant="contained"
+                              variant="text"
                               color='info'
                             // color={e?.text === 'waiting' ? 'warning' : 'success'}
+                            >
+                              <ModeEditIcon sx={{ fontSize: '20px' }} />
+                              {/* {e?.text} */}
+                            </Button>
+
+                          )}
+                          {e?.type === "statusBtnSellMode" && (
+                            <StatusButton
+                              {...e}
+                              // onClick={() => {
+                              //   handleStatusBtnClick(row?.id);
+                              //   setSelectedStatus(e?.text);
+                              // }}
+                              variant="contained"
+                              color={e?.text === 'manual' ? 'warning' : 'success'}
+                            >
+                              {e?.text}
+                            </StatusButton>
+
+                          )}
+                          {e?.type === "statusVip" && (
+                            <StatusButton
+                              {...e}
+                              // onClick={() => {
+                              //   handleStatusBtnClick(row?.id);
+                              //   setSelectedStatus(e?.text);
+                              // }}
+                              variant="contained"
+                              color={
+                                typeof e?.text === 'string'
+                                  ? e?.text === 'VIP'
+                                    ? 'warning'
+                                    : e?.text === 'NO'
+                                      ? 'info'
+                                      : 'success'
+                                  : 'success' || e?.text === 'inactive' ?
+                                    'error' : 'success'
+                              }
+
                             >
                               {e?.text}
                             </StatusButton>
