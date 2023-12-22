@@ -20,6 +20,7 @@ import GetToken from "GetToken";
 import axios from "axios";
 import EditOptionFeature from "../Creatives/EditOptionFeature";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { Delete } from "@mui/icons-material";
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
 
@@ -96,9 +97,10 @@ export default function TableItems({
   selected = false,
   setPage = () => { },
   setPerPage = () => { },
-  pageData, 
+  pageData,
   setUptadeCount,
-  setResponseId = () => { }
+  setResponseId = () => { },
+  refresh = () => { },
 
 }, props) {
   const { page, perPage } = props;
@@ -114,20 +116,19 @@ export default function TableItems({
   const [count, setCount] = React.useState(0);
   const [alignment, setAlignment] = React.useState('');
 
-  React.useEffect(() => {
-    if (selectedStatus === 'waiting') {
-      setAlignment('');
-    } else if (selectedStatus === 'accepted') {
-      setAlignment('accepted');
-    }
+  // React.useEffect(() => {
+  //   if (selectedStatus === 'waiting') {
+  //     setAlignment('');
+  //   } else if (selectedStatus === 'accepted') {
+  //     setAlignment('accepted');
+  //   }
 
-    setSubmitToServer(alignment);
-  }, [selectedStatus, count]);
+  //   setSubmitToServer(alignment);
+  // }, [selectedStatus, count]);
 
-  const handleChange = async (event, newAlignment) => {
-    setAlignment(newAlignment);
-    setSubmitToServer(newAlignment);
-    if (newAlignment !== '' & newAlignment !== null) {
+  const handleChange = async (event) => {
+    console.log(event)
+    if (event !== '' & event !== null) {
       try {
         const config = {
           headers: {
@@ -136,23 +137,25 @@ export default function TableItems({
         };
 
         const sendData = {
-          id_payment: selectedRowId,
-          status: newAlignment,
+          ids: [event],
+
         };
 
         const response = await axios.post(
-          `${ServerURL.url}/admin/payment/s`,
+          `${ServerURL.url}/admin/feature/delete`,
           sendData,
           config
         );
         if (response.status === 201) {
-          toast.success("با موفقیت تغییر داده شد.");
-          setCount(count + 1);
-          setUptadeCount(1);
+          toast.success("با موفقیت حذف شد.");
+          // setCount(count + 1);
+          refresh(1)
+          // setUptadeCount(1);
         } else {
           toast.error("لطفا دوباره امتحان کنید");
         }
       } catch (error) {
+        toast.error('مشکلی رخ داده است');
         console.error("Error sending delete request:", error);
       }
     }
@@ -395,19 +398,37 @@ export default function TableItems({
                             </StatusButton>
                           )}
                           {e?.type === "statusBtn" && (
-                            <Button
-                              // {...e}
-                              onClick={() => {
-                                handleStatusBtnClick(row?.id);
-                                setSelectedStatus(e?.text);
-                              }}
-                              variant="text"
-                              color='info'
-                            // color={e?.text === 'waiting' ? 'warning' : 'success'}
-                            >
-                              <ModeEditIcon sx={{ fontSize: '20px' }} />
-                              {/* {e?.text} */}
-                            </Button>
+                            <>
+                              <Grid container>
+                                <Grid item xs={6} md={5}>
+                                  <Button
+                                    // {...e}
+                                    onClick={() => {
+                                      handleStatusBtnClick(row?.id);
+                                      // setSelectedStatus(e?.text);
+                                    }}
+                                    variant="text"
+                                    color='info'
+                                  // color={e?.text === 'waiting' ? 'warning' : 'success'}
+                                  >
+                                    <ModeEditIcon sx={{ fontSize: '20px' }} />
+                                    {/* {e?.text} */}
+                                  </Button>
+                                </Grid>
+                                <Grid item xs={6} md={5}>
+                                  <Button
+                                    onClick={() => {
+                                      // handleStatusBtnClick(row?.id);
+                                      handleChange(row?.id)
+                                    }}
+                                    variant="text"
+                                    color='error'
+                                  >
+                                    <Delete sx={{ fontSize: '20px' }} />
+                                  </Button>
+                                </Grid>
+                              </Grid>
+                            </>
 
                           )}
                           {e?.type === "statusBtnSellMode" && (

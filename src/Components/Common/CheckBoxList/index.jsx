@@ -197,6 +197,8 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
           setPerPage={(e) => setPerPage(e)}
           perPage={pageDataAll.perPage}
           setResponseId={(e) => setResponseId(e)}
+          refresh={(e) => setCount(count + 1)}
+          
         />
       </Grid>
 
