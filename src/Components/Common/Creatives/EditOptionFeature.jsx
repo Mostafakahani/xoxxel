@@ -7,7 +7,7 @@ import ServerURL from "Components/Common/Layout/config";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
-import { Button, CircularProgress, Dialog, DialogContent, Grid, MenuItem, Select, SvgIcon, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Button, CircularProgress, Dialog, DialogContent, Grid, InputAdornment, MenuItem, Select, SvgIcon, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { PopularIconOff, PopularIconOn } from 'Icons/icons';
 
 const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setClick = () => { } }) => {
@@ -109,48 +109,48 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
   const handleChangeToggleButtonGroup = async (event, newAlignment) => {
     setSellMode(newAlignment);
   }
+  const fetchData = async () => {
+    const config = {
+      headers: {
+        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+      },
+    };
 
+    try {
+      if (id !== null) {
+
+        const response = await axios.get(
+          `${ServerURL.url}/admin/feature/${id}`,
+          config
+        );
+        const dataResponse = response.data;
+        // console.log(dataResponse.map((x)=>x.))
+        if (dataResponse) {
+          // Set initial state based on data from the API
+          setNameFeature(dataResponse?.name);
+          setAutoSell(dataResponse?.sell_mode === 'manual' ? false : true);
+          setSellMode(dataResponse?.sell_mode === 'manual' ? 'manual' : 'auto');
+          setSelectedCategory(dataResponse?.id_cat?.id);
+          setSelectedCountry(dataResponse?.id_country?.id);
+          setSelectedType(dataResponse?.id_typeProduct?.id);
+          setIsPopular(dataResponse?.vip);
+          setPrice(dataResponse?.price);
+        }
+      } else {
+        return
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message)
+
+    } finally {
+      return
+      // setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const config = {
-        headers: {
-          Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
-        },
-      };
-
-      try {
-        if (id !== null) {
-
-          const response = await axios.get(
-            `${ServerURL.url}/admin/feature/${id}`,
-            config
-          );
-          const dataResponse = response.data;
-          // console.log(dataResponse.map((x)=>x.))
-          if (dataResponse) {
-            // Set initial state based on data from the API
-            setNameFeature(dataResponse?.name);
-            setAutoSell(dataResponse?.sell_mode === 'manual' ? false : true);
-            setSellMode(dataResponse?.sell_mode === 'manual' ? 'manual' : 'auto');
-            setSelectedCategory(dataResponse?.id_cat?.id);
-            setSelectedCountry(dataResponse?.id_country?.id);
-            setSelectedType(dataResponse?.id_typeProduct?.id);
-            setIsPopular(dataResponse?.vip);
-            setPrice(dataResponse?.price);
-          }
-        } else {
-          return
-        }
-      } catch (error) {
-        console.log(error);
-        toast.error(error?.response?.data?.message)
-
-      } finally {
-        return
-        // setLoading(false);
-      }
-    };
+   
 
     fetchData();
   }, [countTwo, id]);
@@ -205,7 +205,8 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
         setResponseId(uploadResponse.data.id);
         toast.success("با موفقیت انجام شد.");
         handleRemoveFields()
-        setOpen(false)
+        // fetchData();
+        setClick(false)
         // window.location.href = "../admin/products";
       } else {
         toast.error("لطفا دوباره امتحان کنید");
@@ -388,6 +389,9 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
             onChange={(e) => setPrice(e.target.value.replace(/\D/g, ''))}
             value={price}
             variant="outlined"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">$</InputAdornment>,
+            }}
           />
         </Grid>
         {autoSell || sellMode === 'auto' ? (
@@ -436,7 +440,8 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
               variant="outlined"
               color="error"
               onClick={() => {
-                console.log('')
+                // console.log('')
+                setClick(false)
                 // window.location.href = "../admin/products";
               }}
             >

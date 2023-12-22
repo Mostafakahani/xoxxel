@@ -15,8 +15,8 @@ import GetToken from "GetToken";
 import moment from "moment-jalaali";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-export default function CheckboxesTags({ setSelectedItem = () => { }, value = [], responseId }) {
-  const [localCheckBoxList, setLocalCheckBoxList] = useState(value);
+export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxList, responseId }) {
+  // const [localCheckBoxList, setLocalCheckBoxList] = useState(value);
   const [page, setPage] = useState(1);
   const [dataBody, setDataBody] = useState([]);
   const [pageDataAll, setPageDataAll] = useState({});
@@ -24,10 +24,15 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, value = []
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState([]);
 
-  useEffect(() => {
-    setSelectedItem(selected)
+  // useEffect(() => {
+  //   console.log('1')
+  // }, []);
 
-  }, [selected]);
+  // useEffect(() => {
+  //   setSelectedItem(selected)
+  //   setSelected(checkBoxList);
+  //   console.log('2')
+  // }, [checkBoxList]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,9 +146,7 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, value = []
     "sell_mode",
     "status",
   ];
-  useEffect(() => {
-    setLocalCheckBoxList(value);
-  }, [value]);
+
 
   // const handleChange = (event, value) => {
   //   const selectedId = value.map((v) => v.id);
@@ -178,10 +181,11 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, value = []
   // }, [responseId]);
   return (
     <>
-      <Grid container spacing={2} my={4} sx={{ boxShadow: 5, borderRadius: 2, overflowY: 'auto', height: '500px' }}>
+      <Typography>انتخاب ویژگی</Typography>
+      <Grid container spacing={2} my={2} sx={{ px: 2, py: 2, boxShadow: 3, borderRadius: 1, overflowY: 'auto', height: '500px' }}>
         <TableFeatures
-          selected={selected}
-          setSelected={setSelected}
+          selected={checkBoxList}
+          setSelected={(e)=>{setSelected(e); setSelectedItem(e)}}
           dataHead={dataHead}
           dataBody={dataBody}
           // selectedItemId={selectedItemId}

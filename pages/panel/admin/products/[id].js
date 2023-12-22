@@ -18,6 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
 import CreateOptionFeature from "Components/Common/Creatives/CreateOptionFeature";
 import { useRouter } from "next/router";
+import BackArrow from "Components/Common/Back";
 const ProductEdit = () => {
     const router = useRouter();
     const { id } = router.query;
@@ -50,16 +51,15 @@ const ProductEdit = () => {
         }
         fetchData();
     }, [countOne]);
+    const fetchData = async () => {
+        const config = {
+            headers: {
+                Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+            },
+        };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const config = {
-                headers: {
-                    Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
-                },
-            };
-
-            try {
+        try {
+            if (id !== undefined) {
                 const response = await axios.get(
                     `${ServerURL.url}/admin/product/${id}`,
                     config
@@ -71,20 +71,24 @@ const ProductEdit = () => {
                     setLabelInput(dataResponse?.input_lable);
                     setPlaceholder(dataResponse?.placeholder_input);
                     setTextArea(dataResponse?.description);
-                    setSelectedCategory(dataResponse?.id_type);
+                    setSelectedCategory(dataResponse?.id_type?.id);
                     setSelectedFileItem3(dataResponse?.image_square?.id);
                     setSelectedFileItem2(dataResponse?.image_trend?.id);
                     setSelectedFileItem(dataResponse?.image_main?.id);
                     setCheckBoxList(dataResponse?.features?.map((x) => x.id));
+                    // console.log(dataResponse?.features?.map((x) => x.id))
                 } else {
                     return
                 }
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
             }
-        };
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
+
 
         fetchData();
     }, [countTwo, id]);
@@ -136,16 +140,17 @@ const ProductEdit = () => {
                 placeholder: placeholder,
                 lable_input: labelInput,
                 description_input: textArea,
-                // ids_feature: checkBoxList.map((x) => x),
+                ids_feature: checkBoxList,
             };
             const uploadResponse = await axios.post(
-                `${ServerURL.url}admin/product/${id}/update`,
+                `${ServerURL.url}/admin/product/${id}/update`,
                 dataBody,
                 config
             );
             if (uploadResponse.status === 201) {
                 toast.success("با موفقیت ساخته شد.");
                 handleRemoveFields()
+                fetchData();
                 // window.location.href = "../admin/products";
             } else {
                 toast.error("لطفا دوباره امتحان کنید");
@@ -204,7 +209,7 @@ const ProductEdit = () => {
     // };
 
 
-    if (loading) {
+    if (loading & id !== undefined) {
         return <AccountLayout><div>Loading...</div></AccountLayout>
     }
 
@@ -226,8 +231,15 @@ const ProductEdit = () => {
                         pauseOnHover
                         theme="light"
                     />
-                    <Typography>ویرایش محصول {productData.title || ''}</Typography>
-                    <Grid container xs={12} md={12} spacing={2}>
+                    <Grid container item>
+                        <Grid sm={11} item>
+                            <Typography>ویرایش محصول {productData.title || ''}</Typography>
+                        </Grid>
+                        <Grid sx={{ display: { xs: 'none', sm: 'block' } }} sm={1} item>
+                            <BackArrow link={'panel/admin/products'} />
+                        </Grid>
+                    </Grid>
+                    <Grid item container xs={12} md={12} spacing={2}>
                         <Grid
                             item
                             container
@@ -348,7 +360,7 @@ const ProductEdit = () => {
 
                 <Grid container>
                     <CheckboxesTags
-                        value={checkBoxList}
+                        checkBoxList={checkBoxList}
                         responseId={responseId}
                         setSelectedItem={(e) => setCheckBoxList(e)}
                         onChange={(e) => {
@@ -404,7 +416,7 @@ const ProductEdit = () => {
                             <Button
                                 variant="outlined"
                                 color="inherit"
-                                onClick={() => console.log(checkBoxList)}
+                                onClick={() => setOpenThis(true)}
                             >اضافه کردن ویژگی جدید</Button>
                         </Grid>
                     </Grid>

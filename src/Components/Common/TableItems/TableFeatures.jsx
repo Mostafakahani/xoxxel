@@ -96,8 +96,9 @@ export default function TableItems({
   selected = false,
   setPage = () => { },
   setPerPage = () => { },
-  pageData, // اضافه کردن اطلاعات صفحه به props
+  pageData, 
   setUptadeCount,
+  setResponseId = () => { }
 
 }, props) {
   const { page, perPage } = props;
@@ -107,12 +108,16 @@ export default function TableItems({
   // const [perPage, setPerPage] = React.useState(15);
   ////Dialog
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [responseIdItem, setResponseIdItem] = React.useState(null);
   const [selectedRowId, setSelectedRowId] = React.useState(null);
   const [selectedStatus, setSelectedStatus] = React.useState('');
   const [submitToServer, setSubmitToServer] = React.useState('');
   const [count, setCount] = React.useState(0);
   const [alignment, setAlignment] = React.useState('');
 
+  React.useEffect(() => {
+    setResponseId(responseIdItem)
+  }, [responseIdItem]);
   React.useEffect(() => {
     if (selectedStatus === 'waiting') {
       setAlignment('');
@@ -310,9 +315,10 @@ export default function TableItems({
                   // click={openThis}
                   // setClick={(value) => setOpenThis(value)}
                   // status={'plus'}
+                  setClick={closeDialog}
                   id={selectedRowId}
                   setResponseId={(e) => {
-                    console.log(e);
+                    setResponseIdItem(e);
                     // setCheckBoxList([...checkBoxList, e]);
                     // console.log(checkBoxList);
                   }}
