@@ -35,6 +35,7 @@ const ProductEdit = () => {
     const [openThis, setOpenThis] = useState(false);
     const [category, setCategory] = useState([]);
     const [countOne, setCountOne] = useState(0);
+    const [count, setCount] = useState(0);
     const [countTwo, setCountTwo] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [responseId, setResponseId] = useState(0);
@@ -151,6 +152,8 @@ const ProductEdit = () => {
                 toast.success("با موفقیت ساخته شد.");
                 handleRemoveFields()
                 fetchData();
+                router.back()
+
                 // window.location.href = "../admin/products";
             } else {
                 toast.error("لطفا دوباره امتحان کنید");
@@ -178,36 +181,6 @@ const ProductEdit = () => {
         setSelectedCategory('')
         setResponseId(0)
     }
-    // const SendMessage = async () => {
-    //     if (message !== '') {
-    //         const config = {
-    //             headers: {
-    //                 Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
-    //             },
-    //         };
-    //         const data = {
-    //             id_tiket: parseInt(id),
-    //             description: message
-    //         }
-    //         try {
-    //             const response = await axios.post(
-    //                 `${ServerURL.url}/admin/tiket/replay-tiket`,
-    //                 data, config
-    //             );
-    //             const dataResponse = response.data;
-    //             setData(dataResponse);
-    //             // تغییر messageTemp به مقدار فعلی message
-    //             setSendMessageTemp(message);
-    //         } catch (error) {
-    //             console.log(error);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     } else {
-
-    //     }
-    // };
-
 
     if (loading & id !== undefined) {
         return <AccountLayout><div>Loading...</div></AccountLayout>
@@ -217,7 +190,7 @@ const ProductEdit = () => {
     return (
         <>
             <AccountLayout>
-                <Grid container>
+                <Grid container spacing={1}>
                     <ToastContainer
                         position="top-right"
                         autoClose={3000}
@@ -360,8 +333,10 @@ const ProductEdit = () => {
 
                 <Grid container>
                     <CheckboxesTags
+                        refresh={count}
                         checkBoxList={checkBoxList}
                         responseId={responseId}
+                        setResponseId={(e) => setCheckBoxList([...checkBoxList, e])}
                         setSelectedItem={(e) => setCheckBoxList(e)}
                         onChange={(e) => {
                             setCheckBoxList(e);
@@ -369,6 +344,7 @@ const ProductEdit = () => {
                     />
                     <CreateOptionFeature
                         click={openThis}
+                        refresh={() => setCount(count + 1)}
                         setClick={(value) => setOpenThis(value)}
                         // status={'plus'}
                         setResponseId={(e) => {
@@ -405,7 +381,8 @@ const ProductEdit = () => {
                                 variant="outlined"
                                 color="error"
                                 onClick={() => {
-                                    console.log(checkBoxList)
+                                    router.back()
+                                    // console.log(checkBoxList)
                                     // window.location.href = "../admin/products";
                                 }}
                             >

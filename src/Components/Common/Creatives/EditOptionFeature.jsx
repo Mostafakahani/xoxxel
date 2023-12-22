@@ -150,7 +150,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
   };
 
   useEffect(() => {
-   
+
 
     fetchData();
   }, [countTwo, id]);
@@ -202,7 +202,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
         config
       );
       if (uploadResponse.status === 201) {
-        setResponseId(uploadResponse.data.id);
+        setResponseId(id);
         toast.success("با موفقیت انجام شد.");
         handleRemoveFields()
         // fetchData();
@@ -428,6 +428,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
                 nameFeature === "" ||
                 selectedCategory === "" ||
                 price === '' ||
+                price === 0 ||
                 sellMode === 'auto' && dataFeature === ''
               }
               onClick={handleSubmit}

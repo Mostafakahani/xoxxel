@@ -15,7 +15,7 @@ import GetToken from "GetToken";
 import moment from "moment-jalaali";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxList, responseId }) {
+export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxList, refresh, responseId, setResponseId = () => { } }) {
   // const [localCheckBoxList, setLocalCheckBoxList] = useState(value);
   const [page, setPage] = useState(1);
   const [dataBody, setDataBody] = useState([]);
@@ -23,10 +23,10 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
   const [perPage, setPerPage] = useState(15);
   const [count, setCount] = useState(0);
   const [selected, setSelected] = useState([]);
-
+  // const id = ''
   // useEffect(() => {
   //   console.log('1')
-  // }, []);
+  // }, [refresh]);
 
   // useEffect(() => {
   //   setSelectedItem(selected)
@@ -41,6 +41,8 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
           Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
         },
       };
+
+      // if (checkBoxList !== id) {
 
       try {
         const response = await axios.get(
@@ -105,10 +107,11 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
       } catch (error) {
         console.error("Error fetching data from the server:", error);
       }
-    };
+    }
+    // };
 
     fetchData();
-  }, [page, perPage, count]);
+  }, [page, perPage, count, refresh]);
 
   const handleDelete = async () => {
     try {
@@ -184,8 +187,8 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
       <Typography>انتخاب ویژگی</Typography>
       <Grid container spacing={2} my={2} sx={{ px: 2, py: 2, boxShadow: 3, borderRadius: 1, overflowY: 'auto', height: '500px' }}>
         <TableFeatures
-          selected={checkBoxList}
-          setSelected={(e)=>{setSelected(e); setSelectedItem(e)}}
+          selected={checkBoxList || selected}
+          setSelected={(e) => { setSelected(e); setSelectedItem(e) }}
           dataHead={dataHead}
           dataBody={dataBody}
           // selectedItemId={selectedItemId}
@@ -193,6 +196,7 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
           setPage={(e) => setPage(e)}
           setPerPage={(e) => setPerPage(e)}
           perPage={pageDataAll.perPage}
+          setResponseId={(e) => setResponseId(e)}
         />
       </Grid>
 

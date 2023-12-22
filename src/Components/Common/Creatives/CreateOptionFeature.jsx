@@ -10,7 +10,7 @@ import GetToken from "GetToken";
 import { Button, CircularProgress, Dialog, DialogContent, Grid, MenuItem, Select, SvgIcon, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { PopularIconOff, PopularIconOn } from 'Icons/icons';
 
-const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClick = () => { } }) => {
+const CreateOptionFeature = ({ setResponseId = () => { }, refresh = () => { }, click, setClick = () => { } }) => {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     if (click === true) {
@@ -139,6 +139,7 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
       );
       if (uploadResponse.status === 201) {
         setResponseId(uploadResponse.data.id);
+        refresh(1)
         toast.success("با موفقیت ساخته شد.");
         handleRemoveFields()
         // window.location.href = "../admin/products";
@@ -364,7 +365,8 @@ const CreateOptionFeature = ({ setResponseId = () => { }, status, click, setClic
                     // selectedFileItem.length === 0 ||
                     nameFeature === "" ||
                     // selectedCategory === "" ||
-                    // price === '' ||
+                    price === '' ||
+                    price === 0 ||
                     // dataFeature === '' ||
                     // sellMode === 'auto' && price === '' ||
                     sellMode === 'auto' && dataFeature === '' ||
