@@ -23,7 +23,7 @@ function Card({ titleCard, imageSizeText, changeAlt, saveClick, editClick, image
             </Grid>
             <Grid container item xs={12} spacing={2}>
                 <Grid item xs={6}>
-                    <Button onClick={() => editClick()}  fullWidth sx={{ backgroundColor: '#fff', border: '0.5px solid #364357', color: '#364357', '&:hover': { backgroundColor: '#364357', color: '#fff' } }}>ویرایش</Button>
+                    <Button onClick={() => editClick()} fullWidth sx={{ backgroundColor: '#fff', border: '0.5px solid #364357', color: '#364357', '&:hover': { backgroundColor: '#364357', color: '#fff' } }}>ویرایش</Button>
                 </Grid>
                 <Grid item xs={6}>
                     <Button onClick={() => saveClick()} fullWidth sx={{ backgroundColor: '#7E56DA', color: '#fff', '&:hover': { backgroundColor: '#7e56da8f', color: '#6826ffcf' } }}>ذخیره</Button>

@@ -15,7 +15,7 @@ import GetToken from "GetToken";
 import moment from "moment-jalaali";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxList, refresh, responseId, setResponseId = () => { } }) {
+const CheckboxesTags = ({ setSelectedItem = () => { }, checkBoxList, refresh, responseId, setResponseId = () => { }, id }) => {
   // const [localCheckBoxList, setLocalCheckBoxList] = useState(value);
   const [page, setPage] = useState(1);
   const [dataBody, setDataBody] = useState([]);
@@ -46,7 +46,7 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
 
       try {
         const response = await axios.get(
-          `${ServerURL.url}/admin/feature/get-all-feature-without-pagination`,
+          `${ServerURL.url}/admin/feature/get-all-feature-without-pagination/${id}`,
           config
         );
 
@@ -184,7 +184,7 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
   // }, [responseId]);
   return (
     <>
-      <Typography>انتخاب ویژگی</Typography>
+      <Typography onClick={() => console.log(id)}>انتخاب ویژگی</Typography>
       <Grid container spacing={2} my={2} sx={{ px: 2, py: 2, boxShadow: 3, borderRadius: 1, overflowY: 'auto', height: '500px' }}>
         <TableFeatures
           selected={checkBoxList || selected}
@@ -198,7 +198,7 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
           perPage={pageDataAll.perPage}
           setResponseId={(e) => setResponseId(e)}
           refresh={(e) => setCount(count + 1)}
-          
+
         />
       </Grid>
 
@@ -236,3 +236,4 @@ export default function CheckboxesTags({ setSelectedItem = () => { }, checkBoxLi
     </>
   );
 }
+export default CheckboxesTags

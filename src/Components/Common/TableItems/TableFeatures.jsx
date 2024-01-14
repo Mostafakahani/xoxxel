@@ -529,6 +529,7 @@ export default function TableItems({
         }
         {dataBody?.length !== 0 && (
           <Grid
+          container
             spacing={5}
             display="flex"
             alignItems="center"
