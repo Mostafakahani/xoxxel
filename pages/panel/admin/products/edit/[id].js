@@ -65,8 +65,14 @@ function CreateProduct() {
                         alt_image_main: dataResponse?.alt_image_main,
                         alt_image_trends: dataResponse?.alt_image_trends,
                         alt_image_square: dataResponse?.alt_image_square,
+                        seo_title: dataResponse?.seo_title,
+                        seo_description: dataResponse?.seo_description,
+                        seo_link: dataResponse?.seo_link,
                         features: dataResponse.features?.map((feature) => feature.id) || [],
+
                     }));
+                    setCheckBoxList(dataResponse?.features?.map((x) => x.id));
+
                 }
             }
         } catch (error) {
@@ -92,7 +98,7 @@ function CreateProduct() {
                         <Typography>ویرایش محصول</Typography>
                     </Grid>
                     <Grid item container xs={12} sm={4}>
-                        <TextField size='small' fullWidth />
+                        <TextField value={product?.title || ''} size='small' fullWidth />
                     </Grid>
                     <Grid item container rowSpacing={3}>
                         <Card value={product.alt_image_main} saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Slider'} imageSizeText={'تصویر اصلی (297*147)'} imagePreview={`https://xoxxel.storage.iran.liara.space/${product?.image_main?.id?.name}`} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_main: e }))} />
@@ -112,13 +118,16 @@ function CreateProduct() {
                         <LablesInputs value={product.description} label={'Description'} changeInput={(e) => setProduct((prevProduct) => ({ ...prevProduct, description: e }))} />
                     </Grid>
                     <Grid item container>
-                        <SeoTools changeTitleTag={(e) => setProduct((prevProduct) => ({ ...prevProduct, seo_title: e }))} chnageShortLink={(e) => setProduct((prevProduct) => ({ ...prevProduct, seo_link: e }))} changeMetaDescription={(e) => setProduct((prevProduct) => ({ ...prevProduct, seo_description: e }))} />
+                        <SeoTools valueLink={product?.seo_link} valueTitle={product?.seo_title} valueDescription={product?.seo_description} changeTitleTag={(e) => setProduct((prevProduct) => ({ ...prevProduct, seo_title: e }))} chnageShortLink={(e) => setProduct((prevProduct) => ({ ...prevProduct, seo_link: e }))} changeMetaDescription={(e) => setProduct((prevProduct) => ({ ...prevProduct, seo_description: e }))} />
                     </Grid>
                     <Grid item container>
                         <CheckboxesTags
                             id={'2'}
-                            value={checkBoxList}
+                            // refresh={count}
+                            checkBoxList={checkBoxList}
                             responseId={responseId}
+                            setResponseId={(e) => setCheckBoxList([...checkBoxList, e])}
+                            setSelectedItem={(e) => setCheckBoxList(e)}
                             onChange={(e) => {
                                 setCheckBoxList(e);
                             }}
