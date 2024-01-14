@@ -1,7 +1,7 @@
 import { Box, Button, Grid, TextField, Typography } from '@mui/material'
 import React from 'react'
 
-function Card({ titleCard, imageSizeText, changeAlt, saveClick, editClick, imagePreview, }) {
+function Card({ value, titleCard, imageSizeText, changeAlt, saveClick, editClick, imagePreview, }) {
     return (
         <Grid container item xs={12} sm={4} md={4} sx={{ boxShadow: '-1px 20px 50px -30px #00000078' }} p={3} rowSpacing={2}>
             <Grid item xs={12} display={'flex'} justifyContent={'center'}>
@@ -18,7 +18,7 @@ function Card({ titleCard, imageSizeText, changeAlt, saveClick, editClick, image
                     <Typography variant='span' sx={{ color: '#303E4F' }}>Tag alt</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField size='small' fullWidth onChange={(e) => changeAlt(e.target.value)} />
+                    <TextField value={value || ''} size='small' fullWidth onChange={(e) => changeAlt(e.target.value)} />
                 </Grid>
             </Grid>
             <Grid container item xs={12} spacing={2}>

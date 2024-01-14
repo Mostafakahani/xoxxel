@@ -59,9 +59,12 @@ function CreateProduct() {
                         placeholder_input: dataResponse.placeholder_input,
                         description: dataResponse.description,
                         id_type: dataResponse.id_type?.id,
-                        image_square: { id: dataResponse.image_square?.id },
-                        image_trend: { id: dataResponse.image_trend?.id },
-                        image_main: { id: dataResponse.image_main?.id },
+                        image_square: { id: dataResponse.image_square },
+                        image_trend: { id: dataResponse.image_trend },
+                        image_main: { id: dataResponse.image_main },
+                        alt_image_main: dataResponse?.alt_image_main,
+                        alt_image_trends: dataResponse?.alt_image_trends,
+                        alt_image_square: dataResponse?.alt_image_square,
                         features: dataResponse.features?.map((feature) => feature.id) || [],
                     }));
                 }
@@ -92,9 +95,9 @@ function CreateProduct() {
                         <TextField size='small' fullWidth />
                     </Grid>
                     <Grid item container rowSpacing={3}>
-                        <Card saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Slider'} imageSizeText={'تصویر اصلی (297*147)'} imagePreview={'/images/1-1.png'} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_main: e }))} />
-                        <Card saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Trends'} imageSizeText={'تصویر Trends (153*190)'} imagePreview={'/images/1-1.png'} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_trends: e }))} />
-                        <Card saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Square'} imageSizeText={'تصویر اسلایدی یا مربعی (134*134)'} imagePreview={'/images/1-1.png'} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_square: e }))} />
+                        <Card value={product.alt_image_main} saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Slider'} imageSizeText={'تصویر اصلی (297*147)'} imagePreview={`https://xoxxel.storage.iran.liara.space/${product?.image_main?.id?.name}`} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_main: e }))} />
+                        <Card value={product.alt_image_trends} saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Trends'} imageSizeText={'تصویر Trends (153*190)'} imagePreview={`https://xoxxel.storage.iran.liara.space/${product?.image_trend?.id?.name}`} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_trends: e }))} />
+                        <Card value={product.alt_image_square} saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Square'} imageSizeText={'تصویر اسلایدی یا مربعی (134*134)'} imagePreview={`https://xoxxel.storage.iran.liara.space/${product?.image_square?.id?.name}`} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_square: e }))} />
                     </Grid>
                     {/* <StandardImageList
                         label={"تصویر Trends (153*190)"}
@@ -104,9 +107,9 @@ function CreateProduct() {
                             console.log(e);
                         }} /> */}
                     <Grid item container columnSpacing={5} rowSpacing={2}>
-                        <LablesInputs label={'Label input'} changeInput={(e) => setProduct((prevProduct) => ({ ...prevProduct, input_lable: e }))} />
-                        <LablesInputs label={'Placeholder'} changeInput={(e) => setProduct((prevProduct) => ({ ...prevProduct, placeholder_input: e }))} />
-                        <LablesInputs label={'Description'} changeInput={(e) => setProduct((prevProduct) => ({ ...prevProduct, description: e }))} />
+                        <LablesInputs value={product.input_lable} label={'Label input'} changeInput={(e) => setProduct((prevProduct) => ({ ...prevProduct, input_lable: e }))} />
+                        <LablesInputs value={product.placeholder_input} label={'Placeholder'} changeInput={(e) => setProduct((prevProduct) => ({ ...prevProduct, placeholder_input: e }))} />
+                        <LablesInputs value={product.description} label={'Description'} changeInput={(e) => setProduct((prevProduct) => ({ ...prevProduct, description: e }))} />
                     </Grid>
                     <Grid item container>
                         <SeoTools changeTitleTag={(e) => setProduct((prevProduct) => ({ ...prevProduct, seo_title: e }))} chnageShortLink={(e) => setProduct((prevProduct) => ({ ...prevProduct, seo_link: e }))} changeMetaDescription={(e) => setProduct((prevProduct) => ({ ...prevProduct, seo_description: e }))} />
