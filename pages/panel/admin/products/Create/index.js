@@ -4,6 +4,7 @@ import StandardImageList from 'Components/Common/Images';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import Card from '../../../../../src/Components/Common/NewCreateProduct/Card';
 import LablesInputs from 'Components/Common/NewCreateProduct/LabelInputs';
+import SeoTools from 'Components/Common/NewCreateProduct/SEOTools';
 function CreateProduct() {
     const [idStorage, setIdStorage] = useState();
     return (
@@ -32,38 +33,7 @@ function CreateProduct() {
                         <LablesInputs label={'Input'} changeInput={(e) => console.log(e)} />
                     </Grid>
                     <Grid item container>
-                        <Grid item container p={3} sx={{ border: '1px dashed #000', borderRadius: 3 }}>
-                            <Grid item xs={12} display={'flex'} justifyContent={'flex-end'}>
-                                <Typography variant='h4' sx={{ color: '#000' }}>Seo Tools</Typography>
-                            </Grid>
-                            <Grid item container xs={12} display={'flex'} justifyContent={'flex-end'} rowSpacing={2}>
-                                <Grid item container xs={12} sm={4} display={'flex'} justifyContent={'flex-end'}>
-                                    <Grid item xs={12} display={'flex'} justifyContent={'flex-end'}>
-                                        <Typography variant='p' sx={{ color: '#364357' }}>Short link</Typography>
-                                    </Grid>
-                                    <Grid item xs={12} sm={8} md={6}>
-                                        <TextField size='small' fullWidth />
-                                    </Grid>
-                                </Grid>
-                                <Grid item container xs={12} sm={4} display={'flex'} justifyContent={'flex-end'}>
-                                    <Grid item xs={12} display={'flex'} justifyContent={'flex-end'}>
-                                        <Typography variant='p' sx={{ color: '#364357' }}>Title tag</Typography>
-                                    </Grid>
-                                    <Grid item xs={12} sm={8} md={6}>
-                                        <TextField size='small' fullWidth />
-                                    </Grid>
-                                </Grid>
-                                <Grid item container xs={12} sm={12} display={'flex'} justifyContent={'flex-end'}>
-                                    <Grid item xs={12} display={'flex'} justifyContent={'flex-end'}>
-                                        <Typography variant='p' sx={{ color: '#364357' }}>Meta description</Typography>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField multiline rows={5} size='small' fullWidth />
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-
+                        <SeoTools changeTitleTag={(e) => console.log(e)} chnageShortLink={(e) => console.log(e)} changeMetaDescription={(e) => console.log(e)} />
                     </Grid>
 
                 </Grid>
