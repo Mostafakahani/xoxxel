@@ -14,6 +14,7 @@ import GetToken from 'GetToken';
 import SelectCountry from 'Components/Common/NewCreateProduct/SelectCountry';
 import CreateOptionFeature from 'Components/Common/Creatives/CreateOptionFeature';
 import SelectCategory from 'Components/Common/NewCreateProduct/SelectCategory';
+import ButtonImage from 'Components/Common/Images/ButtonImage';
 
 function CreateProduct() {
     const [product, setProduct] = useState({
@@ -33,6 +34,8 @@ function CreateProduct() {
         image_main: {},
         features: [],
     });
+    const [openDialogImage, setOpenDialogImage] = useState(false);
+
     const [openThis, setOpenThis] = useState(false);
     const [category, setCategory] = useState([]);
     const [count, setCount] = useState(0);
@@ -131,7 +134,6 @@ function CreateProduct() {
                     if (dataResponse.length !== 0) {
                         setOpen(false);
                         setOpenCategory(true);
-                        setSelectedCountry('')
                     }
                     setSelectedShowBadgeCategory(dataResponse);
 
@@ -163,23 +165,73 @@ function CreateProduct() {
             <AccountLayout>
                 <Grid container rowSpacing={5}>
                     <Grid container item>
-                        <Typography onClick={() => console.log(selectedShowBadgeCategory)}>ویرایش محصول</Typography>
+                        <Typography>ویرایش محصول</Typography>
                     </Grid>
                     <Grid item container xs={12} sm={4}>
-                        <TextField value={product?.title || ''} size='small' fullWidth />
+                        <TextField
+                            value={product?.title || ''}
+                            size='small'
+                            fullWidth
+                            onChange={(e) => setProduct((prevProduct) => ({ ...prevProduct, title: e.target.value }))}
+                        />
                     </Grid>
                     <Grid item container rowSpacing={3}>
-                        <Card value={product.alt_image_main} saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Slider'} imageSizeText={'تصویر اصلی (297*147)'} imagePreview={`https://xoxxel.storage.iran.liara.space/${product?.image_main?.id?.name}`} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_main: e }))} />
-                        <Card value={product.alt_image_trends} saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Trends'} imageSizeText={'تصویر Trends (153*190)'} imagePreview={`https://xoxxel.storage.iran.liara.space/${product?.image_trend?.id?.name}`} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_trends: e }))} />
-                        <Card value={product.alt_image_square} saveClick={() => console.log('saveClick')} editClick={() => console.log('editClick')} titleCard={'Square'} imageSizeText={'تصویر اسلایدی یا مربعی (134*134)'} imagePreview={`https://xoxxel.storage.iran.liara.space/${product?.image_square?.id?.name}`} changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_square: e }))} />
+                        {/* <Card value={product.alt_image_main} saveClick={() => console.log('saveClick')} editClick={() => setOpenDialogImage(true)} titleCard={'Slider'} imageSizeText={'تصویر اصلی (297*147)'} imagePreview={`${product?.image_main?.id?.name.includes('https://xoxxel.storage.iran.liara.space/')
+                            ? ''
+                            : 'https://xoxxel.storage.iran.liara.space/'
+                            }${product?.image_main?.id?.name}`} /> */}
+                        <Card
+                            value={product.alt_image_main}
+                            saveClick={() => console.log('saveClick')}
+                            editClick={() => setOpenDialogImage(true)}
+                            titleCard={'Trends'}
+                            imageSizeText={'تصویر Trends (153*190)'}
+                            imagePreview={`${product?.image_main?.id?.name.includes('https://xoxxel.storage.iran.liara.space/')
+                                ? ''
+                                : 'https://xoxxel.storage.iran.liara.space/'
+                                }${product?.image_main?.id?.name}`}
+                            changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_main: e }))}
+                        />
+
+
+
+
+                        <Card
+                            value={product.alt_image_trends}
+                            saveClick={() => console.log('saveClick')}
+                            editClick={() => console.log('editClick')}
+                            titleCard={'Trends'}
+                            imageSizeText={'تصویر Trends (153*190)'}
+                            imagePreview={`${product?.image_trend?.id?.name.includes('https://xoxxel.storage.iran.liara.space/')
+                                ? ''
+                                : 'https://xoxxel.storage.iran.liara.space/'
+                                }${product?.image_trend?.id?.name}`}
+                            changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_trends: e }))}
+                        />
+
+                        <Card
+                            value={product.alt_image_square}
+                            saveClick={() => console.log('saveClick')}
+                            editClick={() => console.log('editClick')}
+                            titleCard={'Square'}
+                            imageSizeText={'تصویر اسلایدی یا مربعی (134*134)'}
+                            imagePreview={`${product?.image_square?.id?.name.includes('https://xoxxel.storage.iran.liara.space/')
+                                ? ''
+                                : 'https://xoxxel.storage.iran.liara.space/'
+                                }${product?.image_square?.id?.name}`}
+                            changeAlt={(e) => setProduct((prevProduct) => ({ ...prevProduct, alt_image_square: e }))}
+                        />
                     </Grid>
-                    {/* <StandardImageList
+                    <ButtonImage
+                        open={openDialogImage}
+                        setOpen={() => setOpenDialogImage(false)}
                         label={"تصویر Trends (153*190)"}
                         idStorage={setIdStorage}
+                        imageUrlLink={(e) => setProduct((prevProduct) => ({ ...prevProduct, image_main: { ...prevProduct.image_main, id: { ...prevProduct.image_main.id, name: e } } }))}
                         onChange={(e) => {
                             setIdStorage(e);
                             console.log(e);
-                        }} /> */}
+                        }} />
                     <Grid item container columnSpacing={5} rowSpacing={2}>
                         <LablesInputs value={product.input_lable} label={'Label input'} changeInput={(e) => setProduct((prevProduct) => ({ ...prevProduct, input_lable: e }))} />
                         <LablesInputs value={product.placeholder_input} label={'Placeholder'} changeInput={(e) => setProduct((prevProduct) => ({ ...prevProduct, placeholder_input: e }))} />
@@ -196,58 +248,55 @@ function CreateProduct() {
                             <Button onClick={() => setOpen(true)}>Select Country</Button>
                         </Grid>
                     </Grid>
-                    <Grid item container>
-                        <Dialog open={open} onClose={() => { setOpen(false); setSelectedCountry('') }}>
-                            <DialogContent>
-                                <Grid item container display={'flex'} justifyContent={'center'}>
-                                    <SelectCountry
-                                        value={country}
-                                        selected={selectedCountry}
-                                        setValue={(e) => handleSetValue(e)}
-                                    />
+                    {/* <Grid item container> */}
+                    <Dialog open={open} onClose={() => { setOpen(false) }}>
+                        <DialogContent>
+                            <Grid item container display={'flex'} justifyContent={'center'}>
+                                <SelectCountry
+                                    value={country}
+                                    selected={selectedCountry}
+                                    setValue={(e) => handleSetValue(e)}
+                                />
+                            </Grid>
+                        </DialogContent>
+                        <DialogActions>
+                            <Grid item container columnSpacing={2}>
+                                <Grid item>
+                                    <Button onClick={() => setOpen(false)}>Create New Country</Button>
                                 </Grid>
-                            </DialogContent>
-                            <DialogActions>
-                                <Grid item container columnSpacing={2}>
-                                    <Grid item>
-                                        <Button onClick={() => setOpen(false)}>Create New Country</Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button color='error' onClick={() => setOpen(false)}>Cancel</Button>
-                                    </Grid>
+                                <Grid item>
+                                    <Button color='error' onClick={() => setOpen(false)}>Cancel</Button>
                                 </Grid>
-                            </DialogActions>
-                        </Dialog>
+                            </Grid>
+                        </DialogActions>
+                    </Dialog>
 
-                        {/* <button onClick={() => console.log(selectedShowBadgeCategory)}>btn</button> */}
-                    </Grid>
-                    <SelectCategory
-                        data={selectedShowBadgeCategory}
-                        selected={(e) => { setSelectedCategoryForShowFeatures(e); }}
-                    // setValue={(e) => handleSetValue(e)}
-                    />
+                    {/* <button onClick={() => console.log(selectedShowBadgeCategory)}>btn</button> */}
+                    {/* </Grid> */}
 
-                    <Grid item container>
-                        <Dialog open={openCategory} onClose={() => { setOpenCategory(false); }}>
-                            <DialogContent>
-                                <Grid item container display={'flex'} justifyContent={'center'}>
-                                    {selectedShowBadgeCategory.map((x) => x.title)}
-                                    {/* <SelectCountry value={country} selected={selectedCountry} setValue={(e) => setSelectedCountry(e)} /> */}
-                                </Grid>
-                            </DialogContent>
-                            <DialogActions>
-                                <Grid item container columnSpacing={2}>
-                                    <Grid item>
-                                        <Button onClick={() => setOpenCategory(false)}>Create New Category</Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button color='error' onClick={() => setOpenCategory(false)}>Cancel</Button>
-                                    </Grid>
-                                </Grid>
-                            </DialogActions>
-                        </Dialog>
 
-                    </Grid>
+                    {/* <Grid item container> */}
+                    <Dialog open={openCategory} onClose={() => { setOpenCategory(false); }}>
+                        <DialogContent>
+                            <Grid item container display={'flex'} justifyContent={'center'}>
+                                <SelectCategory
+                                    data={selectedShowBadgeCategory}
+                                    selected={(e) => { setSelectedCategoryForShowFeatures(e); setOpenCategory(false); }}
+                                /> </Grid>
+                        </DialogContent>
+                        <DialogActions>
+                            <Grid item container columnSpacing={2}>
+                                <Grid item>
+                                    <Button onClick={() => setOpenCategory(false)}>Create New Category</Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button color='error' onClick={() => setOpenCategory(false)}>Cancel</Button>
+                                </Grid>
+                            </Grid>
+                        </DialogActions>
+                    </Dialog>
+
+                    {/* </Grid> */}
                     <Grid item container>
                         <CheckboxesTags //ویژگی
                             id={selectedCategoryForShowFeatures}

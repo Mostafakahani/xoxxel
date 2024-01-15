@@ -306,9 +306,9 @@ const CreateOptionFeature = ({ category, setCategory, setResponseId = () => { },
                 }}
               />
             </Grid> */}
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid container item xs={12} sm={6} md={4}>
               <Typography>به عنوان محبوب</Typography>
-              <Grid xs={6} md={6} mt={1}>
+              <Grid item xs={6} md={6} mt={1}>
                 <Button
                   onClick={() => setIsPopular(!isPopular)}
                   variant='outlined'
