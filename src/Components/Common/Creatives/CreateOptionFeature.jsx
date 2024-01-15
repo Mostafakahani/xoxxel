@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import AccountLayout from "Components/Common/Layout/AccountLayout";
-import StandardImageList from "Components/Common/Images";
-import CheckboxesTags from "Components/Common/CheckBoxList";
 import ServerURL from "Components/Common/Layout/config";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,7 +7,7 @@ import GetToken from "GetToken";
 import { Button, CircularProgress, Dialog, DialogContent, Grid, MenuItem, Select, SvgIcon, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { PopularIconOff, PopularIconOn } from 'Icons/icons';
 
-const CreateOptionFeature = ({ setResponseId = () => { }, refresh = () => { }, click, setClick = () => { } }) => {
+const CreateOptionFeature = ({ category, setCategory, setResponseId = () => { }, refresh = () => { }, click, setClick = () => { } }) => {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     if (click === true) {
@@ -32,7 +29,7 @@ const CreateOptionFeature = ({ setResponseId = () => { }, refresh = () => { }, c
   const [openThis, setOpenThis] = useState(false);
   // const router = useRouter()
   // const [allData, setAllData] = useState([]);
-  const [category, setCategory] = useState([]);
+  // const [category, setCategory] = useState([]);
   // const [responseId, setResponseId] = useState(0);
   const [dataType, setDataType] = useState([]);
 
@@ -75,17 +72,17 @@ const CreateOptionFeature = ({ setResponseId = () => { }, refresh = () => { }, c
     }
     fetchData();
   }, [countOne]);
-  useEffect(() => {
-    async function fetchData() {
-      const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
-      const responseCategory = await axios.get(
-        `${ServerURL.url}/admin/cat/get-all-cat-without-pagination`,
-        config
-      );
-      setCategory(responseCategory.data);
-    }
-    fetchData();
-  }, [countTwo]);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+  //     const responseCategory = await axios.get(
+  //       `${ServerURL.url}/admin/cat/get-all-cat-without-pagination`,
+  //       config
+  //     );
+  //     setCategory(responseCategory.data);
+  //   }
+  //   fetchData();
+  // }, [countTwo]);
 
   useEffect(() => {
     async function fetchData() {

@@ -19,6 +19,7 @@ import GetToken from "GetToken";
 import CreateOptionFeature from "Components/Common/Creatives/CreateOptionFeature";
 import { useRouter } from "next/router";
 const CreateProduct = () => {
+  const router = useRouter()
   const [productName, setProductName] = useState("");
   // const [productPrice, setProductPrice] = useState("");
   // const [starRating, setStarRating] = useState("");
@@ -88,6 +89,7 @@ const CreateProduct = () => {
       if (uploadResponse.status === 201) {
         toast.success("با موفقیت ساخته شد.");
         handleRemoveFields()
+        router.push(`panel/admin/products/edit/${uploadResponse.id}`)
         // window.location.href = "../admin/products";
       } else {
         toast.error("لطفا دوباره امتحان کنید");
@@ -271,7 +273,7 @@ const CreateProduct = () => {
           </Grid>
         </Grid>
 
-        <Grid container>
+        {/* <Grid container>
           <CheckboxesTags
             value={checkBoxList}
             responseId={responseId}
@@ -289,7 +291,7 @@ const CreateProduct = () => {
               // console.log(checkBoxList);
             }}
           />
-        </Grid>
+        </Grid> */}
         <Grid container sx={{ my: "25px" }}>
           <Grid container item spacing={2}>
             <Grid item>
@@ -302,7 +304,7 @@ const CreateProduct = () => {
                   selectedFileItem3.length === 0 ||
                   productName === "" ||
                   selectedCategory === "" ||
-                  checkBoxList.length === 0 ||
+                  // checkBoxList.length === 0 ||
                   textArea === '' ||
                   labelInput === '' ||
                   placeholder === ''
@@ -324,13 +326,13 @@ const CreateProduct = () => {
                 انصراف
               </Button>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Button
                 variant="outlined"
                 color="inherit"
                 onClick={() => setOpenThis(true)}
               >اضافه کردن ویژگی جدید</Button>
-            </Grid>
+            </Grid> */}
           </Grid>
 
         </Grid>
