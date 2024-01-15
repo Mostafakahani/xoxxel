@@ -111,7 +111,7 @@ const CheckboxesTags = ({ setSelectedItem = () => { }, checkBoxList, refresh, re
     // };
 
     fetchData();
-  }, [page, perPage, count, refresh]);
+  }, [page, perPage, count, refresh,id]);
 
   const handleDelete = async () => {
     try {

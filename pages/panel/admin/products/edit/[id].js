@@ -35,6 +35,7 @@ function CreateProduct() {
     });
     const [openThis, setOpenThis] = useState(false);
     const [category, setCategory] = useState([]);
+    const [count, setCount] = useState(0);
 
     const [idStorage, setIdStorage] = useState();
     const [open, setOpen] = useState(false);
@@ -142,6 +143,15 @@ function CreateProduct() {
             }
         }
     };
+    async function getFeatures() {
+        const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+        const responseCategory = await axios.get(
+            `${ServerURL.url}/admin/feature/get-all-feature-without-pagination/${selectedCategoryForShowFeatures}`,
+            config
+        );
+        setSelectedCategoryForShowFeatures(responseCategory.data);
+        // setCount(count + 1)
+    }
 
 
     if (id === undefined || id === null) {
@@ -213,7 +223,7 @@ function CreateProduct() {
                     </Grid>
                     <SelectCategory
                         data={selectedShowBadgeCategory}
-                        selected={(e) => setSelectedCategoryForShowFeatures(e)}
+                        selected={(e) => { setSelectedCategoryForShowFeatures(e); }}
                     // setValue={(e) => handleSetValue(e)}
                     />
 
@@ -240,7 +250,7 @@ function CreateProduct() {
                     </Grid>
                     <Grid item container>
                         <CheckboxesTags //ویژگی
-                            id={'11'}
+                            id={selectedCategoryForShowFeatures}
                             // refresh={count}
                             checkBoxList={checkBoxList}
                             responseId={responseId}
@@ -250,7 +260,7 @@ function CreateProduct() {
                                 setCheckBoxList(e);
                             }}
                         />
-                        <CreateOptionFeature
+                        <CreateOptionFeature //ایجاد ویژگی
                             category={category}
                             setCategory={(e) => { setCategory(e); console.log(e) }}
                             click={openThis}
