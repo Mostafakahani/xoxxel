@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -18,77 +18,114 @@ import {
 } from "@mui/material";
 import { IconB, IconS, IconToggle } from "Icons/icons";
 
-const MyAccordion = () => {
-  const [expanded, setExpanded] = React.useState(null);
+const MyAccordion = ({
+  featureData,
+  checkBoxList,
+  value,
+  country,
+  id,
+  selectedCountry,
+  handleLoadFeatures = () => {},
+  setID = () => {},
+}) => {
+    const [groups, setGroups] = useState([
+      {
+        country: "Iraq",
+        items: [
+          {
+            title: "Premium Service",
+            features: [
+              {
+                name: "1 Month",
+                status: "Not Active",
+                state: "Auto",
+                date: "2023-05-21",
+                price: "$100.05",
+              },
+              {
+                name: "2 Month",
+                status: "Not Active",
+                state: "Auto",
+                date: "2024-05-21",
+                price: "$100.05",
+              },
+              {
+                name: "2 Month",
+                status: "Not Active",
+                state: "Auto",
+                date: "2024-05-21",
+                price: "$100.05",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        country: "Iran",
+        items: [
+          {
+            title: "Premium Service",
+            features: [
+              {
+                name: "1 Month",
+                status: "Not Active",
+                state: "Auto",
+                date: "2023-05-21",
+                price: "$100.05",
+              },
+              {
+                name: "2 Month",
+                status: "Not Active",
+                state: "Auto",
+                date: "2024-05-21",
+                price: "$100.05",
+              },
+              {
+                name: "2 Month",
+                status: "Not Active",
+                state: "Auto",
+                date: "2024-05-21",
+                price: "$100.05",
+              },
+            ],
+          },
+        ],
+      },
+      // Add more groups as needed
+    ]);
+  const [expanded, setExpanded] = useState(Array(groups.length).fill(null));
+  const [selectedIds, setSelectedIds] = useState([]);
 
-  const groups = [
-    {
-      country: "Iraq",
-      items: [
-        {
-          title: "Premium Service",
-          features: [
-            {
-              name: "1 Month",
-              status: "Not Active",
-              state: "Auto",
-              date: "2023-05-21",
-              price: "$100.05",
-            },
-            {
-              name: "2 Month",
-              status: "Not Active",
-              state: "Auto",
-              date: "2024-05-21",
-              price: "$100.05",
-            },
-            {
-              name: "2 Month",
-              status: "Not Active",
-              state: "Auto",
-              date: "2024-05-21",
-              price: "$100.05",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      country: "Iran",
-      items: [
-        {
-          title: "Premium Service",
-          features: [
-            {
-              name: "1 Month",
-              status: "Not Active",
-              state: "Auto",
-              date: "2023-05-21",
-              price: "$100.05",
-            },
-            {
-              name: "2 Month",
-              status: "Not Active",
-              state: "Auto",
-              date: "2024-05-21",
-              price: "$100.05",
-            },
-            {
-              name: "2 Month",
-              status: "Not Active",
-              state: "Auto",
-              date: "2024-05-21",
-              price: "$100.05",
-            },
-          ],
-        },
-      ],
-    },
-    // Add more groups as needed
-  ];
+  useEffect(() => {
+    const updatedRegionData = country?.map((item) => {
+      return {
+        id: item.id,
+        country: item.title,
+        items: [
+          {
+            title: "Premium Service",
+            features: value?.map((x) => ({
+              id: x.id,
+              name: x.name,
+              status: x.status,
+              state: x.sell_mode,
+              date: x.created_at,
+              price: x.price + "$",
+            })),
+          },
+        ],
+      };
+    });
+
+    setGroups(updatedRegionData);
+  }, [country, value]);
 
   const handleExpandClick = (index) => {
-    setExpanded((prevExpanded) => (prevExpanded === index ? null : index));
+    setExpanded((prevExpanded) => {
+      const newExpanded = [...prevExpanded];
+      newExpanded[index] = newExpanded[index] === index ? null : index;
+      return newExpanded;
+    });
   };
 
   const renderFeaturesTable = (features) => (
@@ -138,6 +175,9 @@ const MyAccordion = () => {
                   >
                     {feature.state}
                   </Typography>
+                  {/* <Button onClick={() => console.log(feature.id)}>
+                    GET ID
+                  </Button> */}
                 </TableCell>
 
                 <TableCell>
@@ -178,7 +218,7 @@ const MyAccordion = () => {
 
   return (
     <Grid container spacing={2} display={"flex"} justifyContent={"center"}>
-      {groups.map((group, index) => (
+      {groups?.map((group, index) => (
         <Grid item key={index} xs={12}>
           <Accordion
             disableGutters
@@ -188,7 +228,7 @@ const MyAccordion = () => {
                 boxShadow: "none !important",
               },
             }}
-            expanded={expanded === index}
+            expanded={expanded[index]}
             onChange={() => handleExpandClick(index)}
           >
             <AccordionSummary>
@@ -214,9 +254,10 @@ const MyAccordion = () => {
                     item
                     columnSpacing={2}
                     xs={4}
-                    display={"flex"}
+                    // display={"flex"}
                     justifyContent={"flex-end"}
                     alignItems={"center"}
+                    sx={{ display: { xs: "none", sm: "flex" } }}
                   >
                     {group.items.map((item) => (
                       <Grid item key={item.title}>
@@ -261,26 +302,28 @@ const MyAccordion = () => {
                   <Grid item key={innerIndex} xs={12}>
                     <Accordion>
                       <AccordionSummary
+                        onClick={() => {
+                          //   handleLoadFeatures(value);
+                          setID(group.id);
+                        }}
                         sx={{
                           display: "flex",
                           justifyContent: "flex-start",
                           direction: "ltr",
                         }}
-                        expandIcon={<SvgIcon></SvgIcon>}
+                        expandIcon={<IconToggle />}
                       >
-                        <SvgIcon sx={{ ml: 1 }}>
-                          <IconToggle />
-                        </SvgIcon>
                         <Typography>{x.title}</Typography>
                         <Grid
                           container
                           item
                           columnSpacing={1}
                           xs={4}
-                          display={"flex"}
+                          //   display={"flex"}
                           justifyContent={"flex-end"}
+                          sx={{ display: { xs: "none", sm: "flex" } }}
                         >
-                          {x.features.map((x, index) => (
+                          {x.features.slice(0, 2).map((x, index) => (
                             <Grid item key={index}>
                               <Chip sx={{ color: "#616162" }} label={x.name} />
                             </Grid>

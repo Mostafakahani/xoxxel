@@ -26,23 +26,6 @@ import SelectCategory from "Components/Common/NewCreateProduct/SelectCategory";
 import ButtonImage from "Components/Common/Images/ButtonImage";
 import ShowFeaturesNew from "Components/Common/NewCreateProduct/ShowFeaturesNew";
 import MyAccordion from "Components/Common/NewCreateProduct/ShowFeaturesNew";
-const accordionData = [
-  {
-    id: 1,
-    chipLabel: "Category 1",
-    title: "Accordion 1",
-    contactDetails: "Contact details for Accordion 1",
-    tableData: ["Table Data 1", "Table Data 2"],
-  },
-  {
-    id: 2,
-    chipLabel: "Category 2",
-    title: "Accordion 2",
-    contactDetails: "Contact details for Accordion 2",
-    tableData: ["Table Data 3", "Table Data 4"],
-  },
-  // Add more objects as needed
-];
 
 function CreateProduct() {
   const [product, setProduct] = useState({
@@ -66,10 +49,13 @@ function CreateProduct() {
   const [openDialogImage2, setOpenDialogImage2] = useState(false);
   const [openDialogImage3, setOpenDialogImage3] = useState(false);
 
+  const [handleLoadFeatures, setHandleLoadFeatures] = useState(null);
   const [openThis, setOpenThis] = useState(false);
   const [category, setCategory] = useState([]);
   const [count, setCount] = useState(0);
 
+  const [giveId, setGiveId] = useState(null);
+  const [featureData, setFeatureData] = useState([]);
   const [idStorage, setIdStorage] = useState();
   const [open, setOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState(false);
@@ -85,6 +71,32 @@ function CreateProduct() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const router = useRouter();
   const { id } = router.query;
+  useEffect(() => {
+    const fetchData = async () => {
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
+
+      try {
+        const response = await axios.get(
+          `${ServerURL.url}/admin/feature/get-all-feature-without-pagination/${giveId}`,
+          config
+        );
+
+        const pageData = response.data;
+        setFeatureData(pageData);
+      } catch (error) {
+        console.error("Error fetching data from the server:", error);
+      }
+    };
+    // };
+
+    fetchData();
+  }, [giveId]);
 
   useEffect(() => {
     async function fetchData() {
@@ -441,10 +453,6 @@ function CreateProduct() {
             </DialogActions>
           </Dialog>
 
-          {/* <button onClick={() => console.log(selectedShowBadgeCategory)}>btn</button> */}
-          {/* </Grid> */}
-
-          {/* <Grid item container> */}
           <Dialog
             open={openCategory}
             onClose={() => {
@@ -480,7 +488,7 @@ function CreateProduct() {
 
           {/* </Grid> */}
           <Grid item container>
-            <CheckboxesTags //ویژگی
+            {/* <CheckboxesTags //ویژگی
               id={selectedCategoryForShowFeatures}
               // refresh={count}
               checkBoxList={checkBoxList}
@@ -490,7 +498,7 @@ function CreateProduct() {
               onChange={(e) => {
                 setCheckBoxList(e);
               }}
-            />
+            /> */}
             <CreateOptionFeature //ایجاد ویژگی
               category={category}
               setCategory={(e) => {
@@ -508,7 +516,20 @@ function CreateProduct() {
             />
           </Grid>
           <Grid container item>
-            <MyAccordion data={accordionData} />
+            <MyAccordion
+              id={id}
+              country={country.data}
+              selectedCountry={selectedCountry}
+              value={featureData}
+              //   checkBoxList={checkBoxList}
+              //   featureData={featureData}
+              //   setValue={(e) => handleSetValue(e)}
+              handleLoadFeatures={(e) => {
+                setHandleLoadFeatures(e);
+                handleSetValue(e);
+              }}
+              setID={(e) => setGiveId(e)}
+            />
           </Grid>
 
           <Grid item container>
