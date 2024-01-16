@@ -93,7 +93,7 @@ const MyAccordion = ({
       },
       // Add more groups as needed
     ]);
-  const [expanded, setExpanded] = useState(Array(groups.length).fill(null));
+  const [expanded, setExpanded] = useState(Array(groups?.length).fill(null));
   const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
@@ -170,7 +170,7 @@ const MyAccordion = ({
                 <TableCell>
                   <Typography
                     sx={{
-                      color: feature.state === "Auto" ? "#0085FF" : "#000",
+                      color: feature.state === "auto" ? "#0085FF" : "#000",
                     }}
                   >
                     {feature.state}
@@ -184,8 +184,8 @@ const MyAccordion = ({
                   <Typography
                     sx={{
                       bgcolor:
-                        feature.status === "Active" ? "#C7F1DB" : "#f1c7c7",
-                      color: feature.status === "Active" ? "#0DB25B" : "red",
+                        feature.status === "active" ? "#C7F1DB" : "#f1c7c7",
+                      color: feature.status === "active" ? "#0DB25B" : "red",
                       borderRadius: 2,
                       px: 1,
                       fontSize: 14,
