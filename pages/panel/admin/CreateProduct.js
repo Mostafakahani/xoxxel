@@ -191,7 +191,7 @@ const CreateProduct = () => {
                                 />
                             </Grid> */}
             </Grid>
-            <Grid item xs={12} sm={4} md={4} sx={{ mb: "50px" }}>
+            {/* <Grid item xs={12} sm={4} md={4} sx={{ mb: "50px" }}>
               <Typography>دسته</Typography>
               <Select
                 value={selectedCategory}
@@ -209,7 +209,7 @@ const CreateProduct = () => {
                   <MenuItem value={null}>Loading...</MenuItem>
                 )}
               </Select>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
 
@@ -325,7 +325,7 @@ const CreateProduct = () => {
                   selectedFileItem2.length === 0 ||
                   selectedFileItem3.length === 0 ||
                   productName === "" ||
-                  selectedCategory === "" ||
+                  // selectedCategory === "" ||
                   // checkBoxList.length === 0 ||
                   textArea === "" ||
                   labelInput === "" ||
