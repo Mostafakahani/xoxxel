@@ -27,9 +27,10 @@ export default function MyApp(props) {
   const router = useRouter();
 
   useEffect(() => {
-    if (!(ServerURL.developerMode === true ? ServerURL.Bear : GetToken('user'))) {
+    if (
+      !(ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user"))
+    ) {
       router.push(`${ServerURL.domain}/auth/login`);
-
     }
   }, []);
   return (
@@ -37,8 +38,10 @@ export default function MyApp(props) {
       <RTL>
         <Head>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
+          <meta name="robots" content="noindex" />
+          <meta name="googlebot" content="noindex" />
 
-          <title>xoxxol admin</title>
+          <title>XOXXEL Admin Panel</title>
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link rel="icon" type="image/x-icon" href="/images/logo.png" />
         </Head>
