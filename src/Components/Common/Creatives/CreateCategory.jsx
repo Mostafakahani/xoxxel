@@ -2,6 +2,7 @@ import {
   Button,
   CircularProgress,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
@@ -16,21 +17,44 @@ import ServerURL from "../Layout/config";
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
+import SelectCountry from "../NewCreateProduct/SelectCountry";
+import SelectProduct from "../NewCreateProduct/SelecetProduct";
 
-const CreateCategory = () => {
+const CreateCategory = ({ dataBody, country, countryId, productId }) => {
   const [open, setOpen] = useState(false);
+  const [openSelectProductS, setOpenSelectProductS] = useState(false);
   const [category, setCategory] = useState("");
+  const [products, setProducts] = useState([]);
   const [idProduct, setIdProduct] = useState(null);
   const [idCountry, setIdCountry] = useState(null);
   const [requestError, setRequestError] = useState(null);
   const [addingFeature, setAddingFeature] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const config = {
+  //       headers: {
+  //         Authorization: `${
+  //           ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+  //         }`,
+  //       },
+  //     };
+  //     const responseCategory = await axios.get(
+  //       `${ServerURL.url}/admin/country/get-all-country`,
+  //       config
+  //     );
+  //     setCountry(responseCategory.data);
+  //   }
+  //   fetchData();
+  // }, []);
+
   const handleSubmit = async () => {
-    if ((category !== "") & (idProduct !== null) & (idCountry !== null)) {
+    if (category !== "") {
       setAddingFeature(true);
       try {
         const config = {
@@ -44,8 +68,8 @@ const CreateCategory = () => {
         };
         const data = {
           title: category,
-          id_prouduct: idProduct,
-          id_country: idCountry,
+          id_product: productId,
+          id_country: countryId,
         };
 
         const response = await axios.post(
@@ -137,35 +161,64 @@ const CreateCategory = () => {
           handleClosePanel();
         }}
       >
-        <DialogContent
-        // sx={{ px: "50px", py: "30px" }}
-        >
-          <Grid container item>
-            <Typography align="left" sx={{ my: " 15px" }}>
-              ایجاد دسته
-            </Typography>
+        <DialogTitle>ایجاد دسته</DialogTitle>
+        <DialogContent>
+          <Grid py={1} container item rowSpacing={2}>
             <Grid item xs={12} md={12}>
               <TextField
-                error={!!requestError} // Convert string to boolean
-                helperText={requestError}
-                onChange={(e) => {
-                  setCategory(e.target.value);
-                  setRequestError("");
-                }}
+                onChange={(e) => setCategory(e.target.value)}
                 value={category}
-                label="نام دسته "
+                label="نام دسته"
                 variant="outlined"
-                sx={{
-                  width: { xs: "100%", sm: "100%", md: "100%" },
-                  my: "10px",
-                }}
+                fullWidth
               />
             </Grid>
           </Grid>
-          <Grid item container>
-            {category !== "" && (
-              <Grid item xs={6} sm={3} md={3}>
+          {/* <Grid item xs={12} md={12}>
+            <SelectCountry
+              value={country}
+              selected={idCountry}
+              setValue={(e) => setIdCountry(e)}
+            />
+          </Grid> */}
+          {/* <Grid item xs={12} md={12}>
+            <Button
+              sx={{ textTransform: "none" }}
+              onClick={() => setOpenSelectProductS(true)}
+            >
+              Select Product
+            </Button>
+            <Dialog
+              fullWidth
+              open={openSelectProductS}
+              onClose={() => setOpenSelectProductS(false)}
+            >
+              <DialogContent>
+                <SelectProduct
+                  dataBody={dataBody}
+                  // dataHead={dataHead}
+                  selected={idProduct}
+                  setSelected={(e) => setIdProduct(e)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Grid container>
+                  <Button
+                    variant="contained"
+                    onClick={() => setOpenSelectProductS(false)}
+                  >
+                    Select
+                  </Button>
+                </Grid>
+              </DialogActions>
+            </Dialog>
+          </Grid> */}
+          <DialogActions>
+            <Grid item container spacing={2}>
+              {/* {category !== "" && ( */}
+              <Grid item xs={12} sm={3} md={3}>
                 <Button
+                  fullWidth
                   variant="contained"
                   color="primary"
                   onClick={async () => {
@@ -176,8 +229,8 @@ const CreateCategory = () => {
                       setAddingFeature(false);
                     }
                   }}
-                  sx={{ fontSize: { xs: "14px" }, marginTop: "20px" }}
-                  disabled={addingFeature}
+                  // sx={{ fontSize: { xs: "14px" } }}
+                  disabled={category === "" || category.length < 3}
                 >
                   {addingFeature ? (
                     <CircularProgress size={24} />
@@ -186,22 +239,24 @@ const CreateCategory = () => {
                   )}
                 </Button>
               </Grid>
-            )}
-            <Grid item xs={6} sm={3} md={3}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleClosePanel}
-                style={{
-                  border: "1px solid #989898",
-                  color: "#222",
-                  marginTop: "20px",
-                }}
-              >
-                انصراف
-              </Button>
+              {/* )} */}
+              <Grid item xs={12} sm={3} md={3}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleClosePanel}
+                  style={{
+                    border: "1px solid #989898",
+                    color: "#222",
+                    // marginTop: "20px",
+                  }}
+                >
+                  انصراف
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
+          </DialogActions>
         </DialogContent>
       </Dialog>
     </Grid>

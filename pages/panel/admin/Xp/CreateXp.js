@@ -80,7 +80,7 @@ const CreateXp = () => {
                 `${ServerURL.url}/admin/country/get-all-country`,
                 config
             );
-            setCountry(responseCountry.data.data);
+            setCountry(responseCountry.data);
         }
         fetchData();
     }, [countOne]);

@@ -18,7 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import StandardImageList from "../Images";
 import GetToken from "GetToken";
 
-const CreateRegion = () => {
+const CreateRegion = ({ onUpdate = () => {} }) => {
   const [open, setOpen] = useState(false);
   const [region, setRegion] = useState("");
   const [requestError, setRequestError] = useState(null);
@@ -33,7 +33,9 @@ const CreateRegion = () => {
     setAddingFeature(true);
     const config = {
       headers: {
-        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+        Authorization: `${
+          ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+        }`,
       },
     };
     if (selectedFileItem) {
@@ -52,6 +54,7 @@ const CreateRegion = () => {
 
         if (createResponse.status === 201) {
           toast.success("با موفقیت ساخته شد.");
+          onUpdate();
           handleClosePanel();
         } else if (
           createResponse.status === 400 &&
@@ -127,7 +130,7 @@ const CreateRegion = () => {
             ایجاد ریجن
           </Typography>
           <Grid container>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={12}>
               <TextField
                 error={!!requestError}
                 helperText={requestError}

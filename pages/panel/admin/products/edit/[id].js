@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-import StandardImageList from "Components/Common/Images";
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
   Grid,
   TextField,
   Typography,
@@ -14,17 +10,13 @@ import {
 import Card from "../../../../../src/Components/Common/NewCreateProduct/Card";
 import LablesInputs from "Components/Common/NewCreateProduct/LabelInputs";
 import SeoTools from "Components/Common/NewCreateProduct/SEOTools";
-import CheckboxesTags from "Components/Common/CheckBoxList";
 import { Add } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import axios from "axios";
 import ServerURL from "Components/Common/Layout/config";
 import GetToken from "GetToken";
-import SelectCountry from "Components/Common/NewCreateProduct/SelectCountry";
 import CreateOptionFeature from "Components/Common/Creatives/CreateOptionFeature";
-import SelectCategory from "Components/Common/NewCreateProduct/SelectCategory";
 import ButtonImage from "Components/Common/Images/ButtonImage";
-import ShowFeaturesNew from "Components/Common/NewCreateProduct/ShowFeaturesNew";
 import MyAccordion from "Components/Common/NewCreateProduct/ShowFeaturesNew";
 import CreateRegion from "Components/Common/Creatives/CreateRegon";
 
@@ -50,18 +42,14 @@ function CreateProduct() {
   const [openDialogImage2, setOpenDialogImage2] = useState(false);
   const [openDialogImage3, setOpenDialogImage3] = useState(false);
   const [countryName, setCountryName] = useState("");
-
-  const [handleLoadFeatures, setHandleLoadFeatures] = useState(null);
   const [openThis, setOpenThis] = useState(false);
   const [category, setCategory] = useState([]);
   const [count, setCount] = useState(0);
 
   const [giveId, setGiveId] = useState(null);
   const [featureData, setFeatureData] = useState([]);
-  const [idStorage, setIdStorage] = useState();
+  // const [idStorage, setIdStorage] = useState();
   const [open, setOpen] = useState(false);
-  const [openCategory, setOpenCategory] = useState(false);
-  const [responseId, setResponseId] = useState(0);
   const [checkBoxList, setCheckBoxList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [country, setCountry] = useState([]);
@@ -73,47 +61,78 @@ function CreateProduct() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const router = useRouter();
   const { id } = router.query;
-  // features
-  const [features, setFeatures] = useState([
-    // {
-    //   country: "Iraq",
-    //   items: [
-    //     {
-    //       title: "Premium Service",
-    //       features: [
-    //         {
-    //           id: 1,
-    //           name: "1 Month",
-    //           status: "Not Active",
-    //           state: "Auto",
-    //           date: "2023-05-21",
-    //           price: "$100.05",
-    //         },
-    //         {
-    //           id: 2,
-    //           name: "2 Month",
-    //           status: "Not Active",
-    //           state: "Auto",
-    //           date: "2024-05-21",
-    //           price: "$100.05",
-    //         },
-    //         {
-    //           id: 3,
-    //           name: "2 Month",
-    //           status: "Not Active",
-    //           state: "Auto",
-    //           date: "2024-05-21",
-    //           price: "$100.05",
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // },
-    // Add more groups as needed
-  ]);
+
+  //Products
+
+  const [page, setPage] = useState(1);
+  const [dataBody, setDataBody] = useState([]);
+  const [pageDataAll, setPageDataAll] = useState({});
+  const [perPage, setPerPage] = useState(15);
+  const [selected, setSelected] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
+
+      try {
+        const response = await axios.get(
+          `${ServerURL.url}/admin/product/get-all-products?page=${page}&perPage=${perPage}`,
+          config
+        );
+
+        const pageData = response.data;
+        const updatedPageData = {
+          nowPage: pageData.page,
+          totalPages: pageData.totalPages,
+          perPage: pageData.perPage ? pageData.perPage : 15,
+          totalItems: pageData.totalItems,
+          pagesToDisplay: Array.from(
+            { length: pageData.totalPages },
+            (_, i) => i + 1
+          ),
+        };
+
+        setPageDataAll(updatedPageData);
+        console.log(response.data.data?.map((x) => x.features));
+
+        const apiData = response.data.data;
+        const updatedRegionData = apiData.map((item) => {
+          return {
+            id: item.id,
+            data: [
+              `#${item.id}`,
+              {
+                type: "textBold",
+                text: item.title,
+              },
+              {
+                type: "text",
+                text: item.input_lable,
+              },
+            ],
+          };
+        });
+        setSelected([]);
+        setDataBody(updatedRegionData);
+      } catch (error) {
+        console.error("Error fetching data from the server:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // featuress
+  const [features, setFeatures] = useState([]);
   const featureDataUpdate = async () => {
-    if (country && country.data && selectedShowBadgeCategory && featureData) {
-      const updatedRegionData = country.data.map((item) => {
+    if (country && country && selectedShowBadgeCategory && featureData) {
+      const updatedRegionData = country.map((item) => {
         const categoryTitles = selectedShowBadgeCategory.map((x) => x.title);
 
         return {
@@ -154,7 +173,7 @@ function CreateProduct() {
       setCountry(responseCategory.data);
     }
     fetchData();
-  }, []);
+  }, [count]);
 
   const fetchData = async () => {
     const config = {
@@ -263,27 +282,6 @@ function CreateProduct() {
       }
     }
   }
-  const handleCreateCountry = async () => {
-    if (countryName !== "") {
-      const config = {
-        headers: {
-          Authorization: `${
-            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
-          }`,
-        },
-      };
-
-      try {
-        const responseFeature = await axios.get(
-          `${ServerURL.url}/admin/feature/get-all-feature-without-pagination/${giveId}`,
-          config
-        );
-        setFeatureData(responseFeature.data);
-      } catch (error) {
-        console.error("Error fetching feature data from the server:", error);
-      }
-    }
-  };
 
   useEffect(() => {
     getFeatures();
@@ -316,10 +314,6 @@ function CreateProduct() {
             />
           </Grid>
           <Grid item container rowSpacing={3}>
-            {/* <Card value={product.alt_image_main} saveClick={() => console.log('saveClick')} editClick={() => setOpenDialogImage(true)} titleCard={'Slider'} imageSizeText={'تصویر اصلی (297*147)'} imagePreview={`${product?.image_main?.id?.name.includes('https://xoxxel.storage.iran.liara.space/')
-                            ? ''
-                            : 'https://xoxxel.storage.iran.liara.space/'
-                            }${product?.image_main?.id?.name}`} /> */}
             <Card
               value={product.alt_image_main}
               saveClick={() => console.log("saveClick")}
@@ -341,7 +335,6 @@ function CreateProduct() {
             <ButtonImage
               open={openDialogImage}
               setOpen={() => setOpenDialogImage(false)}
-              idStorage={setIdStorage}
               imageUrlLink={(e) =>
                 setProduct((prevProduct) => ({
                   ...prevProduct,
@@ -351,10 +344,6 @@ function CreateProduct() {
                   },
                 }))
               }
-              onChange={(e) => {
-                setIdStorage(e);
-                console.log(e);
-              }}
             />
 
             <Card
@@ -378,7 +367,6 @@ function CreateProduct() {
             <ButtonImage
               open={openDialogImage2}
               setOpen={() => setOpenDialogImage2(false)}
-              idStorage={setIdStorage}
               imageUrlLink={(e) =>
                 setProduct((prevProduct) => ({
                   ...prevProduct,
@@ -388,10 +376,6 @@ function CreateProduct() {
                   },
                 }))
               }
-              onChange={(e) => {
-                setIdStorage(e);
-                console.log(e);
-              }}
             />
 
             <Card
@@ -416,7 +400,6 @@ function CreateProduct() {
           <ButtonImage
             open={openDialogImage3}
             setOpen={() => setOpenDialogImage3(false)}
-            idStorage={setIdStorage}
             imageUrlLink={(e) =>
               setProduct((prevProduct) => ({
                 ...prevProduct,
@@ -426,10 +409,6 @@ function CreateProduct() {
                 },
               }))
             }
-            onChange={(e) => {
-              setIdStorage(e);
-              console.log(e);
-            }}
           />
 
           <Grid item container columnSpacing={5} rowSpacing={2}>
@@ -483,7 +462,7 @@ function CreateProduct() {
               }
             />
           </Grid>
-          <Grid item container>
+          {/* <Grid item container>
             <Grid item>
               <Button onClick={() => setOpenCategory(true)}>
                 Select Category
@@ -493,7 +472,6 @@ function CreateProduct() {
               <Button onClick={() => setOpen(true)}>Select Country</Button>
             </Grid>
           </Grid>
-          {/* <Grid item container> */}
           <Dialog
             open={open}
             onClose={() => {
@@ -556,21 +534,10 @@ function CreateProduct() {
                 </Grid>
               </Grid>
             </DialogActions>
-          </Dialog>
+          </Dialog> */}
 
           {/* </Grid> */}
           <Grid item container>
-            {/* <CheckboxesTags //ویژگی
-              id={selectedCategoryForShowFeatures}
-              // refresh={count}
-              checkBoxList={checkBoxList}
-              responseId={responseId}
-              setResponseId={(e) => setCheckBoxList([...checkBoxList, e])}
-              setSelectedItem={(e) => setCheckBoxList(e)}
-              onChange={(e) => {
-                setCheckBoxList(e);
-              }}
-            /> */}
             <CreateOptionFeature //ایجاد ویژگی
               category={category}
               setCategory={(e) => {
@@ -583,14 +550,12 @@ function CreateProduct() {
               setResponseId={(e) => {
                 setResponseId(e);
                 setCheckBoxList([...checkBoxList, e]);
-                // console.log(checkBoxList);
               }}
             />
           </Grid>
           <Grid container item>
             <Grid item>
-              <CreateRegion />
-              {/* <Button onClick={handleCreateCountry}>Create Country</Button> */}
+              <CreateRegion onUpdate={() => setCount(count + 1)} />
             </Grid>
           </Grid>
           <Grid container item>
@@ -599,19 +564,16 @@ function CreateProduct() {
                 <MyAccordion
                   features={x}
                   category={selectedShowBadgeCategory}
-                  // id={id}
-                  // country={country.data}
-                  // selectedCountry={selectedCountry}
-                  // value={featureData}
-                  // handleLoadFeatures={(e) => {
-                  //   setHandleLoadFeatures(e);
-                  //   handleSetValue(e);
-                  // }}
-                  // setID={(e) => setGiveId(e)}
-                  // updateFeatures={(updatedFeatures) =>
-                  //   setFeatures(updatedFeatures)
-                  // }
-                  // setFeatures={(e) => setFeatures(e)}
+                  selected={selected}
+                  setSelected={setSelected}
+                  // dataHead={dataHead}
+                  dataBody={dataBody}
+                  pageData={pageDataAll}
+                  setPage={setPage}
+                  setPerPage={setPerPage}
+                  perPage={pageDataAll.perPage}
+                  country={country}
+                  productId={id}
                 />
               </Grid>
             ))}

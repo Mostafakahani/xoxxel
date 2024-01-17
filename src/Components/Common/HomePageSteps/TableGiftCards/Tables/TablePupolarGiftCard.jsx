@@ -9,7 +9,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import { Avatar, Button, Grid, InputAdornment, MenuItem, Pagination, Select, Stack, TextField } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Grid,
+  InputAdornment,
+  MenuItem,
+  Pagination,
+  Select,
+  Stack,
+  TextField,
+} from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import Link from "next/link";
@@ -29,7 +39,7 @@ function EnhancedTableHead(props) {
             px: "16px",
             fontSize: "12.04px",
             color: "#212121",
-            textAlign: 'left'
+            textAlign: "left",
           },
           ".MuiCheckbox-indeterminate": {
             svg: {
@@ -71,7 +81,6 @@ function EnhancedTableHead(props) {
             {headCell}
           </TableCell>
         ))}
-
       </TableRow>
     </TableHead>
   );
@@ -86,17 +95,20 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function TableItems({
-  dataHead,
-  dataBody,
-  setSelected = false,
-  selected = false,
-  setPage = () => { },
-  setPerPage = () => { },
-  pageData, // اضافه کردن اطلاعات صفحه به props
-  label,
-
-}, props) {
+export default function TableItems(
+  {
+    dataHead,
+    dataBody,
+    setSelected = false,
+    selected = false,
+    setPage = () => {},
+    setPerPage = () => {},
+    pageData, // اضافه کردن اطلاعات صفحه به props
+    label,
+    BackArrowEnabled = true,
+  },
+  props
+) {
   const { page, perPage } = props;
 
   const [order, setOrder] = React.useState("asc");
@@ -107,8 +119,7 @@ export default function TableItems({
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  const listPerPage = [15, 25, 50, 100]
-
+  const listPerPage = [15, 25, 50, 100];
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -153,12 +164,8 @@ export default function TableItems({
     }
   };
 
-
-
-
-
   // Search
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState(dataBody);
   ////////////////////////////////////////////// هر دوش کار میکنه
   // useEffect(() => {
@@ -174,34 +181,52 @@ export default function TableItems({
   //   }
   // }, [searchText, dataBody]);
 
-
   useEffect(() => {
-    if (searchText.trim() === '') {
+    if (searchText.trim() === "") {
       setFilteredData(dataBody);
     } else {
       const lowercaseSearchText = searchText.toLowerCase();
-      const filteredItems = dataBody.filter(row => {
-        const hasTextBold = row.data.some(e => e.type === 'textBold' && typeof e.text === 'string' && e.text.toLowerCase().includes(lowercaseSearchText));
+      const filteredItems = dataBody.filter((row) => {
+        const hasTextBold = row.data.some(
+          (e) =>
+            e.type === "textBold" &&
+            typeof e.text === "string" &&
+            e.text.toLowerCase().includes(lowercaseSearchText)
+        );
         return hasTextBold;
       });
       setFilteredData(filteredItems);
     }
   }, [searchText, dataBody]);
 
-
   return (
     <Box sx={{ width: "100%" }}>
-      <Grid container >
+      <Grid container>
         <Grid item sm={6}>
-          <Typography sx={{ color: '#3C3C3C', fontWeight: 700, my: '15px' }}>
+          <Typography sx={{ color: "#3C3C3C", fontWeight: 700, my: "15px" }}>
             {label}
           </Typography>
         </Grid>
-        <Grid item sm={6} sx={{ display: { xs: 'none', sm: 'flex' }, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <BackArrow />
-        </Grid>
+        {BackArrowEnabled === true && (
+          <Grid
+            item
+            sm={6}
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <BackArrow />
+          </Grid>
+        )}
       </Grid>
-      <Grid sx={{ width: { xs: '100%', sm: '60%', md: '50%', lg: '30%' }, my: '15px' }}>
+      <Grid
+        sx={{
+          width: { xs: "100%", sm: "60%", md: "50%", lg: "30%" },
+          my: "15px",
+        }}
+      >
         <TextField
           size="small"
           placeholder="جستجو محصول مورد نظر"
@@ -212,19 +237,32 @@ export default function TableItems({
           sx={{
             "& input::placeholder": {
               fontSize: 13,
-              // color: "#B0B0B0", 
-            }, mb: 2, backgroundColor: '#EBEBEC', borderRadius: '15px', border: 'none', "& fieldset": { border: 'none' },
+              // color: "#B0B0B0",
+            },
+            mb: 2,
+            backgroundColor: "#EBEBEC",
+            borderRadius: "15px",
+            border: "none",
+            "& fieldset": { border: "none" },
           }}
           InputProps={{
-            startAdornment: <InputAdornment position="start">
-              <Box component={'img'} src="/images/light.svg" />
-            </InputAdornment>,
-
+            startAdornment: (
+              <InputAdornment position="start">
+                <Box component={"img"} src="/images/light.svg" />
+              </InputAdornment>
+            ),
           }}
-
         />
       </Grid>
-      <TableContainer className="container-table table-scroll" sx={{ border: '1px solid #E0E0E0', borderRadius: '15px', py: ' 15px', px: '5px' }}>
+      <TableContainer
+        className="container-table table-scroll"
+        sx={{
+          border: "1px solid #E0E0E0",
+          borderRadius: "15px",
+          py: " 15px",
+          px: "5px",
+        }}
+      >
         <Table
           stickyHeader
           aria-label="sticky table"
@@ -321,9 +359,13 @@ export default function TableItems({
                       </TableCell>
                     )}
                     {row?.data?.map((e, i) => (
-                      <TableCell align="center" sx={{
-                        textAlign: 'left'
-                      }} key={i}>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          textAlign: "left",
+                        }}
+                        key={i}
+                      >
                         {!e?.type && e}
                         {e?.type === "avatar" && (
                           <Box className="center">
@@ -346,12 +388,21 @@ export default function TableItems({
                         )}
                         {e?.type === "textBold" && (
                           <>
-                            <Typography variant="p" sx={{ fontWeight: 600, fontSize: "15px" }}> {e?.text}</Typography>
+                            <Typography
+                              variant="p"
+                              sx={{ fontWeight: 600, fontSize: "15px" }}
+                            >
+                              {" "}
+                              {e?.text}
+                            </Typography>
                           </>
                         )}
                         {e?.type === "text" && (
                           <>
-                            <Typography variant="p" sx={{}}> {e?.text}</Typography>
+                            <Typography variant="p" sx={{}}>
+                              {" "}
+                              {e?.text}
+                            </Typography>
                           </>
                         )}
 
@@ -362,7 +413,9 @@ export default function TableItems({
                         )}
                         {e?.type === "btn" && (
                           <>
-                            <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <Grid
+                              sx={{ display: "flex", justifyContent: "center" }}
+                            >
                               {/* <AddProductFeatureNew tableIdi={row.data[0]} /> */}
                               {/* <Button
                                 onClick={(x) => console.log(row.data[0])}
@@ -371,8 +424,21 @@ export default function TableItems({
                                 sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px", mr: "10px" }}>
 
                               </Button> */}
-                              <Button sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
-                                <Link href={'/panel/admin/CreateProduct'} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
+                              <Button
+                                sx={{
+                                  backgroundColor: "#1C49F11A",
+                                  color: "#1C49F1",
+                                  borderRadius: "5px",
+                                }}
+                              >
+                                <Link
+                                  href={"/panel/admin/CreateProduct"}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    color: "#1C49F1",
+                                  }}
+                                >
                                   <EyesIcon />
                                   <Typography>مشاهده و ویرایش</Typography>
                                 </Link>
@@ -380,7 +446,6 @@ export default function TableItems({
                             </Grid>
                           </>
                         )}
-
 
                         {/* {e?.type === "jsx" && e?.jsx} */}
                         {/* M */}
@@ -416,7 +481,11 @@ export default function TableItems({
           spacing={5}
           display="flex"
           alignItems="center"
-          sx={{ mt: 2, flexDirection: { xs: "row", sm: 'row', }, justifyContent: { xs: 'space-between', sm: 'center' } }}
+          sx={{
+            mt: 2,
+            flexDirection: { xs: "row", sm: "row" },
+            justifyContent: { xs: "space-between", sm: "center" },
+          }}
         >
           <Grid item>
             <Stack spacing={2}>
@@ -444,9 +513,9 @@ export default function TableItems({
               size="small"
               value={perPage}
               onChange={(e) => setPerPage(e.target.value)}
-              sx={{ width: { xs: '100%', sm: "80%", md: '100%' } }}
+              sx={{ width: { xs: "100%", sm: "80%", md: "100%" } }}
               defaultValue={15}
-            // onOpen={() => setCountTwo(countTwo + 1)}
+              // onOpen={() => setCountTwo(countTwo + 1)}
             >
               {Array.isArray(listPerPage) ? (
                 listPerPage.map((data, index) => (
@@ -455,15 +524,12 @@ export default function TableItems({
                   </MenuItem>
                 ))
               ) : (
-                <MenuItem value={null}>
-                  Loading...
-                </MenuItem>
+                <MenuItem value={null}>Loading...</MenuItem>
               )}
             </Select>
           </Grid>
         </Grid>
       )}
-
     </Box>
   );
 }
