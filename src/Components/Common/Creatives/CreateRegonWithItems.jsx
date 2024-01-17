@@ -18,7 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import StandardImageList from "../Images";
 import GetToken from "GetToken";
 
-const CreateRegion = ({ onUpdate = () => {} }) => {
+const CreateRegonWithItems = ({ onUpdate = () => {} }) => {
   const [open, setOpen] = useState(false);
   const [region, setRegion] = useState("");
   const [requestError, setRequestError] = useState(null);
@@ -211,4 +211,4 @@ const CreateRegion = ({ onUpdate = () => {} }) => {
   );
 };
 
-export default CreateRegion;
+export default CreateRegonWithItems;

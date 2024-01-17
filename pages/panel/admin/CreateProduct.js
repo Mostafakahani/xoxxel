@@ -19,13 +19,14 @@ import GetToken from "GetToken";
 import CreateOptionFeature from "Components/Common/Creatives/CreateOptionFeature";
 import { useRouter } from "next/router";
 const CreateProduct = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [productName, setProductName] = useState("");
   // const [productPrice, setProductPrice] = useState("");
   // const [starRating, setStarRating] = useState("");
   const [labelInput, setLabelInput] = useState("");
   const [placeholder, setPlaceholder] = useState("");
   const [textArea, setTextArea] = useState("");
+  const [description, setDescription] = useState("");
   const [selectedFileItem, setSelectedFileItem] = useState({});
   const [selectedFileItem2, setSelectedFileItem2] = useState({});
   const [selectedFileItem3, setSelectedFileItem3] = useState({});
@@ -48,12 +49,18 @@ const CreateProduct = () => {
   // }
   useEffect(() => {
     async function fetchData() {
-      const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
       const responseCategory = await axios.get(
-        `${ServerURL.url}/admin/cat/get-all-cat-without-pagination`,
+        `${ServerURL.url}/admin/cat/get-all-cat`,
         config
       );
-      setCategory(responseCategory.data);
+      setCategory(responseCategory); //  || .data
     }
     fetchData();
   }, [countTwo]);
@@ -66,7 +73,9 @@ const CreateProduct = () => {
     setAddingFeature(true);
     const config = {
       headers: {
-        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+        Authorization: `${
+          ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+        }`,
       },
     };
     try {
@@ -79,6 +88,7 @@ const CreateProduct = () => {
         placeholder: placeholder,
         lable_input: labelInput,
         description_input: textArea,
+        description: description,
         ids_feature: checkBoxList.map((x) => x),
       };
       const uploadResponse = await axios.post(
@@ -88,35 +98,35 @@ const CreateProduct = () => {
       );
       if (uploadResponse.status === 201) {
         toast.success("با موفقیت ساخته شد.");
-        handleRemoveFields()
-        router.push(`panel/admin/products/edit/${uploadResponse.id}`)
+        handleRemoveFields();
+        router.push(`panel/admin/products/edit/${uploadResponse.id}`);
         // window.location.href = "../admin/products";
       } else {
         toast.error("لطفا دوباره امتحان کنید");
       }
     } catch (error) {
       console.error("خطا: ", error);
-      setRequestError("خطا در ارسال درخواست به سرور");
+      toast.error("خطا در ارسال درخواست به سرور");
     } finally {
       setAddingFeature(false);
     }
   };
   const handleRemoveFields = () => {
     // router.push('/panel/admin/products')
-    setProductName('')
-    setLabelInput('')
-    setPlaceholder('')
-    setTextArea('')
-    setSelectedFileItem([])
-    setSelectedFileItem2([])
-    setSelectedFileItem3([])
-    setAddingFeature(false)
-    setOpenThis(false)
-    setCategory([])
-    setCountTwo(0)
-    setSelectedCategory('')
-    setResponseId(0)
-  }
+    setProductName("");
+    setLabelInput("");
+    setPlaceholder("");
+    setTextArea("");
+    setSelectedFileItem([]);
+    setSelectedFileItem2([]);
+    setSelectedFileItem3([]);
+    setAddingFeature(false);
+    setOpenThis(false);
+    setCategory([]);
+    setCountTwo(0);
+    setSelectedCategory("");
+    setResponseId(0);
+  };
 
   return (
     <>
@@ -222,7 +232,6 @@ const CreateProduct = () => {
                 console.log(e);
               }}
             />
-
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <StandardImageList
@@ -232,7 +241,6 @@ const CreateProduct = () => {
                 console.log(e);
               }}
             />
-
           </Grid>
         </Grid>
 
@@ -272,6 +280,20 @@ const CreateProduct = () => {
             />
           </Grid>
         </Grid>
+        <Grid container sx={{ my: "20px" }}>
+          <Grid xs={12} sm={4} md={12}>
+            <TextField
+              size="small"
+              fullWidth
+              multiline
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+              label="description"
+              variant="outlined"
+              sx={{ my: "5px" }}
+            />
+          </Grid>
+        </Grid>
 
         {/* <Grid container>
           <CheckboxesTags
@@ -305,13 +327,18 @@ const CreateProduct = () => {
                   productName === "" ||
                   selectedCategory === "" ||
                   // checkBoxList.length === 0 ||
-                  textArea === '' ||
-                  labelInput === '' ||
-                  placeholder === ''
+                  textArea === "" ||
+                  labelInput === "" ||
+                  placeholder === "" ||
+                  description === ""
                 }
                 onClick={handleSubmit}
               >
-                {addingFeature ? <CircularProgress size={24} /> : "ذخیره تغییرات"}
+                {addingFeature ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  "ذخیره تغییرات"
+                )}
               </Button>
             </Grid>
             <Grid item>
@@ -319,7 +346,7 @@ const CreateProduct = () => {
                 variant="outlined"
                 color="error"
                 onClick={() => {
-                  console.log(checkBoxList)
+                  console.log(checkBoxList);
                   // window.location.href = "../admin/products";
                 }}
               >
@@ -334,7 +361,6 @@ const CreateProduct = () => {
               >اضافه کردن ویژگی جدید</Button>
             </Grid> */}
           </Grid>
-
         </Grid>
       </AccountLayout>
     </>

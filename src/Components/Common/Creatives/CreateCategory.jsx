@@ -123,7 +123,7 @@ const CreateCategory = ({ dataBody, country, countryId, productId }) => {
   };
 
   return (
-    <Grid container>
+    <Grid>
       <Button
         sx={{
           fontSize: "12px",

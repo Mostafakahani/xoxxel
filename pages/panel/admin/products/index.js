@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import { AddProductIcon, IconProduct, IconTickets } from "Icons/icons";
 import Link from "next/link";
-import CreateRegon from "Components/Common/Creatives/CreateRegon";
+import CreateRegonWithItems from "Components/Common/Creatives/CreateRegonWithItems";
 import CreateCategory from "Components/Common/Creatives/CreateCategory";
 import CreateType from "Components/Common/Creatives/CreateType";
 import EditOptionsDes from "Components/Common/Creatives/EditOptions/EditOptionsDes";
@@ -159,7 +159,7 @@ const Products = () => {
               }}
             >
               <CreateOptionFeature />
-              <CreateRegon />
+              <CreateRegonWithItems />
               <CreateCategory />
               <CreateType />
               <EditOptionsDes />
