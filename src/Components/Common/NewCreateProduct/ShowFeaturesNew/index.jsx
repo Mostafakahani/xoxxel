@@ -13,6 +13,7 @@ import {
   TableContainer,
   Table,
   CircularProgress,
+  Box,
 } from "@mui/material";
 import { IconToggle } from "Icons/icons";
 import GetToken from "GetToken";
@@ -27,9 +28,11 @@ const MyAccordion = ({
   dataBody,
   features,
   productId,
+  setSelectedRows,
+  selectedRows,
+  baseStorage,
 }) => {
   // console.log(category)
-  const [selectedRows, setSelectedRows] = useState([]);
 
   const [openCreateFeature, setOpenCreateFeature] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -37,35 +40,33 @@ const MyAccordion = ({
   const [AllCat, setAllCat] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const handleGetCategory = async (e) => {
-      setIsLoading(true);
-      try {
-        const config = {
-          headers: {
-            Authorization: `${
-              ServerURL.developerMode === true
-                ? ServerURL.Bear
-                : GetToken("user")
-            }`,
-          },
-        };
+    setIsLoading(true);
+    try {
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
 
-        const response = await axios.get(
-          `${ServerURL.url}/admin/cat/get-all-cat-without-pagination/${productId}/${e}`,
-          config
-        );
-        const dataResponse = response.data;
+      const response = await axios.get(
+        `${ServerURL.url}/admin/cat/get-all-cat-without-pagination/${productId}/${e}`,
+        config
+      );
+      const dataResponse = response.data;
 
-        if (dataResponse) {
-          if (dataResponse.length !== 0) {
-          }
-          setAllCat(dataResponse);
-          console.log(dataResponse);
+      if (dataResponse) {
+        if (dataResponse.length !== 0) {
         }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
+        setAllCat(dataResponse);
+        console.log(dataResponse);
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   const fetchDataFeature = async (e) => {
     setIsLoading(true);
@@ -158,15 +159,31 @@ const MyAccordion = ({
                   ))}
                 </Grid>
 
-                <Grid item>
+                {/* <Grid item>
                   <Typography variant="span">
                     Available{" "}
                     {Array.isArray(features?.items) ? features.items.length : 0}{" "}
                     features
                   </Typography>
+                </Grid> */}
+
+                <Grid item>
+                  <Typography
+                    onClick={() =>
+                      console.log(`${baseStorage}/${features?.img?.name}`)
+                    }
+                    variant="h6"
+                  >
+                    {features?.country}
+                  </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography variant="h6">{features?.country}</Typography>
+                  <Box
+                    component={"img"}
+                    width={30}
+                    sx={{ borderRadius: 2 }}
+                    src={`${baseStorage}/${features?.img?.name}`}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -294,9 +311,6 @@ const MyAccordion = ({
                 </Grid>
               ))}
             </Grid>
-            <Button onClick={() => console.log(selectedRows)}>
-              selectedRows
-            </Button>
           </AccordionDetails>
         </Accordion>
       </Grid>

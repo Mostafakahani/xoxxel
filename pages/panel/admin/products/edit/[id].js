@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import Card from "../../../../../src/Components/Common/NewCreateProduct/Card";
 import LablesInputs from "Components/Common/NewCreateProduct/LabelInputs";
 import SeoTools from "Components/Common/NewCreateProduct/SEOTools";
@@ -19,6 +13,7 @@ import CreateOptionFeature from "Components/Common/Creatives/CreateOptionFeature
 import ButtonImage from "Components/Common/Images/ButtonImage";
 import MyAccordion from "Components/Common/NewCreateProduct/ShowFeaturesNew";
 import CreateRegion from "Components/Common/Creatives/CreateRegon";
+import { ToastContainer, toast } from "react-toastify";
 
 function CreateProduct() {
   const [product, setProduct] = useState({
@@ -26,6 +21,7 @@ function CreateProduct() {
     input_lable: null,
     placeholder_input: null,
     description: null,
+    description_input: null,
     alt_image_main: null,
     alt_image_trends: null,
     alt_image_square: null,
@@ -45,6 +41,7 @@ function CreateProduct() {
   const [openThis, setOpenThis] = useState(false);
   const [category, setCategory] = useState([]);
   const [count, setCount] = useState(0);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const [giveId, setGiveId] = useState(null);
   const [featureData, setFeatureData] = useState([]);
@@ -61,6 +58,7 @@ function CreateProduct() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const router = useRouter();
   const { id } = router.query;
+  const baseStorage = "https://xoxxel.storage.iran.liara.space/";
 
   //Products
 
@@ -99,8 +97,6 @@ function CreateProduct() {
         };
 
         setPageDataAll(updatedPageData);
-        console.log(response.data.data?.map((x) => x.features));
-
         const apiData = response.data.data;
         const updatedRegionData = apiData.map((item) => {
           return {
@@ -138,6 +134,7 @@ function CreateProduct() {
         return {
           id: item.id,
           country: item.title,
+          img: item.id_storage,
           items: [
             {
               title: categoryTitles,
@@ -211,6 +208,10 @@ function CreateProduct() {
             seo_link: dataResponse?.seo_link,
             // features: dataResponse.features?.map((feature) => feature.id) || [],
           }));
+          setSelectedRows(
+            dataResponse.features?.map((feature) => feature.id) || []
+          );
+
           // setCheckBoxList(dataResponse?.features?.map((x) => x.id));
         }
       }
@@ -287,7 +288,59 @@ function CreateProduct() {
     getFeatures();
   }, [giveId]);
 
-  const baseStorage = "https://xoxxel.storage.iran.liara.space/";
+  // update product
+  const handleSubmit = async () => {
+    setLoading(true);
+
+    const config = {
+      headers: {
+        Authorization: `${
+          ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+        }`,
+      },
+    };
+
+    try {
+      const dataBody = {
+        name: product.title,
+        lable_input: product.input_lable,
+        placeholder: product.placeholder_input,
+        description: product.description,
+        description_input: product.description_input,
+        id_type: product.id_type,
+        id_image_square: product.image_square.id.id,
+        id_image_trends: product.image_trend.id.id,
+        id_image_main: product.image_main.id.id,
+        alt_image_main: product.alt_image_main,
+        alt_image_trends: product.alt_image_trends,
+        alt_image_square: product.alt_image_square,
+        seo_title: product.seo_title,
+        seo_description: product.seo_description,
+        seo_link: product.seo_link,
+        ids_feature: selectedRows,
+      };
+      // console.log(dataBody);
+
+      const uploadResponse = await axios.post(
+        `${ServerURL.url}/admin/product/${id}/update`,
+        dataBody,
+        config
+      );
+
+      if (uploadResponse.status === 201) {
+        toast.success("با موفقیت ویرایش شد.");
+        fetchData();
+        // router.back();
+      } else {
+        toast.error("لطفا دوباره امتحان کنید");
+      }
+    } catch (error) {
+      toast.error("لطفا دوباره امتحان کنید");
+      console.error("خطا: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (id === undefined || id === null) {
     return <h3>Loading...</h3>;
@@ -296,6 +349,7 @@ function CreateProduct() {
   return (
     <>
       <AccountLayout>
+        <ToastContainer />
         <Grid container rowSpacing={5}>
           <Grid container item>
             <Typography>ویرایش محصول</Typography>
@@ -344,6 +398,15 @@ function CreateProduct() {
                   },
                 }))
               }
+              onChange={(e) =>
+                setProduct((prevProduct) => ({
+                  ...prevProduct,
+                  image_main: {
+                    ...prevProduct.image_main,
+                    id: { ...prevProduct.image_main.id, id: e },
+                  },
+                }))
+              }
             />
 
             <Card
@@ -373,6 +436,15 @@ function CreateProduct() {
                   image_trend: {
                     ...prevProduct.image_trend,
                     id: { ...prevProduct.image_trend.id, name: e },
+                  },
+                }))
+              }
+              onChange={(e) =>
+                setProduct((prevProduct) => ({
+                  ...prevProduct,
+                  image_trend: {
+                    ...prevProduct.image_trend,
+                    id: { ...prevProduct.image_trend.id, id: e },
                   },
                 }))
               }
@@ -409,6 +481,15 @@ function CreateProduct() {
                 },
               }))
             }
+            onChange={(e) =>
+              setProduct((prevProduct) => ({
+                ...prevProduct,
+                image_square: {
+                  ...prevProduct.image_square,
+                  id: { ...prevProduct.image_square.id, id: e },
+                },
+              }))
+            }
           />
 
           <Grid item container columnSpacing={5} rowSpacing={2}>
@@ -439,6 +520,17 @@ function CreateProduct() {
                 setProduct((prevProduct) => ({
                   ...prevProduct,
                   description: e,
+                }))
+              }
+            />
+            <LablesInputs
+              isFullWidth={true}
+              value={product.description_input}
+              label={"Description Input"}
+              changeInput={(e) =>
+                setProduct((prevProduct) => ({
+                  ...prevProduct,
+                  description_input: e,
                 }))
               }
             />
@@ -574,19 +666,19 @@ function CreateProduct() {
                   perPage={pageDataAll.perPage}
                   country={country}
                   productId={id}
+                  selectedRows={selectedRows}
+                  setSelectedRows={setSelectedRows}
+                  baseStorage={baseStorage}
                 />
               </Grid>
             ))}
           </Grid>
 
-          <Grid item container>
+          <Grid item container columnSpacing={2}>
             <Grid item>
               <Button
-                sx={{
-                  textTransform: "none",
-                  color: "#fff",
-                  backgroundColor: "#19B13A",
-                }}
+                variant="contained"
+                onClick={handleSubmit}
                 endIcon={<Add />}
               >
                 Add Product
@@ -596,11 +688,22 @@ function CreateProduct() {
               <Button
                 variant="outlined"
                 color="inherit"
+                onClick={() =>
+                  router.back() || router.push("/panel/admin/products")
+                }
+              >
+                برگشت
+              </Button>
+            </Grid>
+            {/* <Grid item>
+              <Button
+                variant="outlined"
+                color="inherit"
                 onClick={() => setOpenThis(true)}
               >
                 اضافه کردن ویژگی جدید
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </AccountLayout>
