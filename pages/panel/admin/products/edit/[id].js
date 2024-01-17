@@ -26,6 +26,7 @@ import SelectCategory from "Components/Common/NewCreateProduct/SelectCategory";
 import ButtonImage from "Components/Common/Images/ButtonImage";
 import ShowFeaturesNew from "Components/Common/NewCreateProduct/ShowFeaturesNew";
 import MyAccordion from "Components/Common/NewCreateProduct/ShowFeaturesNew";
+import CreateRegion from "Components/Common/Creatives/CreateRegon";
 
 function CreateProduct() {
   const [product, setProduct] = useState({
@@ -48,6 +49,7 @@ function CreateProduct() {
   const [openDialogImage, setOpenDialogImage] = useState(false);
   const [openDialogImage2, setOpenDialogImage2] = useState(false);
   const [openDialogImage3, setOpenDialogImage3] = useState(false);
+  const [countryName, setCountryName] = useState("");
 
   const [handleLoadFeatures, setHandleLoadFeatures] = useState(null);
   const [openThis, setOpenThis] = useState(false);
@@ -71,32 +73,70 @@ function CreateProduct() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const router = useRouter();
   const { id } = router.query;
+  // features
+  const [features, setFeatures] = useState([
+    // {
+    //   country: "Iraq",
+    //   items: [
+    //     {
+    //       title: "Premium Service",
+    //       features: [
+    //         {
+    //           id: 1,
+    //           name: "1 Month",
+    //           status: "Not Active",
+    //           state: "Auto",
+    //           date: "2023-05-21",
+    //           price: "$100.05",
+    //         },
+    //         {
+    //           id: 2,
+    //           name: "2 Month",
+    //           status: "Not Active",
+    //           state: "Auto",
+    //           date: "2024-05-21",
+    //           price: "$100.05",
+    //         },
+    //         {
+    //           id: 3,
+    //           name: "2 Month",
+    //           status: "Not Active",
+    //           state: "Auto",
+    //           date: "2024-05-21",
+    //           price: "$100.05",
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
+    // Add more groups as needed
+  ]);
+  const featureDataUpdate = async () => {
+    if (country && country.data && selectedShowBadgeCategory && featureData) {
+      const updatedRegionData = country.data.map((item) => {
+        const categoryTitles = selectedShowBadgeCategory.map((x) => x.title);
+
+        return {
+          id: item.id,
+          country: item.title,
+          items: [
+            {
+              title: categoryTitles,
+              features: {},
+            },
+          ],
+        };
+      });
+
+      setFeatures(updatedRegionData);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const config = {
-        headers: {
-          Authorization: `${
-            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
-          }`,
-        },
-      };
+    featureDataUpdate();
+  }, [country, selectedShowBadgeCategory, featureData, id]);
 
-      try {
-        const response = await axios.get(
-          `${ServerURL.url}/admin/feature/get-all-feature-without-pagination/${giveId}`,
-          config
-        );
-
-        const pageData = response.data;
-        setFeatureData(pageData);
-      } catch (error) {
-        console.error("Error fetching data from the server:", error);
-      }
-    };
-    // };
-
-    fetchData();
-  }, [giveId]);
+  // features end
 
   useEffect(() => {
     async function fetchData() {
@@ -150,9 +190,9 @@ function CreateProduct() {
             seo_title: dataResponse?.seo_title,
             seo_description: dataResponse?.seo_description,
             seo_link: dataResponse?.seo_link,
-            features: dataResponse.features?.map((feature) => feature.id) || [],
+            // features: dataResponse.features?.map((feature) => feature.id) || [],
           }));
-          setCheckBoxList(dataResponse?.features?.map((x) => x.id));
+          // setCheckBoxList(dataResponse?.features?.map((x) => x.id));
         }
       }
     } catch (error) {
@@ -203,20 +243,52 @@ function CreateProduct() {
     }
   };
   async function getFeatures() {
-    const config = {
-      headers: {
-        Authorization: `${
-          ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
-        }`,
-      },
-    };
-    const responseCategory = await axios.get(
-      `${ServerURL.url}/admin/feature/get-all-feature-without-pagination/${selectedCategoryForShowFeatures}`,
-      config
-    );
-    setSelectedCategoryForShowFeatures(responseCategory.data);
-    // setCount(count + 1)
+    if (giveId !== null) {
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
+
+      try {
+        const responseFeature = await axios.get(
+          `${ServerURL.url}/admin/feature/get-all-feature-without-pagination/${giveId}`,
+          config
+        );
+        setFeatureData(responseFeature.data);
+      } catch (error) {
+        console.error("Error fetching feature data from the server:", error);
+      }
+    }
   }
+  const handleCreateCountry = async () => {
+    if (countryName !== "") {
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
+
+      try {
+        const responseFeature = await axios.get(
+          `${ServerURL.url}/admin/feature/get-all-feature-without-pagination/${giveId}`,
+          config
+        );
+        setFeatureData(responseFeature.data);
+      } catch (error) {
+        console.error("Error fetching feature data from the server:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getFeatures();
+  }, [giveId]);
+
   const baseStorage = "https://xoxxel.storage.iran.liara.space/";
 
   if (id === undefined || id === null) {
@@ -516,20 +588,33 @@ function CreateProduct() {
             />
           </Grid>
           <Grid container item>
-            <MyAccordion
-              id={id}
-              country={country.data}
-              selectedCountry={selectedCountry}
-              value={featureData}
-              //   checkBoxList={checkBoxList}
-              //   featureData={featureData}
-              //   setValue={(e) => handleSetValue(e)}
-              handleLoadFeatures={(e) => {
-                setHandleLoadFeatures(e);
-                handleSetValue(e);
-              }}
-              setID={(e) => setGiveId(e)}
-            />
+            <Grid item>
+              <CreateRegion />
+              {/* <Button onClick={handleCreateCountry}>Create Country</Button> */}
+            </Grid>
+          </Grid>
+          <Grid container item>
+            {features.map((x, index) => (
+              <Grid container item key={index}>
+                <MyAccordion
+                  features={x}
+                  category={selectedShowBadgeCategory}
+                  // id={id}
+                  // country={country.data}
+                  // selectedCountry={selectedCountry}
+                  // value={featureData}
+                  // handleLoadFeatures={(e) => {
+                  //   setHandleLoadFeatures(e);
+                  //   handleSetValue(e);
+                  // }}
+                  // setID={(e) => setGiveId(e)}
+                  // updateFeatures={(updatedFeatures) =>
+                  //   setFeatures(updatedFeatures)
+                  // }
+                  // setFeatures={(e) => setFeatures(e)}
+                />
+              </Grid>
+            ))}
           </Grid>
 
           <Grid item container>

@@ -91,7 +91,7 @@ const CreateRegion = () => {
   };
 
   return (
-    <Grid>
+    <Grid container>
       <Button
         sx={{
           fontSize: "12px",
@@ -127,7 +127,7 @@ const CreateRegion = () => {
             ایجاد ریجن
           </Typography>
           <Grid container>
-            <Grid xs={12} md={6}>
+            <Grid item xs={12} md={6}>
               <TextField
                 error={!!requestError}
                 helperText={requestError}
@@ -144,7 +144,7 @@ const CreateRegion = () => {
                 }}
               />
             </Grid>
-            <Grid xs={12} md={12}>
+            <Grid item xs={12} md={12}>
               {/* <UploadFile
                                 id={"file1"}
                                 accept="image/png, image/jpg, image/jpeg"
@@ -166,7 +166,7 @@ const CreateRegion = () => {
 
           <Grid container>
             {region !== "" && selectedFileItem.length !== 0 && (
-              <Grid xs={6} sm={3} md={3}>
+              <Grid item xs={6} sm={3} md={3}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -187,7 +187,7 @@ const CreateRegion = () => {
                 </Button>
               </Grid>
             )}
-            <Grid xs={6} sm={3} md={3}>
+            <Grid item xs={6} sm={3} md={3}>
               <Button
                 variant="outlined"
                 color="primary"

@@ -19,13 +19,22 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import GetToken from "GetToken";
 
-export default function StandardImageList({ onChange = () => { }, imageUrlLink = () => { }, label, disableStatus, justIcon, idStorage }) {
+export default function StandardImageList({
+  onChange = () => {},
+  imageUrlLink = () => {},
+  label,
+  disableStatus,
+  justIcon,
+  idStorage,
+}) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [gallery, setGallery] = useState(data);
   const [openAddPhoto, setOpenAddPhoto] = useState(false);
   const [selectedFileItem, setSelectedFileItem] = useState({});
-  const [selectedImageId, setSelectedImageId] = useState(idStorage ? idStorage : null);
+  const [selectedImageId, setSelectedImageId] = useState(
+    idStorage ? idStorage : null
+  );
   const [addingFeature, setAddingFeature] = useState(false);
   const [count, setCount] = useState(0);
   const [requestError, setRequestError] = useState(null);
@@ -50,7 +59,13 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
   const handleSubmit = async () => {
     setAddingFeature(true);
     setRequestError("");
-    const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+    const config = {
+      headers: {
+        Authorization: `${
+          ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+        }`,
+      },
+    };
     if (selectedFileItem && selectedFileItem.file) {
       try {
         const formData = new FormData();
@@ -60,9 +75,10 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
         formData.append("file", selectedFileItem.file);
 
         const uploadResponse = await axios.post(
-          `${selectedFileItem?.fileResDetails?.url
-            ? selectedFileItem?.fileResDetails?.url
-            : "https://xoxxel.storage.iran.liara.space/"
+          `${
+            selectedFileItem?.fileResDetails?.url
+              ? selectedFileItem?.fileResDetails?.url
+              : "https://xoxxel.storage.iran.liara.space/"
           }`,
           formData,
           {
@@ -99,7 +115,8 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
 
   const scrollContainerRef = useRef();
   const handleScroll = async () => {
-    const { scrollTop, clientHeight, scrollHeight } = scrollContainerRef.current;
+    const { scrollTop, clientHeight, scrollHeight } =
+      scrollContainerRef.current;
     if (scrollTop + clientHeight >= scrollHeight) {
       setPage((prevPage) => prevPage + 1);
     }
@@ -109,12 +126,25 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
     let isCancelled = false;
     async function fetchData() {
       try {
-        const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
-        const response = await axios.get(`${ServerURL.url}/admin/storage/get-all-files?page=${page}&perPage=${perPage}`, config);
+        const config = {
+          headers: {
+            Authorization: `${
+              ServerURL.developerMode === true
+                ? ServerURL.Bear
+                : GetToken("user")
+            }`,
+          },
+        };
+        const response = await axios.get(
+          `${ServerURL.url}/admin/storage/get-all-files?page=${page}&perPage=${perPage}`,
+          config
+        );
 
         if (!isCancelled) {
           setData((prevData) => {
-            const newData = response.data.data.filter(newItem => !prevData.some(item => item.id === newItem.id));
+            const newData = response.data.data.filter(
+              (newItem) => !prevData.some((item) => item.id === newItem.id)
+            );
             return [...prevData, ...newData];
           });
         }
@@ -132,8 +162,6 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
       isCancelled = true;
     };
   }, [page, perPage]);
-
-
 
   const handleDelete = (title) => {
     const updatedGallery = gallery.filter((item) => item.title !== title);
@@ -153,6 +181,7 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
   return (
     <>
       <Grid
+        container
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -170,22 +199,16 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
           }}
           disabled={disableStatus ? true : false}
         >
-          {
-            justIcon ? (
-              <>
-                {justIcon}
-              </>
-            ) : (
-              <>
-                {idStorage ? "فایل انتخاب شده" : "انتخاب فایل"}
-              </>
-            )
-          }
+          {justIcon ? (
+            <>{justIcon}</>
+          ) : (
+            <>{idStorage ? "فایل انتخاب شده" : "انتخاب فایل"}</>
+          )}
           {/* انتخاب فایل */}
         </Button>
-      </Grid >
+      </Grid>
       <Dialog open={open} onClose={handleClosePanel} fullWidth maxWidth="lg">
-        <Grid sx={{ p: "15px" }}>
+        <Grid item sx={{ p: "15px" }}>
           <ImageList
             ref={scrollContainerRef}
             onScroll={handleScroll}
@@ -205,13 +228,15 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
                   style={{
                     cursor: "pointer",
                     border:
-                      idStorage === x.id || selectedImageId === x.id ? "2px solid #1c49f1" : "none",
+                      idStorage === x.id || selectedImageId === x.id
+                        ? "2px solid #1c49f1"
+                        : "none",
                     borderRadius: "5px",
                   }}
                   onClick={() => {
                     handleImageClick(x.id);
                     setImageId(x.id);
-                    setImageUrl(x.url)
+                    setImageUrl(x.url);
                   }}
                 />
               </ImageListItem>
@@ -220,7 +245,7 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
             {scrollStatus ? <CircularProgress size={24} /> : ""}
           </ImageList>
           <Grid container>
-            <Grid xs={6} md={2}>
+            <Grid item xs={6} md={2}>
               <Button
                 variant="contained"
                 color="primary"
@@ -235,7 +260,7 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
                 انتخاب عکس
               </Button>
             </Grid>
-            <Grid xs={6} md={2}>
+            <Grid item xs={6} md={2}>
               <Button
                 variant="outlined"
                 color="primary"
@@ -255,7 +280,7 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
           onClose={handleClosePanel2}
         >
           <Grid container sx={{ p: "15px" }}>
-            <Grid>
+            <Grid item>
               <Typography
                 variant="body2"
                 sx={{ fontSize: { xs: "14px", md: "16px" } }}
@@ -282,7 +307,7 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
             </Typography>
 
             <Grid container>
-              <Grid xs={6} md={2}>
+              <Grid item xs={6} md={2}>
                 <Button
                   onClick={() => {
                     handleSubmit();
@@ -293,7 +318,7 @@ export default function StandardImageList({ onChange = () => { }, imageUrlLink =
                   {addingFeature ? <CircularProgress size={24} /> : "آپلود عکس"}
                 </Button>
               </Grid>
-              <Grid xs={6} md={2}>
+              <Grid item xs={6} md={2}>
                 <Button onClick={() => setOpenAddPhoto(false)} color="primary">
                   برگشت
                 </Button>

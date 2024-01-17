@@ -20,6 +20,8 @@ import GetToken from "GetToken";
 const CreateCategory = () => {
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState("");
+  const [idProduct, setIdProduct] = useState(null);
+  const [idCountry, setIdCountry] = useState(null);
   const [requestError, setRequestError] = useState(null);
   const [addingFeature, setAddingFeature] = useState(false);
 
@@ -28,17 +30,22 @@ const CreateCategory = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(category)
-    if (category !== "") {
+    if ((category !== "") & (idProduct !== null) & (idCountry !== null)) {
       setAddingFeature(true);
       try {
         const config = {
           headers: {
-            Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+            Authorization: `${
+              ServerURL.developerMode === true
+                ? ServerURL.Bear
+                : GetToken("user")
+            }`,
           },
         };
         const data = {
           title: category,
+          id_prouduct: idProduct,
+          id_country: idCountry,
         };
 
         const response = await axios.post(
@@ -54,7 +61,7 @@ const CreateCategory = () => {
           toast.success("با موفقیت ساخته شد.");
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
         // console.log(error.response.data.message)
         if (
           error.response.data.message[0] ===
@@ -92,7 +99,7 @@ const CreateCategory = () => {
   };
 
   return (
-    <Grid>
+    <Grid container>
       <Button
         sx={{
           fontSize: "12px",
@@ -133,13 +140,13 @@ const CreateCategory = () => {
         <DialogContent
         // sx={{ px: "50px", py: "30px" }}
         >
-          <Grid container>
+          <Grid container item>
             <Typography align="left" sx={{ my: " 15px" }}>
               ایجاد دسته
             </Typography>
-            <Grid xs={12} md={12}>
+            <Grid item xs={12} md={12}>
               <TextField
-                error={requestError}
+                error={!!requestError} // Convert string to boolean
                 helperText={requestError}
                 onChange={(e) => {
                   setCategory(e.target.value);
@@ -155,17 +162,19 @@ const CreateCategory = () => {
               />
             </Grid>
           </Grid>
-          <Grid container>
+          <Grid item container>
             {category !== "" && (
-              <Grid xs={6} sm={3} md={3}>
+              <Grid item xs={6} sm={3} md={3}>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => {
+                  onClick={async () => {
                     setAddingFeature(true);
-                    handleSubmit().finally(() => {
+                    try {
+                      await handleSubmit();
+                    } finally {
                       setAddingFeature(false);
-                    });
+                    }
                   }}
                   sx={{ fontSize: { xs: "14px" }, marginTop: "20px" }}
                   disabled={addingFeature}
@@ -178,7 +187,7 @@ const CreateCategory = () => {
                 </Button>
               </Grid>
             )}
-            <Grid xs={6} sm={3} md={3}>
+            <Grid item xs={6} sm={3} md={3}>
               <Button
                 variant="outlined"
                 color="primary"
