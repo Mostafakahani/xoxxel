@@ -426,7 +426,7 @@ export default function TableItems({
                                   مشاهده و ویرایش
                                 </Link>
                               </Button> */}
-                                <Link href={`/panel/admin/products/${row?.id}`} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
+                                <Link href={`/panel/admin/products/edit/${row?.id}`} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
                                   <Button startIcon={<EyesIcon />} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
                                     مشاهده و ویرایش
                                   </Button>
