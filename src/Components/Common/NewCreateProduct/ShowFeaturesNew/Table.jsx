@@ -20,6 +20,7 @@ function TableItems({
   setIsDialogOpen,
   selectedRows,
   setSelectedRows,
+  item,
 }) {
   const handleCheckboxChange = (id) => {
     setSelectedRows((prevSelectedRows) => {
@@ -32,13 +33,11 @@ function TableItems({
   };
 
   const openDialog = (id) => {
-    setSelectedRowId(id);
     setIsDialogOpen(true);
-    console.log("openDialog");
+    console.log(item);
   };
 
   const closeDialog = () => {
-    setSelectedRowId(null);
     setIsDialogOpen(false);
   };
 
@@ -46,7 +45,12 @@ function TableItems({
     <TableBody>
       <TableRow>
         <TableCell>
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              openDialog();
+              // console.log(item);
+            }}
+          >
             <IconB />
           </IconButton>
         </TableCell>
@@ -90,25 +94,9 @@ function TableItems({
           }}
         >
           {feature.name}
-          <SvgIcon onClick={() => openDialog(true)} sx={{ ml: 1 }}>
+          <SvgIcon sx={{ ml: 1 }}>
             <IconS />
           </SvgIcon>
-
-          <Dialog
-            open={isDialogOpen}
-            onClose={closeDialog}
-            fullWidth
-            maxWidth="lg"
-          >
-            <DialogContent>
-              <EditOptionFeature
-                click={openDialog}
-                setClick={closeDialog}
-                setResponseId={(e) => {
-                }}
-              />
-            </DialogContent>
-          </Dialog>
         </TableCell>
         <TableCell>
           <Grid
@@ -125,6 +113,20 @@ function TableItems({
           </Grid>
         </TableCell>
       </TableRow>
+      <Dialog open={isDialogOpen} onClose={closeDialog} fullWidth maxWidth="lg">
+        <DialogContent>
+          <EditOptionFeature
+            setClick={closeDialog}
+            id={selectedRows}
+            deleteId={item}
+            setResponseId={(e) => {
+              // setResponseId(e);
+              // setCheckBoxList([...checkBoxList, e]);
+              console.log(e);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </TableBody>
   );
 }

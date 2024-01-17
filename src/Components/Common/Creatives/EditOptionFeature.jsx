@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import AccountLayout from "Components/Common/Layout/AccountLayout";
 import StandardImageList from "Components/Common/Images";
 import CheckboxesTags from "Components/Common/CheckBoxList";
@@ -7,10 +7,31 @@ import ServerURL from "Components/Common/Layout/config";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import GetToken from "GetToken";
-import { Button, CircularProgress, Dialog, DialogContent, Grid, InputAdornment, MenuItem, Select, SvgIcon, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
-import { PopularIconOff, PopularIconOn } from 'Icons/icons';
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  Grid,
+  InputAdornment,
+  MenuItem,
+  Select,
+  SvgIcon,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from "@mui/material";
+import { PopularIconOff, PopularIconOn } from "Icons/icons";
 
-const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setClick = () => { } }) => {
+const EditOptionFeature = ({
+  id,
+  setResponseId = () => {},
+  status,
+  click,
+  setClick = () => {},
+  deleteId,
+}) => {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     if (click === true) {
@@ -36,7 +57,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
   const [countTwo, setCountTwo] = useState(0);
   const [countThree, setCountThree] = useState(0);
 
-  const [sellMode, setSellMode] = useState('');
+  const [sellMode, setSellMode] = useState("");
   const [autoSell, setAutoSell] = useState(true);
 
   const [selectedType, setSelectedType] = useState("");
@@ -45,7 +66,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
 
   const [isPopular, setIsPopular] = useState(false);
   //New Test:
-  const [dataFeature, setDataFeature] = useState('');
+  const [dataFeature, setDataFeature] = useState("");
   const [uniqueTrimmedArray, setUniqueTrimmedArray] = useState([]);
 
   const handleInputChange = (event) => {
@@ -53,9 +74,9 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
     setDataFeature(newValue);
 
     const newUniqueTrimmedArray = newValue
-      .split('\n')
-      .map(value => value.trim())
-      .filter(value => value !== "")
+      .split("\n")
+      .map((value) => value.trim())
+      .filter((value) => value !== "")
       .filter((value, index, self) => self.indexOf(value) === index);
 
     setUniqueTrimmedArray(newUniqueTrimmedArray);
@@ -63,7 +84,13 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
 
   useEffect(() => {
     async function fetchData() {
-      const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
       const responseCountry = await axios.get(
         `${ServerURL.url}/admin/country/get-all-country`,
         config
@@ -74,19 +101,31 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
   }, [countOne]);
   useEffect(() => {
     async function fetchData() {
-      const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
       const responseCategory = await axios.get(
-        `${ServerURL.url}/admin/cat/get-all-cat-without-pagination`,
+        `${ServerURL.url}/admin/cat/get-all-cat`,
         config
       );
-      setCategory(responseCategory.data);
+      setCategory(responseCategory);
     }
     fetchData();
   }, [countTwo]);
 
   useEffect(() => {
     async function fetchData() {
-      const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
       const responseType = await axios.get(
         `${ServerURL.url}/admin/type-product/get-all-type-product-without-pagination`,
         config
@@ -108,17 +147,18 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
 
   const handleChangeToggleButtonGroup = async (event, newAlignment) => {
     setSellMode(newAlignment);
-  }
+  };
   const fetchData = async () => {
     const config = {
       headers: {
-        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+        Authorization: `${
+          ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+        }`,
       },
     };
 
     try {
       if (id !== null) {
-
         const response = await axios.get(
           `${ServerURL.url}/admin/feature/${id}`,
           config
@@ -128,8 +168,8 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
         if (dataResponse) {
           // Set initial state based on data from the API
           setNameFeature(dataResponse?.name);
-          setAutoSell(dataResponse?.sell_mode === 'manual' ? false : true);
-          setSellMode(dataResponse?.sell_mode === 'manual' ? 'manual' : 'auto');
+          setAutoSell(dataResponse?.sell_mode === "manual" ? false : true);
+          setSellMode(dataResponse?.sell_mode === "manual" ? "manual" : "auto");
           setSelectedCategory(dataResponse?.id_cat?.id);
           setSelectedCountry(dataResponse?.id_country?.id);
           setSelectedType(dataResponse?.id_typeProduct?.id);
@@ -137,50 +177,54 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
           setPrice(dataResponse?.price);
         }
       } else {
-        return
+        return;
       }
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.message)
-
+      toast.error(error?.response?.data?.message);
     } finally {
-      return
+      return;
       // setLoading(false);
     }
   };
 
   useEffect(() => {
-
-
     fetchData();
   }, [countTwo, id]);
 
   useEffect(() => {
     async function fetchData() {
-      if (autoSell & sellMode === 'auto') {
-        const config = { headers: { Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}` } };
+      if (autoSell & (sellMode === "auto")) {
+        const config = {
+          headers: {
+            Authorization: `${
+              ServerURL.developerMode === true
+                ? ServerURL.Bear
+                : GetToken("user")
+            }`,
+          },
+        };
         const responseDataFeature = await axios.get(
           `${ServerURL.url}/admin/feature/${id}/list-data-feature`,
           config
         );
         setDataFeature(responseDataFeature?.data[0]?.data);
-
       }
     }
     fetchData();
-
   }, [autoSell]);
   useEffect(() => {
-    setDataFeature('')
-    setUniqueTrimmedArray([])
+    setDataFeature("");
+    setUniqueTrimmedArray([]);
   }, [sellMode]);
-
 
   const handleSubmit = async () => {
     setAddingFeature(true);
     const config = {
       headers: {
-        Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+        Authorization: `${
+          ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+        }`,
       },
     };
     try {
@@ -194,7 +238,6 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
         // id_Storage: selectedFileItem,
         data_feature: dataFeature,
         sell_mode: sellMode,
-
       };
       const uploadResponse = await axios.post(
         `${ServerURL.url}/admin/feature/${id}/update`,
@@ -204,14 +247,13 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
       if (uploadResponse.status === 201) {
         setResponseId(id);
         toast.success("با موفقیت انجام شد.");
-        handleRemoveFields()
+        handleRemoveFields();
         // fetchData();
-        setClick(false)
+        setClick(false);
         // window.location.href = "../admin/products";
       } else {
         toast.error("لطفا دوباره امتحان کنید");
-        toast.error(error?.response?.data?.message)
-
+        toast.error(error?.response?.data?.message);
       }
     } catch (error) {
       console.error("خطا: ", error);
@@ -219,27 +261,57 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
       setAddingFeature(false);
     }
   };
+  const handleDelete = async (e) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
+
+      const deleteData = {
+        ids: e,
+      };
+
+      const res = await axios.get(
+        `${ServerURL.url}/admin/feature/delete`,
+        deleteData,
+        config
+      );
+
+      // Log the request details
+      // console.log("Request:", res.config);
+
+      if (res.status === 200) {
+        setClick(false);
+        toast.success("با موفقیت حذف شد");
+      }
+    } catch (error) {
+      console.error("Error sending delete request:", error);
+      toast.error("Error sending delete request");
+    }
+  };
+
   const handleRemoveFields = () => {
     // router.push('/panel/admin/products')
-    setOpen(false)
-    setNameFeature('')
-    setIsPopular(false)
-    setSelectedType('')
-    setSelectedCountry('')
-    setDataFeature('')
-    setSellMode('')
-    setPrice('')
-    setSelectedFileItem([])
-    setAddingFeature(false)
-    setOpenThis(false)
-    setCategory([])
-    setCountTwo(0)
-    setSelectedCategory('')
+    setOpen(false);
+    setNameFeature("");
+    setIsPopular(false);
+    setSelectedType("");
+    setSelectedCountry("");
+    setDataFeature("");
+    setSellMode("");
+    setPrice("");
+    setSelectedFileItem([]);
+    setAddingFeature(false);
+    setOpenThis(false);
+    setCategory([]);
+    setCountTwo(0);
+    setSelectedCategory("");
     // setResponseId(0)
-  }
-
-
-
+  };
 
   return (
     <>
@@ -257,10 +329,9 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
         theme="light"
       />
 
-
       <Grid container spacing={5}>
         <Grid item container spacing={2}>
-          <Grid item container xs={12} sm={12} md={12} spacing={2} >
+          <Grid item container xs={12} sm={12} md={12} spacing={2}>
             <Grid item xs={12} sm={6} md={8}>
               <Typography>ویرایش فیچر</Typography>
               <TextField
@@ -373,7 +444,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
           <Grid xs={6} md={6} mt={1}>
             <Button
               onClick={() => setIsPopular(!isPopular)}
-              variant='outlined'
+              variant="outlined"
               endIcon={!isPopular ? <PopularIconOn /> : <PopularIconOff />}
             >
               Popular
@@ -386,7 +457,7 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
             sx={{ mt: 1 }}
             size="small"
             fullWidth
-            onChange={(e) => setPrice(e.target.value.replace(/\D/g, ''))}
+            onChange={(e) => setPrice(e.target.value.replace(/\D/g, ""))}
             value={price}
             variant="outlined"
             InputProps={{
@@ -394,10 +465,12 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
             }}
           />
         </Grid>
-        {autoSell || sellMode === 'auto' ? (
-          sellMode === 'auto' && (
+        {autoSell || sellMode === "auto" ? (
+          sellMode === "auto" && (
             <Grid item xs={12} sm={4} md={12}>
-              <Typography variant='subtitle1'>تعداد کد ها: {uniqueTrimmedArray.length}</Typography>
+              <Typography variant="subtitle1">
+                تعداد کد ها: {uniqueTrimmedArray.length}
+              </Typography>
               <TextField
                 sx={{ mt: 1 }}
                 size="medium"
@@ -427,9 +500,9 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
                 // selectedFileItem.length === 0 ||
                 nameFeature === "" ||
                 selectedCategory === "" ||
-                price === '' ||
+                price === "" ||
                 price === 0 ||
-                sellMode === 'auto' && dataFeature === ''
+                (sellMode === "auto" && dataFeature === "")
               }
               onClick={handleSubmit}
             >
@@ -442,19 +515,29 @@ const EditOptionFeature = ({ id, setResponseId = () => { }, status, click, setCl
               color="error"
               onClick={() => {
                 // console.log('')
-                setClick(false)
+                handleDelete(deleteId);
+                // window.location.href = "../admin/products";
+              }}
+            >
+              حذف
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                // console.log('')
+                setClick(false);
                 // window.location.href = "../admin/products";
               }}
             >
               انصراف
             </Button>
           </Grid>
-
         </Grid>
       </Grid>
-
     </>
-
   );
 };
 

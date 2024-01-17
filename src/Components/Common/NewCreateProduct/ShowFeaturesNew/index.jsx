@@ -34,6 +34,7 @@ const MyAccordion = ({
 }) => {
   // console.log(category)
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [openCreateFeature, setOpenCreateFeature] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [featureData, setFeatureData] = useState([]);
@@ -190,126 +191,143 @@ const MyAccordion = ({
           </AccordionSummary>
           <AccordionDetails>
             <Grid container item>
-              {AllCat?.map((x) => (
-                <Grid item key={x.id} xs={12}>
-                  <Accordion
-                    sx={{
-                      bgcolor: "#E4E4E4",
-                      boxShadow: "none !important",
-                    }}
-                    // onClick={() => {
-                    //   setGiveId(features.id);
-                    //   // setGiveId(x.id);
-                    // }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<IconToggle />}
-                      onClick={() => {
-                        fetchDataFeature(x.id);
-                        // setGiveId(x.id);
-                      }}
+              {isLoading && (
+                <Grid container display={"flex"} justifyContent={"center"}>
+                  <CircularProgress />
+                </Grid>
+              )}
+
+              {!AllCat || AllCat.length === 0 ? (
+                <Grid container display={"flex"} justifyContent={"center"}>
+                  <Typography variant="body1">
+                    ارور: دسته بندی موجود نیست
+                  </Typography>
+                </Grid>
+              ) : (
+                AllCat.map((x) => (
+                  <Grid item key={x.id} xs={12}>
+                    <Accordion
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        direction: "rtl",
+                        bgcolor: "#E4E4E4",
+                        boxShadow: "none !important",
                       }}
+                      // onClick={() => {
+                      //   setGiveId(features.id);
+                      //   // setGiveId(x.id);
+                      // }}
                     >
-                      <Grid
-                        container
-                        item
+                      <AccordionSummary
+                        expandIcon={<IconToggle />}
+                        onClick={() => {
+                          fetchDataFeature(x.id);
+                          // setGiveId(x.id);
+                        }}
                         sx={{
                           display: "flex",
                           justifyContent: "space-between",
-                          // direction: "rtl",
+                          direction: "rtl",
                         }}
                       >
-                        <Grid item>
-                          <Typography>{x.title}</Typography>
-                        </Grid>
-                        <Grid item>
-                          <Button
-                            sx={{ textTransform: "none" }}
-                            onClick={() => setOpenCreateFeature(true)}
-                          >
-                            Create Feature
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    </AccordionSummary>
-                    <CreateOptionFeatureForEdit
-                      click={openCreateFeature}
-                      setClick={() => setOpenCreateFeature()}
-                      catId={x.id}
-                      countryId={features.id}
-                    />
-                    <AccordionDetails>
-                      <Grid container item>
-                        {isLoading ? (
-                          <Grid
-                            container
-                            display={"flex"}
-                            justifyContent={"center"}
-                          >
-                            <CircularProgress />
+                        <Grid
+                          container
+                          item
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            // direction: "rtl",
+                          }}
+                        >
+                          <Grid item>
+                            <Typography>{x.title}</Typography> {/* Cat title */}
                           </Grid>
-                        ) : (
-                          <>
-                            {featureData.length === 0 ? (
-                              <Grid
-                                container
-                                display={"flex"}
-                                justifyContent={"center"}
-                              >
-                                <Typography variant="body1">
-                                  هیچ فیچری وجود ندارد
-                                </Typography>
-                              </Grid>
-                            ) : (
-                              <TableContainer
-                                sx={{ minWidth: { xs: 250, md: 600 } }}
-                              >
-                                <Grid container>
-                                  <Grid item xs={12}>
-                                    <Table>
-                                      <TableHead>
-                                        <TableRow>
-                                          <TableCell>Action</TableCell>
-                                          <TableCell>Price</TableCell>
-                                          <TableCell>Date</TableCell>
-                                          <TableCell>State</TableCell>
-                                          <TableCell>Status</TableCell>
-                                          <TableCell
-                                            sx={{
-                                              display: "flex",
-                                              justifyContent: "flex-end",
-                                            }}
-                                          >
-                                            Feature Name
-                                          </TableCell>
-                                          <TableCell>Selection</TableCell>{" "}
-                                          {/* New column for checkboxes */}
-                                        </TableRow>
-                                      </TableHead>
-                                      {featureData.map((item) => (
-                                        <TableItems
-                                          selectedRows={selectedRows}
-                                          setSelectedRows={setSelectedRows}
-                                          feature={item}
-                                          key={item.id}
-                                        />
-                                      ))}
-                                    </Table>
-                                  </Grid>
+                          <Grid item>
+                            <Button
+                              sx={{ textTransform: "none" }}
+                              onClick={() => setOpenCreateFeature(true)}
+                            >
+                              Create Feature
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </AccordionSummary>
+                      <CreateOptionFeatureForEdit
+                        click={openCreateFeature}
+                        setClick={() => setOpenCreateFeature()}
+                        catId={x.id}
+                        countryId={features.id}
+                      />
+                      <AccordionDetails>
+                        <Grid container item>
+                          {isLoading ? (
+                            <Grid
+                              container
+                              display={"flex"}
+                              justifyContent={"center"}
+                            >
+                              <CircularProgress />
+                            </Grid>
+                          ) : (
+                            <>
+                              {featureData.length === 0 ? (
+                                <Grid
+                                  container
+                                  display={"flex"}
+                                  justifyContent={"center"}
+                                >
+                                  <Typography variant="body1">
+                                    هیچ فیچری وجود ندارد
+                                  </Typography>
                                 </Grid>
-                              </TableContainer>
-                            )}
-                          </>
-                        )}
-                      </Grid>
-                    </AccordionDetails>
-                  </Accordion>
-                </Grid>
-              ))}
+                              ) : (
+                                <TableContainer
+                                  sx={{ minWidth: { xs: 250, md: 600 } }}
+                                >
+                                  <Grid container>
+                                    <Grid item xs={12}>
+                                      <Table>
+                                        <TableHead>
+                                          <TableRow>
+                                            <TableCell>Action</TableCell>
+                                            <TableCell>Price</TableCell>
+                                            <TableCell>Date</TableCell>
+                                            <TableCell>State</TableCell>
+                                            <TableCell>Status</TableCell>
+                                            <TableCell
+                                              sx={{
+                                                display: "flex",
+                                                justifyContent: "flex-end",
+                                              }}
+                                            >
+                                              Feature Name
+                                            </TableCell>
+                                            <TableCell>Selection</TableCell>{" "}
+                                            {/* New column for checkboxes */}
+                                          </TableRow>
+                                        </TableHead>
+                                        {featureData.map((item) => (
+                                          <TableItems
+                                            selectedRows={selectedRows}
+                                            setSelectedRows={setSelectedRows}
+                                            feature={item}
+                                            key={item.id}
+                                            setIsDialogOpen={setIsDialogOpen}
+                                            isDialogOpen={isDialogOpen}
+                                            item={item.id}
+                                          />
+                                        ))}
+                                      </Table>
+                                    </Grid>
+                                  </Grid>
+                                </TableContainer>
+                              )}
+                            </>
+                          )}
+                        </Grid>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Grid>
+                ))
+              )}
             </Grid>
           </AccordionDetails>
         </Accordion>
