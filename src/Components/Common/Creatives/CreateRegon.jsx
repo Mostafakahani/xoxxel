@@ -22,7 +22,7 @@ const CreateRegion = ({ onUpdate = () => {} }) => {
   const [open, setOpen] = useState(false);
   const [region, setRegion] = useState("");
   const [requestError, setRequestError] = useState(null);
-  const [selectedFileItem, setSelectedFileItem] = useState({});
+  const [selectedFileItem, setSelectedFileItem] = useState([]);
   const [addingFeature, setAddingFeature] = useState(false);
 
   const handleClickOpen = () => {
@@ -168,7 +168,7 @@ const CreateRegion = ({ onUpdate = () => {} }) => {
           </Grid>
 
           <Grid container>
-            {region !== "" && selectedFileItem.length !== 0 && (
+            {(region !== "") & (selectedFileItem.length !== 0) && (
               <Grid item xs={6} sm={3} md={3}>
                 <Button
                   variant="contained"

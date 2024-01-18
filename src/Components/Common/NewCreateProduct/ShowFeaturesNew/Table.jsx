@@ -21,6 +21,7 @@ function TableItems({
   selectedRows,
   setSelectedRows,
   item,
+  onUpdate = () => {},
 }) {
   const handleCheckboxChange = (id) => {
     setSelectedRows((prevSelectedRows) => {
@@ -117,8 +118,9 @@ function TableItems({
         <DialogContent>
           <EditOptionFeature
             setClick={closeDialog}
-            id={selectedRows}
+            id={item}
             deleteId={item}
+            onUpdate={() => onUpdate()}
             setResponseId={(e) => {
               // setResponseId(e);
               // setCheckBoxList([...checkBoxList, e]);

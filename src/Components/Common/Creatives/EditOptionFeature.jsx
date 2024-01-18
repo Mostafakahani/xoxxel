@@ -31,6 +31,7 @@ const EditOptionFeature = ({
   click,
   setClick = () => {},
   deleteId,
+  onUpdate = () => {},
 }) => {
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -249,6 +250,7 @@ const EditOptionFeature = ({
         toast.success("با موفقیت انجام شد.");
         handleRemoveFields();
         // fetchData();
+        onUpdate();
         setClick(false);
         // window.location.href = "../admin/products";
       } else {

@@ -160,7 +160,7 @@ const Products = () => {
             >
               <CreateOptionFeature />
               <CreateRegonWithItems />
-              <CreateCategory />
+              {/* <CreateCategory /> */}
               <CreateType />
               <EditOptionsDes />
 
