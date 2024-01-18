@@ -242,7 +242,7 @@ export default function TableItems(
             sx={{
               borderRadius: "8px",
               overflow: "hidden",
-              minWidth: 600,
+              minWidth: 500,
               "td,tr": {
                 fontSize: "12.67px",
                 color: "#212121",
@@ -416,8 +416,8 @@ export default function TableItems(
                           {e?.type === "editAction" && (
                             <Grid
                               container
-                              display={"flex"}
-                              justifyContent={"center"}
+                              // display={"flex"}
+                              // justifyContent={"center"}
                             >
                               <Button
                                 startIcon={<IconB />}

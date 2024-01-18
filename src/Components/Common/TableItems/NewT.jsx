@@ -9,7 +9,20 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import { Avatar, Button, Dialog, DialogContent, DialogTitle, Grid, MenuItem, Pagination, Select, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  MenuItem,
+  Pagination,
+  Select,
+  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon } from "Icons/icons";
 import AddProductFeatureNew from "../Popup/CreateProductOptionNew";
@@ -31,7 +44,7 @@ function EnhancedTableHead(props) {
             px: "16px",
             fontSize: "12.04px",
             color: "#212121",
-            textAlign: 'left'
+            textAlign: "left",
           },
           ".MuiCheckbox-indeterminate": {
             svg: {
@@ -73,7 +86,6 @@ function EnhancedTableHead(props) {
             {headCell}
           </TableCell>
         ))}
-
       </TableRow>
     </TableHead>
   );
@@ -88,17 +100,19 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function TableItems({
-  dataHead,
-  dataBody,
-  setSelected = false,
-  selected = false,
-  setPage = () => { },
-  setPerPage = () => { },
-  pageData, // اضافه کردن اطلاعات صفحه به props
-  setUptadeCount,
-
-}, props) {
+export default function TableItems(
+  {
+    dataHead,
+    dataBody,
+    setSelected = false,
+    selected = false,
+    setPage = () => {},
+    setPerPage = () => {},
+    pageData, // اضافه کردن اطلاعات صفحه به props
+    setUptadeCount,
+  },
+  props
+) {
   const { page, perPage } = props;
 
   const [order, setOrder] = React.useState("asc");
@@ -107,16 +121,16 @@ export default function TableItems({
   ////Dialog
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [selectedRowId, setSelectedRowId] = React.useState(null);
-  const [selectedStatus, setSelectedStatus] = React.useState('');
-  const [submitToServer, setSubmitToServer] = React.useState('');
+  const [selectedStatus, setSelectedStatus] = React.useState("");
+  const [submitToServer, setSubmitToServer] = React.useState("");
   const [count, setCount] = React.useState(0);
-  const [alignment, setAlignment] = React.useState('');
+  const [alignment, setAlignment] = React.useState("");
 
   React.useEffect(() => {
-    if (selectedStatus === 'waiting') {
-      setAlignment('');
-    } else if (selectedStatus === 'accepted') {
-      setAlignment('accepted');
+    if (selectedStatus === "waiting") {
+      setAlignment("");
+    } else if (selectedStatus === "accepted") {
+      setAlignment("accepted");
     }
 
     setSubmitToServer(alignment);
@@ -125,11 +139,15 @@ export default function TableItems({
   const handleChange = async (event, newAlignment) => {
     setAlignment(newAlignment);
     setSubmitToServer(newAlignment);
-    if (newAlignment !== '' & newAlignment !== null) {
+    if ((newAlignment !== "") & (newAlignment !== null)) {
       try {
         const config = {
           headers: {
-            Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+            Authorization: `${
+              ServerURL.developerMode === true
+                ? ServerURL.Bear
+                : GetToken("user")
+            }`,
           },
         };
 
@@ -169,15 +187,12 @@ export default function TableItems({
     openDialog(id);
   };
 
-
   // New for pages:
   const itemsPerPage = pageData.perPage;
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  const listPerPage = [15, 25, 50, 100]
-
-
+  const listPerPage = [15, 25, 50, 100];
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -309,7 +324,7 @@ export default function TableItems({
 
                 <ToggleButtonGroup
                   color="primary"
-                  value={selectedStatus === '' ? null : alignment}
+                  value={selectedStatus === "" ? null : alignment}
                   exclusive
                   onChange={handleChange}
                   aria-label="Platform"
@@ -357,9 +372,13 @@ export default function TableItems({
                         </TableCell>
                       )}
                       {row?.data?.map((e, i) => (
-                        <TableCell align="center" sx={{
-                          textAlign: 'left'
-                        }} key={i}>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            textAlign: "left",
+                          }}
+                          key={i}
+                        >
                           {!e?.type && e}
                           {e?.type === "avatar" && (
                             <Box className="center">
@@ -382,12 +401,21 @@ export default function TableItems({
                           )}
                           {e?.type === "textBold" && (
                             <>
-                              <Typography variant="p" sx={{ fontWeight: 600, fontSize: "15px" }}> {e?.text}</Typography>
+                              <Typography
+                                variant="p"
+                                sx={{ fontWeight: 600, fontSize: "15px" }}
+                              >
+                                {" "}
+                                {e?.text}
+                              </Typography>
                             </>
                           )}
                           {e?.type === "text" && (
                             <>
-                              <Typography variant="p" sx={{}}> {e?.text}</Typography>
+                              <Typography variant="p" sx={{}}>
+                                {" "}
+                                {e?.text}
+                              </Typography>
                             </>
                           )}
 
@@ -404,15 +432,21 @@ export default function TableItems({
                                 setSelectedStatus(e?.text);
                               }}
                               variant="contained"
-                              color={e?.text === 'waiting' ? 'warning' : 'success'}
+                              color={
+                                e?.text === "waiting" ? "warning" : "success"
+                              }
                             >
                               {e?.text}
                             </StatusButton>
-
                           )}
                           {e?.type === "btn" && (
                             <>
-                              <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
+                              <Grid
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                }}
+                              >
                                 {/* <AddProductFeatureNew tableId={row.data[0]} />
                               <Button
                                 onClick={(x) => console.log(row.data[0])}
@@ -426,15 +460,28 @@ export default function TableItems({
                                   مشاهده و ویرایش
                                 </Link>
                               </Button> */}
-                                <Link href={`/panel/admin/products/edit/${row?.id}`} style={{ display: 'flex', alignItems: 'center', color: '#1C49F1' }}>
-                                  <Button startIcon={<EyesIcon />} sx={{ backgroundColor: '#1C49F11A', color: '#1C49F1', borderRadius: "5px" }}>
+                                <Link
+                                  href={`/panel/admin/products/edit/${row?.id}`}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    color: "#1C49F1",
+                                  }}
+                                >
+                                  <Button
+                                    startIcon={<EyesIcon />}
+                                    sx={{
+                                      backgroundColor: "#1C49F11A",
+                                      color: "#1C49F1",
+                                      borderRadius: "5px",
+                                    }}
+                                  >
                                     مشاهده و ویرایش
                                   </Button>
                                 </Link>
                               </Grid>
                             </>
                           )}
-
 
                           {/* {e?.type === "jsx" && e?.jsx} */}
                           {/* M */}
@@ -454,26 +501,29 @@ export default function TableItems({
             </TableBody>
           </Table>
         </TableContainer>
-        {
-          dataBody?.length === 0 && (
-            <Typography
-              component={"h6"}
-              sx={{
-                textAlign: "center",
-                color: "black",
-                my: 3
-              }}
-            >
-              موردی پیدا نشد!
-            </Typography>
-          )
-        }
+        {dataBody?.length === 0 && (
+          <Typography
+            component={"h6"}
+            sx={{
+              textAlign: "center",
+              color: "black",
+              my: 3,
+            }}
+          >
+            موردی پیدا نشد!
+          </Typography>
+        )}
         {dataBody?.length !== 0 && (
           <Grid
-            spacing={5}
+            container
+            // spacing={3}
             display="flex"
             alignItems="center"
-            sx={{ mt: 2, flexDirection: { xs: "row", sm: 'row', }, justifyContent: { xs: 'space-between', sm: 'center' } }}
+            sx={{
+              mt: 2,
+              flexDirection: { xs: "row", sm: "row" },
+              justifyContent: { xs: "space-between", sm: "center" },
+            }}
           >
             <Grid item>
               <Stack spacing={2}>
@@ -501,9 +551,9 @@ export default function TableItems({
                 size="small"
                 value={perPage}
                 onChange={(e) => setPerPage(e.target.value)}
-                sx={{ width: { xs: '100%', sm: "80%" } }}
+                sx={{ width: { xs: "100%", sm: "80%" } }}
                 defaultValue={15}
-              // onOpen={() => setCountTwo(countTwo + 1)}
+                // onOpen={() => setCountTwo(countTwo + 1)}
               >
                 {Array.isArray(listPerPage) ? (
                   listPerPage.map((data, index) => (
@@ -512,16 +562,13 @@ export default function TableItems({
                     </MenuItem>
                   ))
                 ) : (
-                  <MenuItem value={null}>
-                    Loading...
-                  </MenuItem>
+                  <MenuItem value={null}>Loading...</MenuItem>
                 )}
               </Select>
             </Grid>
           </Grid>
         )}
-      </Box >
+      </Box>
     </>
-
   );
 }
