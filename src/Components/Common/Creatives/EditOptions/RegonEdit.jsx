@@ -28,7 +28,7 @@ const RegonEdit = () => {
           config
         );
         const apiData = response.data;
-        const updatedRegionData = apiData.data.map((item) => {
+        const updatedRegionData = apiData.map((item) => {
           return {
             id: item.id,
             data: [
