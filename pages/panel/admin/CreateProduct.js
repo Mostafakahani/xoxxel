@@ -60,7 +60,7 @@ const CreateProduct = () => {
         `${ServerURL.url}/admin/cat/get-all-cat`,
         config
       );
-      setCategory(responseCategory); //  || .data
+      setCategory(responseCategory.data); //  || .data
     }
     fetchData();
   }, [countTwo]);
@@ -89,7 +89,7 @@ const CreateProduct = () => {
         lable_input: labelInput,
         description_input: textArea,
         description: description,
-        ids_feature: checkBoxList.map((x) => x),
+        // ids_feature: checkBoxList.map((x) => x),
       };
       const uploadResponse = await axios.post(
         `${ServerURL.url}/admin/product/create`,
@@ -99,7 +99,8 @@ const CreateProduct = () => {
       if (uploadResponse.status === 201) {
         toast.success("با موفقیت ساخته شد.");
         handleRemoveFields();
-        router.push(`panel/admin/products/edit/${uploadResponse.id}`);
+        // console.log(uploadResponse.data.id)
+        router.push(`/panel/admin/products/edit/${uploadResponse.data.id}`);
         // window.location.href = "../admin/products";
       } else {
         toast.error("لطفا دوباره امتحان کنید");
@@ -281,7 +282,7 @@ const CreateProduct = () => {
           </Grid>
         </Grid>
         <Grid container sx={{ my: "20px" }}>
-          <Grid xs={12} sm={4} md={12}>
+          <Grid xs={12} sm={12} md={12}>
             <TextField
               size="small"
               fullWidth

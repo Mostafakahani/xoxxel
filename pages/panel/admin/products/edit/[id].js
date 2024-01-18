@@ -341,7 +341,36 @@ function CreateProduct() {
       setLoading(false);
     }
   };
+  const handleDeleteProduct = async (e) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
+        },
+      };
 
+      const deleteData = {
+        ids: [e],
+      };
+
+      const response = await axios.post(
+        `${ServerURL.url}/admin/product/delete`,
+        deleteData,
+        config
+      );
+      if (response.data.status === "success") {
+        toast.success("با موفقیت حذف شد.");
+        router.back()
+        // setCount(count + 1);
+      } else {
+        toast.error("لطفا دوباره امتحان کنید");
+      }
+    } catch (error) {
+      console.error("Error sending delete request:", error);
+    }
+  };
   if (id === undefined || id === null) {
     return <h3>Loading...</h3>;
   }
@@ -686,6 +715,15 @@ function CreateProduct() {
             </Grid>
             <Grid item>
               <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDeleteProduct(id)}
+              >
+                حذف محصول
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
                 variant="outlined"
                 color="inherit"
                 onClick={() =>
@@ -695,6 +733,7 @@ function CreateProduct() {
                 برگشت
               </Button>
             </Grid>
+
             {/* <Grid item>
               <Button
                 variant="outlined"
