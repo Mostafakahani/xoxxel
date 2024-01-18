@@ -33,6 +33,18 @@ export const dataSidebar = [
     iconActive: <IconProduct size="22" />,
   },
   {
+    href: "/panel/admin/Categories",
+    text: "دسته بندی ها",
+    icon: <IconProductDisable />,
+    iconActive: <IconProduct size="22" />,
+  },
+  {
+    href: "/panel/admin/Regons",
+    text: "منطقه ها",
+    icon: <IconProductDisable />,
+    iconActive: <IconProduct size="22" />,
+  },
+  {
     href: "/panel/admin/UpdatePrices",
     text: "اعلامیه قیمت",
     icon: <IconPriceDisable size="22" />,
@@ -92,5 +104,4 @@ export const dataSidebar = [
     icon: <IconSettingDisable size="22" />,
     iconActive: <IconSetting size="22" />,
   },
-
 ];

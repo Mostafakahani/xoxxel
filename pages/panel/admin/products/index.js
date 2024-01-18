@@ -26,7 +26,9 @@ const Products = () => {
     const fetchData = async () => {
       const config = {
         headers: {
-          Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
         },
       };
 
@@ -93,7 +95,9 @@ const Products = () => {
     try {
       const config = {
         headers: {
-          Authorization: `${ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")}`,
+          Authorization: `${
+            ServerURL.developerMode === true ? ServerURL.Bear : GetToken("user")
+          }`,
         },
       };
 
@@ -163,7 +167,6 @@ const Products = () => {
               {/* <CreateCategory /> */}
               <CreateType />
               <EditOptionsDes />
-
             </Grid>
           </Grid>
         </Grid>
@@ -181,7 +184,16 @@ const Products = () => {
           theme="light"
         />
 
-        <Grid container sx={{ mt: "20px", display: 'flex', justifyContent: 'flex-end', my: 1 }} spacing={1}>
+        <Grid
+          container
+          sx={{
+            mt: "20px",
+            display: "flex",
+            justifyContent: "flex-end",
+            my: 1,
+          }}
+          spacing={1}
+        >
           <Grid item>
             <Link
               href={"/panel/admin/CreateProduct"}
@@ -204,9 +216,10 @@ const Products = () => {
                     backgroundColor: "#4166ef",
                   },
                 }}
+                endIcon={<AddProductIcon />}
               >
                 ثبت محصول جدید
-                <AddProductIcon />
+                {/* <AddProductIcon /> */}
               </Button>
             </Link>
           </Grid>
@@ -246,7 +259,6 @@ const Products = () => {
                         page={0}
                         show={(x) => console.log(x)}
                     /> */}
-
         </Grid>
         <NewT
           selected={selected}

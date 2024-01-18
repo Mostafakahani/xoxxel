@@ -183,7 +183,11 @@ const MyAccordion = ({
                     component={"img"}
                     width={30}
                     sx={{ borderRadius: 2 }}
-                    src={`${baseStorage}/${features?.img?.name}`}
+                    src={
+                      features?.img?.name
+                        ? `${baseStorage}/${features?.img?.name}`
+                        : "/images/no.png"
+                    }
                   />
                 </Grid>
               </Grid>
@@ -250,9 +254,6 @@ const MyAccordion = ({
                           </Grid>
                         </Grid>
                       </AccordionSummary>
-                      <Button onClick={() => console.log(x.id)}>
-                        features.id
-                      </Button>
                       <CreateOptionFeatureForEdit
                         click={openCreateFeature}
                         setClick={() => setOpenCreateFeature()}
@@ -316,7 +317,9 @@ const MyAccordion = ({
                                             setIsDialogOpen={setIsDialogOpen}
                                             isDialogOpen={isDialogOpen}
                                             item={item.id}
-                                            onUpdate={() => fetchDataFeature(x.id)}
+                                            onUpdate={() =>
+                                              fetchDataFeature(x.id)
+                                            }
                                           />
                                         ))}
                                       </Table>
