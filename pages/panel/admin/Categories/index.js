@@ -47,12 +47,12 @@ const Categories = () => {
         const apiData = response.data;
         const updatedRegionData = apiData.map((item) => {
           return {
-            id: item.id,
+            id: item?.id,
             data: [
-              `#${item.id}`,
+              `#${item?.id}`,
               {
                 type: "textBold",
-                text: item.title,
+                text: item?.title,
               },
               // {
               //   type: "icon",
@@ -60,7 +60,8 @@ const Categories = () => {
               // },
               {
                 type: "editAction",
-                text: item.id,
+                text: item?.id,
+                value: item?.title,
               },
             ],
           };
@@ -95,7 +96,11 @@ const Categories = () => {
         deleteData,
         config
       );
-      if (response.data.status === "success") {
+      if (
+        response.data.status === "success" ||
+        response.status === 200 ||
+        response.status === 201
+      ) {
         toast.success("با موفقیت حذف شد.");
         setCount(count + 1);
       } else {
@@ -197,6 +202,7 @@ const Categories = () => {
           setPage={(e) => setPage(e)}
           setPerPage={(e) => setPerPage(e)}
           perPage={pageDataAll.perPage}
+          setUptadeCount={(e) => setCount(count + 1)}
         />
       </AccountLayout>
     </>

@@ -12,10 +12,13 @@ import Checkbox from "@mui/material/Checkbox";
 import {
   Avatar,
   Button,
+  CircularProgress,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
+  TextField,
 } from "@mui/material";
 import StatusButton from "Components/Common/StatusButton";
 import { EyesIcon, IconB } from "Icons/icons";
@@ -24,6 +27,7 @@ import { ToastContainer, toast } from "react-toastify";
 import ServerURL from "../Layout/config";
 import GetToken from "GetToken";
 import axios from "axios";
+import { useState } from "react";
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, numSelected, rowCount, dataHead, selected } = props;
@@ -116,12 +120,17 @@ export default function TableItems(
   const [selectedRowId, setSelectedRowId] = React.useState(null);
   const [selectedStatus, setSelectedStatus] = React.useState("");
   const [submitToServer, setSubmitToServer] = React.useState("");
-  const [count, setCount] = React.useState(0);
-  const [alignment, setAlignment] = React.useState("");
+  const [loading, setLoading] = useState(false);
+
+  const [count, setCount] = useState(0);
+  const [title, setTitle] = useState("");
+  const [changeCatergoryName, setChangeCatergoryName] = useState("");
+  const [idGet, setIdGet] = useState(null);
   const baseStorage = "https://xoxxel.storage.iran.liara.space/";
 
-  const handleChange = async (event, newAlignment) => {
-    if ((newAlignment !== "") & (newAlignment !== null)) {
+  const handleChange = async () => {
+    setLoading(true);
+    if ((idGet !== "") & (idGet !== null)) {
       try {
         const config = {
           headers: {
@@ -134,12 +143,11 @@ export default function TableItems(
         };
 
         const sendData = {
-          id_payment: selectedRowId,
-          status: newAlignment,
+          title: changeCatergoryName,
         };
 
         const response = await axios.post(
-          `${ServerURL.url}/admin/payment/change-status`,
+          `${ServerURL.url}/admin/cat/update/${idGet}`,
           sendData,
           config
         );
@@ -147,12 +155,19 @@ export default function TableItems(
           toast.success("با موفقیت تغییر داده شد.");
           setCount(count + 1);
           setUptadeCount(1);
+          setIsDialogOpen(false);
+          setLoading(false);
         } else {
           toast.error("لطفا دوباره امتحان کنید");
+          setLoading(false);
         }
       } catch (error) {
-        console.error("Error sending delete request:", error);
+        console.error("Error sending change request:", error);
+        setLoading(false);
       }
+    } else {
+      toast.error("لطفا دوباره امتحان کنید");
+      setLoading(false);
     }
   };
 
@@ -235,6 +250,42 @@ export default function TableItems(
         theme="light"
       />
       <Box sx={{ width: "100%" }}>
+        <Dialog
+          maxWidth="xs"
+          fullWidth
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+        >
+          <DialogTitle>{title}</DialogTitle>
+          <DialogContent>
+            <Grid container item>
+              <Grid item container>
+                <TextField
+                  fullWidth
+                  onChange={(e) => setChangeCatergoryName(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Grid item container>
+              {loading ? (
+                <Grid container item display={"flex"} justifyContent={"center"}>
+                  <CircularProgress />
+                </Grid>
+              ) : (
+                <Button
+                  variant="text"
+                  fullWidth
+                  disableElevation
+                  onClick={() => handleChange()}
+                >
+                  تایید
+                </Button>
+              )}
+            </Grid>
+          </DialogActions>
+        </Dialog>
         <TableContainer className="container-table table-scroll">
           <Table
             stickyHeader
@@ -422,7 +473,11 @@ export default function TableItems(
                               <Button
                                 startIcon={<IconB />}
                                 color="inherit"
-                                onClick={() => console.log(e?.text)}
+                                onClick={() => {
+                                  setIsDialogOpen(true);
+                                  setIdGet(e?.text);
+                                  setTitle(e?.value);
+                                }}
                               >
                                 ویرایش
                               </Button>
