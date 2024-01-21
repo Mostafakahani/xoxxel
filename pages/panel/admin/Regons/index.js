@@ -79,7 +79,8 @@ const Regons = () => {
               },
               {
                 type: "editAction",
-                text: item.id
+                text: item.id,
+                value: item.title,
               },
             ],
           };
@@ -291,6 +292,7 @@ const Regons = () => {
           setPage={(e) => setPage(e)}
           setPerPage={(e) => setPerPage(e)}
           perPage={pageDataAll.perPage}
+          setUptadeCount={(e) => setCount(count + 1)}
         />
 
         <Dialog open={open} maxWidth={"md"} onClose={() => closeDialog()}>
